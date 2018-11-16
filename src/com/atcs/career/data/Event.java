@@ -3,7 +3,7 @@
 
 package com.atcs.career.data;
 
-public class Initializer {
+public class Event {
 	private int amountOfSessions;
 	private Session[] sessions;
 	private Student[] students;
