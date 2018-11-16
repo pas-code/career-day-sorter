@@ -1,0 +1,1 @@
+choose file name with prompt "Save As..." default name "CareerDay" default location path to desktop
