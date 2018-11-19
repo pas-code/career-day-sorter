@@ -9,7 +9,6 @@ public class Student {
 	private String lName, fName, fullName, email;
 	private Session[] requests, assignments;
 	private int grade, priority, timeEntered;
-	
 	public static void main(String[] args)
    {
       Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100, 0);
