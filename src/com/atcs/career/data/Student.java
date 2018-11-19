@@ -1,4 +1,4 @@
-//Thomas Varano
+//Information Team
 //Nov 7, 2018
 
 package com.atcs.career.data;
@@ -12,11 +12,11 @@ public class Student {
 	
 	public static void main(String[] args)
    {
-      Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100);
+      Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100, 0);
       System.out.println(s.getGrade());
    }
 	
-	public Student(String lastName, String firstName, String email, Session[] requests, int timeEntered) {
+	public Student(String lastName, String firstName, String email, Session[] requests, int timeEntered, int priority) {
 		lName = lastName;
 		fName = firstName;
 		fullName = fName + " " + lName;
@@ -24,11 +24,12 @@ public class Student {
 		this.requests = requests;
 		this.timeEntered = timeEntered;
 		grade = getGradeFromEmail();
+		this.priority = priority;
 	}
 	  /**
+	   * 0 if an invalid email is used
     * @return
     * Grade Level 9-12
-    * \n0 if an invalid email is used
     */
 	public int getGradeFromEmail(){
 	   if(email.charAt(email.indexOf('@')-2)!='2')
