@@ -3,6 +3,8 @@
 
 package com.atcs.career.data;
 
+import java.util.Calendar;
+
 public class Student {
 	private String lName, fName, fullName, email;
 	private Session[] requests, assignments;
@@ -23,19 +25,25 @@ public class Student {
 		this.timeEntered = timeEntered;
 		grade = getGradeFromEmail();
 	}
-	
-	/**
-	 * @return
-	 * Grade Level 9-12
-	 */
+	  /**
+    * @return
+    * Grade Level 9-12
+    * \n0 if an invalid email is used
+    */
 	public int getGradeFromEmail(){
-	   if(email.charAt(email.indexOf('@')-2)=='2' && email.charAt(email.indexOf('@')-1)=='2')
-	      return 9;
-	   else if(email.charAt(email.indexOf('@')-2)=='2' && email.charAt(email.indexOf('@')-1)=='1')
-	      return 10;
-	   else if(email.charAt(email.indexOf('@')-2)=='2' && email.charAt(email.indexOf('@')-1)=='0')
-         return 11;      
-	   return 12;
+	   if(email.charAt(email.indexOf('@')-2)!='2')
+	      return 12;
+	   int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+	   if(Calendar.getInstance().get(Calendar.MONTH)>=0 && Calendar.getInstance().get(Calendar.MONTH)<=6) thisYear--;
+	   int gradYear = 0;
+	   gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-2) + email.charAt(email.indexOf('@')-1));
+	   switch (gradYear-thisYear){
+	      case 1: return 12;
+	      case 2: return 11;
+	      case 3: return 10;
+	      case 4: return 9;
+	   }   
+	   return 0;
 	}
 
    public String getlName()
