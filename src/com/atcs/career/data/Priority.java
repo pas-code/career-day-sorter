@@ -6,12 +6,15 @@ package com.atcs.career.data;
 
 public class Priority
 {
+   public final static double CWEIGHT = 1;
+   public final static double TWEIGHT = 1;
+   public final static double GWEIGHT = 1;
    private double cMag, tMag, gMag;
    private double cWeight, tWeight, gWeight;
    
-   public Priority(double cMag, double tMag, double gMag, double cWeight, double tWeight, double gWeight)
+   public Priority(double tMag, double gMag, double cWeight, double tWeight, double gWeight)
    {
-      this.cMag = cMag;
+      cMag = 0;
       this.tMag = tMag;
       this.gMag = gMag;
       this.cWeight = cWeight;
