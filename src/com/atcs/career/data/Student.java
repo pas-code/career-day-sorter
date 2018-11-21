@@ -3,19 +3,21 @@
 
 package com.atcs.career.data;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Student {
 	private String lName, fName, fullName, email;
-	private Session[] requests, assignments;
+	private ArrayList<Session> requests, assignments;
 	private int grade, priority, timeEntered;
 	public static void main(String[] args)
    {
       Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100, 0);
       System.out.println(s.getGrade());
+      System.out.println(s);
    }
 	
-	public Student(String lastName, String firstName, String email, Session[] requests, int timeEntered, int priority) {
+	public Student(String lastName, String firstName, String email, ArrayList<Session> requests, int timeEntered, int priority) {
 		lName = lastName;
 		fName = firstName;
 		fullName = fName + " " + lName;
@@ -25,8 +27,9 @@ public class Student {
 		grade = getGradeFromEmail();
 		this.priority = priority;
 	}
-	  /**
-	   * 0 if an invalid email is used
+
+   /**
+	 * Returns 0 if an invalid email is used
     * @return
     * Grade Level 9-12
     */
@@ -86,27 +89,27 @@ public class Student {
       this.email = email;
    }
 
-   public Session[] getRequests()
+
+
+   public ArrayList<Session> getRequests()
    {
       return requests;
    }
 
-   public void setRequests(Session[] requests)
+   public void setRequests(ArrayList<Session> requests)
    {
       this.requests = requests;
    }
 
-   public Session[] getAssignments()
+   public ArrayList<Session> getAssignments()
    {
       return assignments;
    }
 
-   public void setAssignments(Session[] assignments)
+   public void setAssignments(ArrayList<Session> assignments)
    {
       this.assignments = assignments;
    }
-
-
 
    public int getPriority()
    {
@@ -137,4 +140,12 @@ public class Student {
    {
       this.grade = grade;
    }
+   
+   @Override
+  public String toString()
+  {
+      return "Student: [" + fName +" " + lName + "] [email: " + email + 
+            "] [grade: " + grade + "] [timeEntered: " + timeEntered + "] [priority: " + priority+"]";  
+  }
+
 }

@@ -17,7 +17,7 @@ public class ScriptInterpreter {
 	 * @throws IOException 
 	 * @throws InterruptedException
 	 */
-	public String[] getProcessValues(ProcessBuilder pb) throws IOException, InterruptedException {
+	public static String[] getProcessValues(ProcessBuilder pb) throws IOException, InterruptedException {
 		String s = null;
 		Process p = pb.start();
 		
