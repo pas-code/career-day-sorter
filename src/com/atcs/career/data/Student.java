@@ -9,12 +9,11 @@ public class Student {
 	private int grade;
 	private Priority priority;
 	
-	  public Student(String name, String email, Session[] requests, Session[] assignments)
+	  public Student(String name, String email, Session[] requests)
 	  {
 	      this.name = name;
 	      this.email = email;
 	      this.requests = requests;
-	      this.assignments = assignments;
 	      priority = getStudentPriority();
 	  }
 	  
