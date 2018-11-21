@@ -6,9 +6,6 @@ package com.atcs.career.data;
 
 public class Priority
 {
-   public final static double CWEIGHT = 1;
-   public final static double TWEIGHT = 1;
-   public final static double GWEIGHT = 1;
    private double cMag, tMag, gMag;
    private double cWeight, tWeight, gWeight;
    
