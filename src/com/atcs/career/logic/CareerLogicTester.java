@@ -28,21 +28,4 @@ public class CareerLogicTester
    {
    }
    
-   
-   public void assignRoomsToSessions(){
-      
-   }
-   
-   
-   
-   public void rankStudents(){
-      
-   }
-   
-   
-   
-   public void assignStudentsToSessions(){
-      
-   }
-   
 }
