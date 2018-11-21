@@ -26,6 +26,7 @@ public class Student {
 		this.timeEntered = timeEntered;
 		grade = getGradeFromEmail();
 		this.priority = priority;
+		assignments = new ArrayList<Session>();
 	}
 
    /**
