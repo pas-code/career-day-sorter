@@ -3,7 +3,7 @@
 
 package com.atcs.career.data;
 
-public class Student {
+public class Student implements Comparable<Student>{
 	private String name, email;
    private Session[] requests, assignments;
 	private int grade;
@@ -18,7 +18,12 @@ public class Student {
 	  }
 	  
 	  public Priority getStudentPriority(){
-	     return null;
+	     return priority;
 	  }
+
+   @Override
+   public int compareTo(Student o){
+      return (int)(this.getStudentPriority().getPriority() - o.getStudentPriority().getPriority());
+   }
 	
 }
