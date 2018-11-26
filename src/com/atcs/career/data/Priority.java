@@ -6,33 +6,51 @@ package com.atcs.career.data;
 
 public class Priority
 {
-   private double cMag, tMag, gMag;
-   private double cWeight, tWeight, gWeight;
+   /*Priority is made up of three factors:
+    * -Time
+    * -Group
+    * -Contentness
+    * 
+    * The "Magnitude" value represents the actual value (What time, what group, etc.)
+    * The "Weight" value is user inputted and controls how much the algorithm factors in that value
+    * Magnitude and Weight are used to compute the overall Value for each factor, which in turn calculates their priority
+    */
+   private double contentnessMagnitude, timeMagnitude, groupMagnitude;
+   private static double contentnessWeight, timeWeight, groupWeight;
    
-   public Priority(double tMag, double gMag, double cWeight, double tWeight, double gWeight)
+   public Priority(double tMag, double gMag)
    {
-      cMag = 0;
-      this.tMag = tMag;
-      this.gMag = gMag;
-      this.cWeight = cWeight;
-      this.tWeight = tWeight;
-      this.gWeight = gWeight;
+      contentnessMagnitude = 0;
+      this.timeMagnitude = tMag;
+      this.groupMagnitude = gMag;
    }
    
    public double getContentness(){
-      return cMag*cWeight;
+      return contentnessMagnitude*contentnessWeight;
    }
    
    public double getTime(){
-      return tMag*tWeight;
+      return timeMagnitude*timeWeight;
    }
    
    public double getGroup(){
-      return gMag*gWeight;
+      return groupMagnitude*groupWeight;
    }
    
    public double getPriority(){
       return getContentness() + getTime() + getGroup();
+   }
+
+   public static void setContentnessWeight(double cWeight){
+      Priority.contentnessWeight = cWeight;
+   }
+
+   public static void setTimeWeight(double tWeight){
+      Priority.timeWeight = tWeight;
+   }
+
+   public static void setGroupWeight(double gWeight){
+      Priority.groupWeight = gWeight;
    }
 
    
