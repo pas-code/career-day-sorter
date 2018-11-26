@@ -29,6 +29,10 @@ public class Priority
       return contentnessMagnitude*contentnessWeight;
    }
    
+   public void setContentness(double cMag){
+      this.contentnessMagnitude = cMag;
+   }
+   
    public double getTime(){
       return timeMagnitude*timeWeight;
    }
