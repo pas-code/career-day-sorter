@@ -12,8 +12,7 @@ public class Student {
 	private int grade, priority, timeEntered;
 	public static void main(String[] args)
    {
-      Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100, 0);
-      System.out.println(s.getGrade());
+      Student s = new Student("Reineke", "Michael", "mreineke@pascack.org", null, 100, 0);
       System.out.println(s);
    }
 	
@@ -35,12 +34,27 @@ public class Student {
     * Grade Level 9-12
     */
 	public int getGradeFromEmail(){
-	   if(email.charAt(email.indexOf('@')-2)!='2')
-	      return 12;
+	   //NEED TO COMPENSATE FOR EMAILS WITH 3 NUMBERS ex. mreineke201@pascack.org
+//	   if(email.charAt(email.indexOf('@')-2)!='2')
+//	      return 12;
 	   int thisYear = Calendar.getInstance().get(Calendar.YEAR);
 	   if(Calendar.getInstance().get(Calendar.MONTH)>=0 && Calendar.getInstance().get(Calendar.MONTH)<=6) thisYear--;
 	   int gradYear = 0;
-	   gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-2) + email.charAt(email.indexOf('@')-1));
+//	   if(nums.contains(""+email.charAt(email.indexOf('@')-3)))
+//	      gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-3) + email.charAt(email.indexOf('@')-2));
+//	   else 
+//	      gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-2) + email.charAt(email.indexOf('@')-1));
+	   
+	   for (int c = 0; c < email.substring(0, email.indexOf('@')).length(); c++) {
+	      if(email.toCharArray()[c]>='0'&&email.toCharArray()[c]<='9'){
+	         gradYear = Integer.parseInt("20"+email.substring(c,c+2));
+	         break;
+	      }
+	   }
+	   if((gradYear+"").length()<4)
+	      return 12;
+	   
+	   
 	   switch (gradYear-thisYear){
 	      case 1: return 12;
 	      case 2: return 11;
