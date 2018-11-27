@@ -127,7 +127,7 @@ public class BasicLogger {
    		filter = new Filter(threshold);
       filter.setThreshold(threshold);
    }
-   private String getPrintName(String callerClassNmae) {
+   private String getPrintName(String callerClassName) {
    	if (getName().equals(callerClassName)) 
    		return "main";
    	return getName();
