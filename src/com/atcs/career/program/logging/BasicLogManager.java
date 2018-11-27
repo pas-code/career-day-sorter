@@ -4,9 +4,7 @@
 package com.atcs.career.program.logging;
 
 import java.util.HashMap;
-import java.util.logging.Filter;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 public class BasicLogManager {
    public static final String GLOBAL_NAME = "global";
@@ -23,12 +21,7 @@ public class BasicLogManager {
    
    public static final Level DEFAULT_LEVEL = Level.ALL;
       
-   public static final Filter DEFAULT_FILTER = new Filter() {
-      @Override
-      public boolean isLoggable(LogRecord arg0) {
-         return arg0.getLevel().intValue() >= DEFAULT_LEVEL.intValue();
-      }
-   };
+   public static final BasicLogger.Filter DEFAULT_FILTER = new BasicLogger.Filter(DEFAULT_LEVEL);
    
    private final String name;
    private final BasicLogManager parent;
@@ -53,14 +46,12 @@ public class BasicLogManager {
       master = new BasicLogger(name, null);
       addLogger(master);
       master.setFilter(DEFAULT_FILTER);
-      master.setThreshold(DEFAULT_LEVEL);
       master.setOut(System.out);
    }
    
    private void initMaster() {
       master = getLogger(name);
       master.setFilter(DEFAULT_FILTER);
-      master.setThreshold(DEFAULT_LEVEL);
       master.setOut(System.out);      
    }
    
@@ -91,20 +82,16 @@ public class BasicLogManager {
       return created;
    }
    
-   public Filter getFilter() {
+   public BasicLogger.Filter getFilter() {
       return master.getFilter();
    }
 
-   public void setFilter(Filter filter) {
+   public void setFilter(BasicLogger.Filter filter) {
       master.setFilter(filter);
    }
 
    public Level getThreshold() {
       return master.getThreshold();
-   }
-
-   public void setThreshold(Level threshold) {
-      master.setThreshold(threshold);
    }
 
    public String getName() {

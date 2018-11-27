@@ -6,7 +6,6 @@ package com.atcs.career.program.logging;
 import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -14,13 +13,12 @@ public class BasicLogger {
    private PrintStream out;
    private Filter filter;
    private BasicLogger master;
-   private Level threshold;
    private final String name;
    private boolean verbose;
    
    BasicLogger(String name, BasicLogger master) {
       this.name = name; this.master = master;
-      verbose = true;
+      verbose = false;
    }
    
    BasicLogger(String name) {
@@ -41,7 +39,9 @@ public class BasicLogger {
    public void log(LogRecord l) {
       if (!vetLog(l)) return;
       if (verbose) {
-         getOut().println(LocalDate.now() + " " + LocalTime.now() + " "+ getCallerMethod() + " - " + name + ":");
+      	String caller = getCallerMethod();
+         getOut().println(LocalDate.now() + " " + LocalTime.now() + " "+ caller
+         + " - " + getPrintName(caller.substring(0, caller.indexOf(" "))) + ":");
          getOut().println(l.getLevel().getName() + ": "+l.getMessage());
       } else {
          getOut().println(name + " -- "+l.getLevel().getName() + ": "+l.getMessage());
@@ -95,7 +95,7 @@ public class BasicLogger {
    }
    
    private boolean vetLog(LogRecord l) {
-      return (l.getLevel().intValue() >= getThreshold().intValue());
+      return getFilter().isLoggable(l);
    }
    
    public PrintStream getOut() {
@@ -107,7 +107,7 @@ public class BasicLogger {
    }
    public Filter getFilter() {
       if (filter != null) return filter; 
-      if (master == null) return BasicLogManager.DEFAULT_FILTER;
+      if (master == null) return new Filter(Level.ALL);
       return master.getFilter();
    }
    public void setFilter(Filter filter) {
@@ -120,12 +120,17 @@ public class BasicLogger {
       this.master = master;
    }
    public Level getThreshold() {
-      if (threshold != null) return threshold;
-      if (master == null) return BasicLogManager.DEFAULT_LEVEL;
-      return master.getThreshold();
+      return filter.threshold;
    }
-   public void setThreshold(Level threshold) {
-      this.threshold = threshold;
+   public void setFilter(Level threshold) {
+   	if (filter == null) 
+   		filter = new Filter(threshold);
+      filter.setThreshold(threshold);
+   }
+   private String getPrintName(String callerClassNmae) {
+   	if (getName().equals(callerClassName)) 
+   		return "main";
+   	return getName();
    }
    public String getName() {
       return name;
@@ -135,5 +140,22 @@ public class BasicLogger {
    }
    public void setVerbose(boolean v) {
       this.verbose = v;
+   }
+   
+   public static class Filter implements java.util.logging.Filter {
+   	private Level threshold;
+   	
+   	public Filter(Level threshold) {
+   		this.threshold = threshold;
+   	}
+   	
+		@Override
+		public boolean isLoggable(LogRecord record) {
+			return record.getLevel().intValue() >= threshold.intValue();
+		}
+   	
+		void setThreshold(Level l) {
+			threshold = l;
+		}
    }
 }
