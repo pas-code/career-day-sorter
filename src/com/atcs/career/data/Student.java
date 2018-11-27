@@ -1,29 +1,146 @@
-//Thomas Varano
+//Information Team
 //Nov 7, 2018
 
 package com.atcs.career.data;
 
-public class Student implements Comparable<Student>{
-	private String name, email;
-   private Session[] requests, assignments;
-	private int grade;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class Student implements Comparable<Student> {
+	private String lName, fName, email;
+	private ArrayList<Session> requests, assignments;
+	private int grade, timeEntered;
 	private Priority priority;
 	
-	  public Student(String name, String email, Session[] requests)
+	public static void main(String[] args)
+   {
+      Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100);
+      System.out.println(s.getGrade());
+      System.out.println(s);
+   }
+	
+	  public Student(String lName, String fName, String email, ArrayList<Session> requests, int timeEntered)
 	  {
-	      this.name = name;
+	      this.lName = lName; this.fName = fName;
 	      this.email = email;
 	      this.requests = requests;
+	      grade = getGradeFromEmail();
 	      priority = getStudentPriority();
+	      this.timeEntered = timeEntered;
 	  }
 	  
-	  public Priority getStudentPriority(){
+
+   /**
+	 * Returns 0 if an invalid email is used
+    * @return
+    * Grade Level 9-12
+    */
+	public int getGradeFromEmail() {
+	   if(email.charAt(email.indexOf('@')-2)!='2')
+	      return 12;
+	   int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+	   if(Calendar.getInstance().get(Calendar.MONTH)>=0 && Calendar.getInstance().get(Calendar.MONTH)<=6) thisYear--;
+	   int gradYear = 0;
+	   gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-2) + email.charAt(email.indexOf('@')-1));
+	   switch (gradYear-thisYear){
+	      case 1: return 12;
+	      case 2: return 11;
+	      case 3: return 10;
+	      case 4: return 9;
+	   }   
+	   return 0;
+	}
+
+   public String getlName()
+   {
+      return lName;
+   }
+
+   public void setlName(String lName)
+   {
+      this.lName = lName;
+   }
+
+   public String getfName()
+   {
+      return fName;
+   }
+
+   public void setfName(String fName)
+   {
+      this.fName = fName;
+   }
+
+   public String getFullName()
+   {
+      return fName + " " + lName;
+   }
+
+   public String getEmail()
+   {
+      return email;
+   }
+
+   public void setEmail(String email)
+   {
+      this.email = email;
+   }
+
+
+
+   public ArrayList<Session> getRequests()
+   {
+      return requests;
+   }
+
+   public void setRequests(ArrayList<Session> requests)
+   {
+      this.requests = requests;
+   }
+
+   public ArrayList<Session> getAssignments()
+   {
+      return assignments;
+   }
+
+   public void setAssignments(ArrayList<Session> assignments)
+   {
+      this.assignments = assignments;
+   }
+
+   public int getTimeEntered()
+   {
+      return timeEntered;
+   }
+
+   public void setTimeEntered(int timeEntered)
+   {
+      this.timeEntered = timeEntered;
+   }
+
+   public int getGrade()
+   {
+      return grade;
+   }
+
+   public void setGrade(int grade)
+   {
+      this.grade = grade;
+   }
+   
+   public Priority getStudentPriority() {
 	     return priority;
 	  }
-
+   
+   @Override
+  public String toString()
+  {
+      return "Student: [" + fName +" " + lName + "] [email: " + email + 
+            "] [grade: " + grade + "] [timeEntered: " + timeEntered + "] [priority: " + priority+"]";  
+  }
+   
    @Override
    public int compareTo(Student o){
       return (int)(this.getStudentPriority().getPriority() - o.getStudentPriority().getPriority());
    }
-	
 }

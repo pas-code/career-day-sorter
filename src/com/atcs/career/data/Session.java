@@ -1,4 +1,4 @@
-//Thomas Varano
+//Information Team
 //Nov 7, 2018
 
 package com.atcs.career.data;
@@ -14,32 +14,59 @@ public class Session implements Comparable<Session>{
 	 */
 	private int[] gradesAvailable;
 	private int popularity;
-   
+
    public Session(String title, String speaker){
-      super();
       this.title = title;
       this.speaker = speaker;
+      this.students = new ArrayList<Student>();
+      this.gradesAvailable = new int[]{9,10,11,12};
+      this.popularity = 0;
    }
    
+   public String getTitle()
+   {
+      return title;
+   }
+   public void setTitle(String title)
+   {
+      this.title = title;
+   }
+   public String getSpeaker()
+   {
+      return speaker;
+   }
+   public void setSpeaker(String speaker)
+   {
+      this.speaker = speaker;
+   }
+   public ArrayList<Student> getStudents()
+   {
+      return students;
+   }
+   public void setStudents(ArrayList<Student> students)
+   {
+      this.students = students;
+   }
+   public int[] getGradesAvailable()
+   {
+      return gradesAvailable;
+   }
+   public void setGradesAvailable(int[] gradesAvailable)
+   {
+      this.gradesAvailable = gradesAvailable;
+   }
+   public int getPopularity()
+   {
+      return popularity;
+   }
+   public void setPopularity(int popularity)
+   {
+      this.popularity = popularity;
+   }
+
    @Override
    public int compareTo(Session o){
       return this.popularity - o.getPopularity();
-   }
-
-   public String getTitle(){
-      return title;
-   }
-
-   public String getSpeaker(){
-      return speaker;
-   }
-
-   public ArrayList<Student> getStudents(){
-      return students;
-   }
-
-   public int getPopularity(){
-      return popularity;
    }
 	
 }
