@@ -3,6 +3,7 @@
 
 package com.atcs.career.program.logging;
 
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -31,6 +32,14 @@ public class SampleLoggingClass {
 		
 		log.setVerbose(false);
 		log.log(Level.CONFIG, "this is a nonverbose config msg");
+		
+		log.info("this is logging at a level info");
+		
+		try {
+			Collections.sort(null, null);
+		} catch (NullPointerException e) {
+			log.error(e, "message for logging an error");
+		}
 	}
 	
 	

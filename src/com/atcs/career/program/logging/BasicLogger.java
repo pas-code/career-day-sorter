@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-public class BasicLogger {
+public class BasicLogger {	
    private PrintStream out;
    private Filter filter;
    private BasicLogger master;
@@ -41,15 +41,22 @@ public class BasicLogger {
       if (verbose) {
       	String caller = getCallerMethod();
          getOut().println(LocalDate.now() + " " + LocalTime.now() + " "+ caller
-         + " - " + getPrintName(caller.substring(0, caller.indexOf(" "))) + ":");
+         		+ " - " + getPrintName(caller.substring(0, caller.indexOf(" "))) + ":");
          getOut().println(l.getLevel().getName() + ": "+l.getMessage());
       } else {
-         getOut().println(name + " -- "+l.getLevel().getName() + ": "+l.getMessage());
+         getOut().println(LocalTime.now() + " " +name + " -- "+l.getLevel().getName() + ": "+l.getMessage());
       }
    }
    
    public void log(Level l, String msg) {
       log(new LogRecord(l, msg));
+   }
+   
+   public void error(Throwable e, String msg) {
+   	boolean prevVerbose = verbose;
+   	verbose = true;
+   	severe("EXCEPTION! " + e.getClass().getName() + "- \""+e.getMessage() + "\", "+msg);
+   	verbose = prevVerbose;
    }
    
    public void severe(String msg) {
