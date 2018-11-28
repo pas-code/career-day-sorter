@@ -14,8 +14,7 @@ public class Session {
 	 */
 	private int[] gradesAvailable;
 	private int popularity;
-   public Session(String title, String speaker, ArrayList<Student> students, int[] gradesAvailable, int popularity)
-   {
+   public Session(String title, String speaker, ArrayList<Student> students, int[] gradesAvailable, int popularity){
       super();
       this.title = title;
       this.speaker = speaker;
@@ -30,44 +29,34 @@ public class Session {
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
    }
-   public String getTitle()
-   {
+   public String getTitle(){
       return title;
    }
-   public void setTitle(String title)
-   {
+   public void setTitle(String title){
       this.title = title;
    }
-   public String getSpeaker()
-   {
+   public String getSpeaker(){
       return speaker;
    }
-   public void setSpeaker(String speaker)
-   {
+   public void setSpeaker(String speaker){
       this.speaker = speaker;
    }
-   public ArrayList<Student> getStudents()
-   {
+   public ArrayList<Student> getStudents(){
       return students;
    }
-   public void setStudents(ArrayList<Student> students)
-   {
+   public void setStudents(ArrayList<Student> students){
       this.students = students;
    }
-   public int[] getGradesAvailable()
-   {
+   public int[] getGradesAvailable(){
       return gradesAvailable;
    }
-   public void setGradesAvailable(int[] gradesAvailable)
-   {
+   public void setGradesAvailable(int[] gradesAvailable){
       this.gradesAvailable = gradesAvailable;
    }
-   public int getPopularity()
-   {
+   public int getPopularity(){
       return popularity;
    }
-   public void setPopularity(int popularity)
-   {
+   public void setPopularity(int popularity){
       this.popularity = popularity;
    }
 	

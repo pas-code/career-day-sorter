@@ -10,13 +10,12 @@ public class Student {
 	private String lName, fName, fullName, email;
 	private ArrayList<Session> requests, assignments;
 	private int grade, priority, timeEntered;
-	public static void main(String[] args)
-   {
-      Student s = new Student("Reineke", "Michael", "mreineke@pascack.org", null, 100, 0);
+	public static void main(String[] args) {
+      Student s = new Student("Reineke", "Michael", "mreineke1@pascack.org", null, 100);
       System.out.println(s);
    }
 	
-	public Student(String lastName, String firstName, String email, ArrayList<Session> requests, int timeEntered, int priority) {
+	public Student(String lastName, String firstName, String email, ArrayList<Session> requests, int timeEntered) {
 		lName = lastName;
 		fName = firstName;
 		fullName = fName + " " + lName;
@@ -24,7 +23,7 @@ public class Student {
 		this.requests = requests;
 		this.timeEntered = timeEntered;
 		grade = getGradeFromEmail();
-		this.priority = priority;
+//		this.priority = priority;
 		assignments = new ArrayList<Session>();
 	}
 
@@ -34,19 +33,13 @@ public class Student {
     * Grade Level 9-12
     */
 	public int getGradeFromEmail(){
-	   //NEED TO COMPENSATE FOR EMAILS WITH 3 NUMBERS ex. mreineke201@pascack.org
-//	   if(email.charAt(email.indexOf('@')-2)!='2')
-//	      return 12;
 	   int thisYear = Calendar.getInstance().get(Calendar.YEAR);
 	   if(Calendar.getInstance().get(Calendar.MONTH)>=0 && Calendar.getInstance().get(Calendar.MONTH)<=6) thisYear--;
 	   int gradYear = 0;
-//	   if(nums.contains(""+email.charAt(email.indexOf('@')-3)))
-//	      gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-3) + email.charAt(email.indexOf('@')-2));
-//	   else 
-//	      gradYear = Integer.parseInt("20" + email.charAt(email.indexOf('@')-2) + email.charAt(email.indexOf('@')-1));
-	   
 	   for (int c = 0; c < email.substring(0, email.indexOf('@')).length(); c++) {
 	      if(email.toCharArray()[c]>='0'&&email.toCharArray()[c]<='9'){
+	         if(email.substring(c+1,c+2).equals("@"))
+	            return 12;
 	         gradYear = Integer.parseInt("20"+email.substring(c,c+2));
 	         break;
 	      }
@@ -64,101 +57,82 @@ public class Student {
 	   return 0;
 	}
 
-   public String getlName()
-   {
+   public String getlName(){
       return lName;
    }
 
-   public void setlName(String lName)
-   {
+   public void setlName(String lName){
       this.lName = lName;
    }
 
-   public String getfName()
-   {
+   public String getfName(){
       return fName;
    }
 
-   public void setfName(String fName)
-   {
+   public void setfName(String fName){
       this.fName = fName;
    }
 
-   public String getFullName()
-   {
+   public String getFullName(){
       return fullName;
    }
 
-   public void setFullName(String fullName)
-   {
+   public void setFullName(String fullName){
       this.fullName = fullName;
    }
 
-   public String getEmail()
-   {
+   public String getEmail(){
       return email;
    }
 
-   public void setEmail(String email)
-   {
+   public void setEmail(String email){
       this.email = email;
    }
 
 
 
-   public ArrayList<Session> getRequests()
-   {
+   public ArrayList<Session> getRequests(){
       return requests;
    }
 
-   public void setRequests(ArrayList<Session> requests)
-   {
+   public void setRequests(ArrayList<Session> requests){
       this.requests = requests;
    }
 
-   public ArrayList<Session> getAssignments()
-   {
+   public ArrayList<Session> getAssignments(){
       return assignments;
    }
 
-   public void setAssignments(ArrayList<Session> assignments)
-   {
+   public void setAssignments(ArrayList<Session> assignments){
       this.assignments = assignments;
    }
 
-   public int getPriority()
-   {
+   public int getPriority(){
       return priority;
    }
 
-   public void setPriority(int priority)
-   {
+   public void setPriority(int priority){
       this.priority = priority;
    }
 
-   public int getTimeEntered()
-   {
+   public int getTimeEntered(){
       return timeEntered;
    }
 
-   public void setTimeEntered(int timeEntered)
-   {
+   public void setTimeEntered(int timeEntered){
       this.timeEntered = timeEntered;
    }
 
-   public int getGrade()
-   {
+   public int getGrade(){
       return grade;
    }
 
-   public void setGrade(int grade)
-   {
+   public void setGrade(int grade){
       this.grade = grade;
    }
    
    @Override
-  public String toString()
-  {
+  public String toString(){
       return "Student: [" + fName +" " + lName + "] [email: " + email + 
             "] [grade: " + grade + "] [timeEntered: " + timeEntered + "] [priority: " + priority+"]";  
   }
