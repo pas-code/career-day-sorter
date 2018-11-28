@@ -175,6 +175,7 @@ public class Time implements Comparable<Time>, Serializable
       else 
          this.setHour24(hour12+12);
    }
+   
    public int getMinute() {
       return minute;
    }

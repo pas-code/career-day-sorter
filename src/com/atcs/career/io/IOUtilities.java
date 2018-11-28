@@ -24,7 +24,7 @@ public class IOUtilities
    /**
     * Prompts user to open a file (.csv)
     * @return 
-    * String representing the .cvs file path
+    * String representing the .csv file path
     */
    public static String importCSV(){
       String filePath = "";

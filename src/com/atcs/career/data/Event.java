@@ -3,14 +3,7 @@
 
 package com.atcs.career.data;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.io.importexport.ScriptInterpreter;
 
 public class Event{
 	private int amountOfSessions;
