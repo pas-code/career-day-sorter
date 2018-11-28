@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Session implements Comparable<Session>{
 	private String title, speaker;
 	private ArrayList<Student> students;
+	private Room room;
 	/**
 	 * list of all grades available to see the session (9, 10, 11, 12)
 	 * If it's empty, its all grades.
@@ -62,6 +63,14 @@ public class Session implements Comparable<Session>{
    public void setPopularity(int popularity)
    {
       this.popularity = popularity;
+   }
+   public Room getRoom()
+   {
+      return room;
+   }
+   public void setRoom(Room room)
+   {
+      this.room = room;
    }
 
    @Override

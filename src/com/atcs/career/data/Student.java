@@ -102,7 +102,6 @@ public class Student implements Comparable<Student> {
    }
 
 
-
    public ArrayList<Session> getRequests()
    {
       return requests;
