@@ -60,6 +60,10 @@ public class Session implements Comparable<Session>{
    {
       return popularity;
    }
+   public void addPopularity(int addBy)
+   {
+      popularity += addBy;
+   }
    public void setPopularity(int popularity)
    {
       this.popularity = popularity;

@@ -5,6 +5,8 @@ package com.atcs.career.data;
 
 import java.util.ArrayList;
 
+import com.atcs.career.logic.Algorithms;
+
 public class Event{
 	private int amountOfSessions;
 	private ArrayList<Session> sessions;
@@ -13,7 +15,7 @@ public class Event{
 	
 	public static void main(String[] args)
    {
-	   
+	   Algorithms.assignRoomsToSessions(students, rooms, sessions);
    }
 	
 }

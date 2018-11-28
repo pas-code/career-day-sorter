@@ -6,6 +6,7 @@ package com.atcs.career.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
@@ -14,25 +15,32 @@ import com.atcs.career.data.Student;
 public class Algorithms{
 
    
-   public void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
+   public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
       Collections.sort(rooms);
       
-      for(Student s: students){
-         ArrayList<Session> requests = s.getRequests();
-         for(int i = 0; i < requests.size(); i++) {
-            requests.get(i);
+      HashMap<String, Session> sessionHash = new HashMap<String, Session>();
+      for(Session s: sessions){
+         sessionHash.put(s.getSpeaker(), s);
+      }
+ 
+      for(Student stud: students){
+         ArrayList<Session> requests = stud.getRequests();
+         int requestsSize = requests.size();
+         for(int i = 0; i < requestsSize; i++) {
+            sessionHash.get(requests.get(i)).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
          }
       }
       
+      sessions = (ArrayList<Session>) sessionHash.values();
       Collections.sort(sessions);
+      
       for(int i = 0; i < sessions.size(); i++){
          if(rooms.size() < i) { //COME BACK WITH ERROR MANAGER STUFF
             sessions.get(i).setRoom(rooms.get(i));
          }
       }
    }
-   
    
    public static void rankStudents(){
       
