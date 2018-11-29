@@ -15,7 +15,7 @@ public class Event{
 	
 	public static void main(String[] args)
    {
-	   Algorithms.assignRoomsToSessions(students, rooms, sessions);
+//	   Algorithms.assignRoomsToSessions(students, rooms, sessions);
    }
 	
 }

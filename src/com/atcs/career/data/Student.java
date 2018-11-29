@@ -144,7 +144,11 @@ public class Student implements Comparable<Student> {
    
    public Priority getStudentPriority() {
 	     return priority;
-	  }
+	}
+   
+   public void setStudentPriority(Priority newPriority) {
+      this.priority = newPriority;
+   }
    
    @Override
   public String toString()

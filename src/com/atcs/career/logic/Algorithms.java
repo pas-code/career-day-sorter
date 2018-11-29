@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
@@ -42,8 +43,22 @@ public class Algorithms{
       }
    }
    
-   public static void rankStudents(){
+   public static void rankStudents(ArrayList<Student> students, int classCutOffForGroupLevel, int upperClassmanLevelMag, int lowerClassmanLevelMag){
+      for(int i = 0; i < students.size(); i++) {
+         Student currentStud = students.get(i);
+     
+         if (currentStud.getGrade() >= classCutOffForGroupLevel) {
+            int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag));
+         }
+         else if (currentStud.getGrade() < classCutOffForGroupLevel) {
+            int timeMagForPriority = currentStud.getTimeEntered();     //**
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
+            
+         }
+      }
       
+      Collections.sort(students);
    }
    
    
