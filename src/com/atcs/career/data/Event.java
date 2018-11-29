@@ -15,11 +15,13 @@ public class Event implements Serializable{
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
+	private String eventName;
 	
 	/**
 	 * Creates a new Event from scratch
 	 */
-	public Event(){
+	public Event(String name){
+	   eventName = name;
 	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
 	   amountOfSessions = sessions.size();
 	   //rooms =
@@ -29,5 +31,22 @@ public class Event implements Serializable{
 	public void save(){
 	   
 	}
+
+
+   public int getAmountOfSessions() {
+      return amountOfSessions;
+   }
+
+   public ArrayList<Session> getSessions() {
+      return sessions;
+   }
+
+   public ArrayList<Student> getStudents() {
+      return students;
+   }
+
+   public ArrayList<Room> getRooms() {
+      return rooms;
+   }
 	
 }
