@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import com.atcs.career.io.IOUtilities;
 
 public class Event implements Serializable{
-	/**
-    * 
-    */
+
    private static final long serialVersionUID = -7463051683970561540L;
    private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
@@ -23,6 +21,7 @@ public class Event implements Serializable{
 	 */
 	public Event(){
 	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+	   amountOfSessions = sessions.size();
 	   //rooms =
 	   //sessions =
 	}
