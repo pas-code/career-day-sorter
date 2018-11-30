@@ -48,10 +48,10 @@ public class Algorithms{
          Student currentStud = students.get(i);
          int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
          if (currentStud.getGrade() >= classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag));
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag)); //Dont set priority w/ constructor
          }
          else if (currentStud.getGrade() < classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag)); //Same
          }
       }
       Collections.sort(students);
@@ -62,10 +62,27 @@ public class Algorithms{
       for(int j = 0; j < roundOfAssignment; j++) {
          for(int i = 0; i < students.size(); i++) {
             Student currentStud = students.get(i);
-            
-   //         currentStud.getAssignments().get(i) = currentStud.getRequests().get(i);
-           
+               sessions.get(findIndexOfSession(currentStud.getRequests().get(roundOfAssignment), sessions)).getStudents().add(currentStud);
+               
+               
+               
+//            currentStud.setAssignments(currentStud.getRequests().get(i));
+
+
          }
       }   
+   }
+   
+   public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
+      
+      
+      
+      return 0;
+      
+   }
+   
+   
+   public static void updateStudentSession(Student stud){
+      
    }
 }
