@@ -54,16 +54,20 @@ public class Algorithms{
          else if (currentStud.getGrade() < classCutOffForGroupLevel) {
             int timeMagForPriority = currentStud.getTimeEntered();     //**
             currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
-            
          }
       }
-      
       Collections.sort(students);
    }
    
-   
-   
-   public static void assignStudentsToSessions(){
-      
+   public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
+      int roundOfAssignment = 3;
+      for(int j = 0; j < roundOfAssignment; j++) {
+         for(int i = 0; i < students.size(); i++) {
+            Student currentStud = students.get(i);
+            
+   //         currentStud.getAssignments().get(i) = currentStud.getRequests().get(i);
+           
+         }
+      }   
    }
 }
