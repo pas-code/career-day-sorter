@@ -46,13 +46,11 @@ public class Algorithms{
    public static void rankStudents(ArrayList<Student> students, int classCutOffForGroupLevel, int upperClassmanLevelMag, int lowerClassmanLevelMag){
       for(int i = 0; i < students.size(); i++) {
          Student currentStud = students.get(i);
-     
+         int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
          if (currentStud.getGrade() >= classCutOffForGroupLevel) {
-            int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
             currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag));
          }
          else if (currentStud.getGrade() < classCutOffForGroupLevel) {
-            int timeMagForPriority = currentStud.getTimeEntered();     //**
             currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
          }
       }
