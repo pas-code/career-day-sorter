@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.io.importexport.CSVReader;
@@ -18,7 +20,9 @@ public class IOUtilities
 {
    public static void main(String[] args)
    {
-      loadStudentArray(importCSV()); 
+//      loadStudentArray(importCSV());
+      ArrayList<Room> arr = loadRoomArray();
+      System.out.println(arr);
    }
    
    /**
@@ -40,6 +44,22 @@ public class IOUtilities
           e.printStackTrace();
           return "File not found";
        }
+   }
+   /**
+    * Loads ArrayList with Room objects from local .csv file
+    * @return ArrayList of Room objects
+    */
+   public static ArrayList<Room> loadRoomArray(){
+      ArrayList<Room> rooms = new ArrayList<Room>();
+      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
+      for(int i = 0; i < lines.size(); i++){
+//         if(lines.get(i)[0].equals(""))
+//            break;
+         int roomNum = Integer.parseInt(lines.get(i)[0].trim());
+         int roomCap = Integer.parseInt(lines.get(i)[1].trim());
+         rooms.add(new Room(roomNum, roomCap));
+      }
+      return rooms;
    }
 
    /**

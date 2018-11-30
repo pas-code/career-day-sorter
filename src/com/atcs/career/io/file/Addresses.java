@@ -16,7 +16,7 @@ public class Addresses {
    
    public static final String getHome() {
       if (MainClass.isApp)
-         return getExecutiveDir() + "/Contents/Data";
+         return getExecutiveDir() + "/Contents/Data/";
       return System.getProperty("user.home") + "/Applications/" + MainClass.APP_NAME + "/Data/";
    }
 }
