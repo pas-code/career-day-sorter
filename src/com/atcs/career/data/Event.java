@@ -48,5 +48,13 @@ public class Event implements Serializable{
    public ArrayList<Room> getRooms() {
       return rooms;
    }
+
+   public String getEventName() {
+      return eventName;
+   }
+
+   public void setEventName(String eventName) {
+      this.eventName = eventName;
+   }
 	
 }
