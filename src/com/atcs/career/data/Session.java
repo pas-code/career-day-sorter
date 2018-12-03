@@ -66,5 +66,10 @@ public class Session implements Comparable<Session>{
    public int compareTo(Session o) {
       return this.popularity - o.getPopularity();
    }
+
+@Override
+public String toString() {
+	return "Session [title=" + title + ", speaker=" + speaker + ", popularity=" + popularity + "]";
+}
 	
 }

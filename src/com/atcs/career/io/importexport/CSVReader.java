@@ -32,7 +32,7 @@ public class CSVReader {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] lineArr = line.split(",");
-				System.out.println(Arrays.asList(lineArr));
+//				System.out.println(Arrays.asList(lineArr));
 				lines.add(lineArr);
 			}
 			br.close();
