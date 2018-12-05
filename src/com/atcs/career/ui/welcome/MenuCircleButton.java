@@ -1,3 +1,5 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
