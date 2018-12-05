@@ -22,6 +22,9 @@ public class Session implements Comparable<Session>{
       this.speaker = speaker;
       this.numOfPeriods = numOfPeriods;
       this.students =  new ArrayList<ArrayList<Student>>();
+      for(int i = 0; i < numOfPeriods; i++) {
+         students.add(new ArrayList<Student>());
+      }
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
    }
