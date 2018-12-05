@@ -109,4 +109,10 @@ public class IOUtilities
       }
       return students;
    }
+   
+   public static ArrayList<Student> getAllStudents(String fileName){
+	   ArrayList<Student> students = new ArrayList<Student>();
+	   
+	   return students;
+   }
 }

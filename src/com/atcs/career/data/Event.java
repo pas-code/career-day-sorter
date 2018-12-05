@@ -47,8 +47,9 @@ public class Event implements Serializable{
 	
 	public static void save(Event e){
 		try {
-			new File(System.getProperty("user.home") + "/Desktop/temp/temp.event").createNewFile();
-			FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "/Desktop/temp/temp.event");
+			String location = System.getProperty("user.home") + "/Desktop/Event/Event.event";
+			new File(location).createNewFile();
+			FileOutputStream fos = new FileOutputStream(location);
 			ObjectOutputStream os = new ObjectOutputStream(fos);
 			os.writeObject(e);
 			fos.close();
