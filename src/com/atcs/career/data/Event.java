@@ -25,7 +25,7 @@ public class Event implements Serializable{
 	//TESTING
 	public static void main(String[] args) {
 		Event e = new Event("career");
-		save(e);
+//		save(e);
 	}
 	
 	
