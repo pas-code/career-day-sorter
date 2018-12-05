@@ -5,9 +5,16 @@
 package com.atcs.career.io.file;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import com.atcs.career.data.Event;
 
 public class FileHandler {
    public static String HOME_DIR, SAVE_DIR, LOG_DIR, EMAIL_DIR;
+   public static final String SUFFIX = ".event";
+   
    //initialFileWork()
    public static void createFileNames() {
       HOME_DIR = Addresses.getHome();
@@ -22,5 +29,22 @@ public class FileHandler {
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
       
+   }
+   
+   public static void save(Event e){
+      createFileNames();
+      createFiles();
+      try {
+         String location = SAVE_DIR + e.getEventName() + SUFFIX;
+         new File(location).createNewFile();
+         FileOutputStream fos = new FileOutputStream(location);
+         ObjectOutputStream os = new ObjectOutputStream(fos);
+         os.writeObject(e);
+         fos.close();
+         os.close();
+      
+      } catch(IOException i){
+         i.printStackTrace();
+      }
    }
 }

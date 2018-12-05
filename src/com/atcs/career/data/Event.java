@@ -3,14 +3,11 @@
 
 package com.atcs.career.data;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.atcs.career.io.IOUtilities;
+import com.atcs.career.io.file.FileHandler;
 
 public class Event implements Serializable{
 
@@ -25,7 +22,7 @@ public class Event implements Serializable{
 	//TESTING
 	public static void main(String[] args) {
 		Event e = new Event("career");
-//		save(e);
+		FileHandler.save(e);
 	}
 	
 	
@@ -45,20 +42,7 @@ public class Event implements Serializable{
 	   sessions = IOUtilities.loadSessionArray();
 	}
 	
-	public static void save(Event e){
-		try {
-			String location = System.getProperty("user.home") + "/Desktop/Event/Event.event";
-			new File(location).createNewFile();
-			FileOutputStream fos = new FileOutputStream(location);
-			ObjectOutputStream os = new ObjectOutputStream(fos);
-			os.writeObject(e);
-			fos.close();
-			os.close();
-		
-		} catch(IOException i){
-			i.printStackTrace();
-		}
-	}
+
 
 
    public int getAmountOfSessions() {
