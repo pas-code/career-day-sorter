@@ -49,7 +49,7 @@ public class ClassroomMoreInfo extends JPanel implements KeyListener, MouseListe
    
    
 
-   public ClassroomMoreInfo(Event event, Session session) 
+   public ClassroomMoreInfo(Event event) 
    {    
 	  
       addKeyListener(this);
@@ -59,7 +59,7 @@ public class ClassroomMoreInfo extends JPanel implements KeyListener, MouseListe
       this.setBackground(Color.WHITE);
       
      this.event = event;
-     this.session = session;
+     
      classroomNumber = session.getRoom().getRoomNumber();
     
       
