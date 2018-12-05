@@ -34,4 +34,8 @@ public class Room implements Comparable<Room>{
    public int getMaxCapacity(){
       return maxCapacity;
    }
+   
+   public String toString(){
+      return "Room: " + "[Room Number: " + roomNumber +"] [Capacity: " + maxCapacity +"]" ; 
+   }
 }
