@@ -1,3 +1,5 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import com.atcs.career.resources.FontManager;
 
 //Edward Fominykh
 //Program Description

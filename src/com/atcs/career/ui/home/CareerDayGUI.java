@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.Session;
+import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman
 //9/4/18

@@ -1,3 +1,5 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,6 +10,8 @@ import java.awt.RenderingHints;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.atcs.career.resources.FontManager;
 
 //Edward Fominykh
 //Program Description

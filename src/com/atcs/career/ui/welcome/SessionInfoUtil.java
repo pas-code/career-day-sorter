@@ -1,4 +1,8 @@
+package com.atcs.career.ui.welcome;
+
 import javax.swing.JPanel;
+
+import com.atcs.career.data.Session;
 
 //Edward Fominykh
 //Program Description
