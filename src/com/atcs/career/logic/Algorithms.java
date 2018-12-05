@@ -62,15 +62,11 @@ public class Algorithms{
       for(int j = 0; j < numOfPeriods; j++) { //For each period
          for(int i = 0; i < students.size(); i++) { //Go through every student
             Student currentStud = students.get(i); //Makes it easier to refer to current students
-               
-               
-               
-               
-//            currentStud.setAssignments(currentStud.getRequests().get(i));
-
-
+            assignBasedOnChoice(currentStud, sessions, j);
          }
-      }   
+      } 
+      
+      //Assign randoms
    }
    
    
@@ -79,12 +75,13 @@ public class Algorithms{
          Session desiredSession = sessions.get(findIndexOfSession(currentStud.getRequests().get(k), sessions));
          if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity()){
             desiredSession.getStudents().get(period).add(currentStud);
-            currentStud.getRequests().remove(k);
+            currentStud.getAssignments().set(period - 1, desiredSession);
+            currentStud.getRequests().remove(k); //Remove the session so it doesnt try and double-add them
             return;
          }
       }
-      
-      //insert least pop. session because they couldn't get any of their choices. Use ArrayList of ArrayList to hold these students till end
+      currentStud.getAssignments().set(period - 1, null); //PLACEHOLDER LINE UNTIL RANDOM STUFF WORKS
+      //Couldn't assign this student into a session of their choice. Use ArrayList of ArrayList to hold these students till end
    }
    
    public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
@@ -93,10 +90,5 @@ public class Algorithms{
             return i;
       }
       return -1;     
-   }
-   
-   
-   public static void updateStudentSession(Student stud){
-      
    }
 }

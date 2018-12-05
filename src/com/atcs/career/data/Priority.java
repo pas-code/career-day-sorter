@@ -18,11 +18,17 @@ public class Priority
    private double contentnessMagnitude, timeMagnitude, groupMagnitude;
    private static double contentnessWeight, timeWeight, groupWeight;
    
+   
    public Priority(double tMag, double gMag)
    {
       contentnessMagnitude = 0;
       this.timeMagnitude = tMag;
       this.groupMagnitude = gMag;
+      
+    //RANDOM VALUES FOR WEIGHTS SO IT WORKS. WILL BE USER INPUT LATER
+      groupWeight = 1;
+      timeWeight = 1;
+      contentnessWeight = 0;
    }
    
    public double getContentness(){
