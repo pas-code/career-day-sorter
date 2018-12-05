@@ -14,7 +14,11 @@ import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 
 public class Algorithms{
-
+    /*Each sub ArrayList corresponds to a period
+    * Students who didn't submit a request will be placed into every sub array
+    * Students who couldn't get a top 5 choice placed into specific sub array for that period
+    * */
+   static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
    public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
@@ -58,6 +62,11 @@ public class Algorithms{
    }
    
    public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
+      //Creates Array Lists for Random Assignment
+      for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
+         toBeRandomlyAssigned.add(new ArrayList<Student>());
+      }
+      
       int numOfPeriods = 3;
       for(int j = 0; j < numOfPeriods; j++) { //For each period
          for(int i = 0; i < students.size(); i++) { //Go through every student
@@ -71,7 +80,7 @@ public class Algorithms{
    
    
    public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
-      for(int k = 0; k < currentStud.getRequests().size(); k++){
+      for(int k = 0; k < currentStud.getRequests().size(); k++){ //Check every request the student makes
          Session desiredSession = sessions.get(findIndexOfSession(currentStud.getRequests().get(k), sessions));
          if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity()){
             desiredSession.getStudents().get(period).add(currentStud);
@@ -81,7 +90,7 @@ public class Algorithms{
          }
       }
       currentStud.getAssignments().set(period - 1, null); //PLACEHOLDER LINE UNTIL RANDOM STUFF WORKS
-      //Couldn't assign this student into a session of their choice. Use ArrayList of ArrayList to hold these students till end
+      toBeRandomlyAssigned.get(period - 1).add(currentStud);
    }
    
    public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
