@@ -25,7 +25,7 @@ public class Event implements Serializable{
 	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
 	   amountOfSessions = sessions.size();
 	   rooms = IOUtilities.loadRoomArray();
-	   //sessions =
+	   sessions = IOUtilities.loadSessionArray();
 	}
 	
 	public void save(){
