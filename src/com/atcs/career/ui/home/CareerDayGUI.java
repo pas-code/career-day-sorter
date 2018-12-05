@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.Session;
+import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman
 //9/4/18
@@ -114,14 +115,14 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
         ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 //        for (int i = 0; i < 10; i++)
         
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive")));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey", 3)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive", 3)));
             
         sessionScroll = new JScrollPane(ScrollBackPanel);
         tabs.addTab("Sessions", sessionScroll);

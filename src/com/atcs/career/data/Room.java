@@ -4,11 +4,12 @@
 package com.atcs.career.data;
 
 public class Room implements Comparable<Room>{
-	private int roomNumber, maxCapacity;
+	private int maxCapacity;
+	private String roomNumber;
 	private Session[] residentSessions;
 	
 
-   public Room(int roomNumber, int maxCapacity){
+   public Room(String roomNumber, int maxCapacity){
       super();
       this.roomNumber = roomNumber;
       this.maxCapacity = maxCapacity;
@@ -27,8 +28,12 @@ public class Room implements Comparable<Room>{
       this.residentSessions = residentSessions;
    }
 
-   public int getRoomNumber(){
+   public String getRoomNumber(){
       return roomNumber;
+   }
+   
+   public void setRoomNumber(String roomNumber){
+	   this.roomNumber = roomNumber;
    }
 
    public int getMaxCapacity(){

@@ -17,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.atcs.career.resources.FontManager;
+
 //Edward Fominykh
 //Program Description
 //Nov 16, 2018

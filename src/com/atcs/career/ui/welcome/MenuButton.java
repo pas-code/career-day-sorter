@@ -11,6 +11,8 @@ import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.atcs.career.resources.FontManager;
+
 //Edward Fominykh
 //Program Description
 //Nov 15, 2018
