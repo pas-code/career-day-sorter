@@ -24,7 +24,7 @@ public class FileHandler {
    }
    
    public static void createFiles() {
-      new File(HOME_DIR).mkdir();
+      new File(HOME_DIR).mkdirs();
       new File(SAVE_DIR).mkdir();
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
