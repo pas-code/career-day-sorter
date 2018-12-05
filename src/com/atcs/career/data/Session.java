@@ -3,9 +3,10 @@
 
 package com.atcs.career.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Session implements Comparable<Session>{
+public class Session implements Comparable<Session>, Serializable {
 	private String title, speaker;
 	private ArrayList<Student> students;
 	/**

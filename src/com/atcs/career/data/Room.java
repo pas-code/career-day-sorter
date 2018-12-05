@@ -3,7 +3,9 @@
 
 package com.atcs.career.data;
 
-public class Room implements Comparable<Room>{
+import java.io.Serializable;
+
+public class Room implements Comparable<Room>, Serializable {
 	private int roomNumber, maxCapacity;
 	private Session[] residentSessions;
 	

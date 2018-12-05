@@ -3,10 +3,11 @@
 
 package com.atcs.career.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Student implements Comparable<Student> {
+public class Student implements Comparable<Student>, Serializable  {
 	private String lName, fName, email;
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;

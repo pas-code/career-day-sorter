@@ -3,6 +3,10 @@
 
 package com.atcs.career.data;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,6 +21,19 @@ public class Event implements Serializable{
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName;
 	
+	
+	//TESTING
+	public static void main(String[] args) {
+		Event e = new Event("career");
+		save(e);
+	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Creates a new Event from scratch
 	 */
@@ -28,8 +45,18 @@ public class Event implements Serializable{
 	   sessions = IOUtilities.loadSessionArray();
 	}
 	
-	public void save(){
-	   
+	public static void save(Event e){
+		try {
+			new File(System.getProperty("user.home") + "/Desktop/temp/temp.event").createNewFile();
+			FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "/Desktop/temp/temp.event");
+			ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(e);
+			fos.close();
+			os.close();
+		
+		} catch(IOException i){
+			i.printStackTrace();
+		}
 	}
 
 
