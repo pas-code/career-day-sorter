@@ -54,7 +54,7 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
     // public ArrayList<String> exampleClassrooms;
     private JPanel sessionPanelHolder;
     private ArrayList<SessionInfoUtil> sessionPanels;
-    private Event event;
+    private static Event event;
 
     public CareerDayGUI()
     {
@@ -246,6 +246,8 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
      */
     public static void main(String[] args)
     {
+//        event = new Event("Career Day 2018");
+        
         new CareerDayGUI();
     }
 }
