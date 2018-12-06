@@ -6,11 +6,12 @@ package com.atcs.career.data;
 import java.io.Serializable;
 
 public class Room implements Comparable<Room>, Serializable {
-	private int roomNumber, maxCapacity;
+	private String roomNumber;
+	private int maxCapacity;
 	private Session[] residentSessions;
 	
 
-   public Room(int roomNumber, int maxCapacity){
+   public Room(String roomNumber, int maxCapacity){
       super();
       this.roomNumber = roomNumber;
       this.maxCapacity = maxCapacity;
@@ -29,8 +30,12 @@ public class Room implements Comparable<Room>, Serializable {
       this.residentSessions = residentSessions;
    }
 
-   public int getRoomNumber(){
+   public String getRoomNumber(){
       return roomNumber;
+   }
+   
+   public void setRoomNumber(String roomNumber){
+	   this.roomNumber = roomNumber;
    }
 
    public int getMaxCapacity(){

@@ -105,14 +105,15 @@ public class CareerDayGUI extends JPanel
         scrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 //        for (int i = 0; i < 10; i++)
         if (testing) {
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive")));
+      	  final int numSessions = event.getAmountOfSessions();
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump",numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive", numSessions)));
         }
         
         sessionScroll = new JScrollPane(scrollBackPanel);
