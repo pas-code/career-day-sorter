@@ -88,5 +88,14 @@ public class Session implements Comparable<Session>{
    public int compareTo(Session o){
       return this.popularity - o.getPopularity();
    }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      Session otherSession = (Session) obj;
+         return this.speaker.equals(otherSession.getSpeaker()) && this.title.equals(otherSession.getTitle());
+   
+   }
+   
 	
 }

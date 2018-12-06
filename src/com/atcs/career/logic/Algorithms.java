@@ -84,13 +84,22 @@ public class Algorithms{
          Session desiredSession = sessions.get(findIndexOfSession(currentStud.getRequests().get(k), sessions));
          if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity()){
             desiredSession.getStudents().get(period).add(currentStud);
-            currentStud.getAssignments().set(period - 1, desiredSession);
+            currentStud.getAssignments().set(period - 1, desiredSession);      
             currentStud.getRequests().remove(k); //Remove the session so it doesnt try and double-add them
             return;
          }
       }
       currentStud.getAssignments().set(period - 1, null); //PLACEHOLDER LINE UNTIL RANDOM STUFF WORKS
       toBeRandomlyAssigned.get(period - 1).add(currentStud);
+      
+      
+      changeStudentContentness(currentStud); //Deals with contentness
+   }
+   
+   public static void changeStudentContentness(Student currentStud){
+      
+      //do things
+      
    }
    
    public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
