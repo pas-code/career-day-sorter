@@ -40,10 +40,9 @@ public class CareerDayGUI extends JPanel
     private JTextArea info;
     private ArrayList<JButton> periods;
     private JTabbedPane tabs;
-    public int numOfPeriods = 3;
     private Font bigFont;
     private Font smallFont;
-    private JPanel sessionPanelHolder;
+    private JPanel sessionPanelHolder; 
     private ArrayList<SessionInfoUtil> sessionPanels;
     private Event event;
 
@@ -79,7 +78,7 @@ public class CareerDayGUI extends JPanel
         // west panel
         west = new JPanel(new GridLayout(0, 1));
         periods = new ArrayList<JButton>();
-        for (int i = 1; i <= numOfPeriods; i++)
+        for (int i = 1; i <= event.getAmountOfSessions(); i++)
         {
             JButton period = new JButton("Period " + i);
             period.setFont(smallFont);
