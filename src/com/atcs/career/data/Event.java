@@ -52,11 +52,6 @@ public class Event implements Serializable
     {
     }
 
-    public int getAmountOfSessions()
-    {
-        return amountOfSessions;
-    }
-
     public ArrayList<Session> getSessions()
     {
         return sessions;
