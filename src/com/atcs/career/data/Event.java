@@ -41,7 +41,7 @@ public class Event implements Serializable
         sessions.add(new Session("Software Development", "Johnny Ive"));
         
         students = new ArrayList<Student>();
-        students.add(new Student("Peter", "Peter", "ppeter20@pascack.org", new Session[](sessions[0], sessions[1], sessions[2]), 0))
+//        students.add(new Student("Peter", "Peter", "ppeter20@pascack.org", new Session[](sessions[0], sessions[1], sessions[2]), 0))
         
         this.students = students;
         this.rooms = rooms;
