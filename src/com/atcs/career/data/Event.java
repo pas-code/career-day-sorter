@@ -24,13 +24,7 @@ public class Event implements Serializable{
 		Event e = new Event("career");
 		FileHandler.save(e);
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * Creates a new Event from scratch
 	 */
@@ -38,8 +32,8 @@ public class Event implements Serializable{
 	   eventName = name;
 	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
 	   amountOfSessions = sessions.size();
-	   rooms = IOUtilities.loadRoomArray();
-	   sessions = IOUtilities.loadSessionArray();
+	   rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+	   sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
 	}
 	
 

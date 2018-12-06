@@ -21,9 +21,9 @@ public class IOUtilities
    public static void main(String[] args)
    {
 //      loadStudentArray(importCSV());
-//      ArrayList<Room> arr = loadRoomArray();
-      ArrayList<Session> arr = loadSessionArray();
-      System.out.println(arr);
+//      ArrayList<Room> arr = loadRoomArray(importCSV());
+//      ArrayList<Session> arr2 = loadSessionArray(importCSV());
+//      System.out.println(arr);
    }
    
    /**
@@ -50,15 +50,22 @@ public class IOUtilities
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
-   public static ArrayList<Room> loadRoomArray(){
+   public static ArrayList<Room> loadRoomArray(String fileName){
       ArrayList<Room> rooms = new ArrayList<Room>();
-      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
+      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
+//      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
+      System.out.println(lines.size());
+//      int size = 0;
+//      for(String[] l : lines)
+//         if(l[0] != null)
+//            size++;
       for(int i = 0; i < lines.size(); i++){
-//         if(lines.get(i)[0].equals(""))
-//            break;
          int roomNum = Integer.parseInt(lines.get(i)[0].trim());
          int roomCap = Integer.parseInt(lines.get(i)[1].trim());
+         System.out.println(roomNum + ", " + roomCap);
          rooms.add(new Room(roomNum, roomCap));
+         if(lines.get(i)[0].equals("255"))
+            break;
       }
       return rooms;
    }
@@ -67,9 +74,10 @@ public class IOUtilities
     * Loads ArrayList with Session objects from local .csv file
     * @return ArrayList of Session objects
     */
-   public static ArrayList<Session> loadSessionArray(){
+   public static ArrayList<Session> loadSessionArray(String fileName){
       ArrayList<Session> sessions = new ArrayList<Session>();
-      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/sessions.csv");
+      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
+//      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/sessions.csv");
       for(int i = 0; i < lines.size(); i++){
 //    	  System.out.println(lines.get(i)[0]);
 //    	  System.out.println(lines.get(i)[0].indexOf("-"));
@@ -77,6 +85,7 @@ public class IOUtilities
          String speaker = lines.get(i)[0].substring(0, lines.get(i)[0].indexOf(" - "));
          String title = lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3);
          sessions.add(new Session(title, speaker));
+         System.out.println(sessions.get(i));
       }
       return sessions;
    }
