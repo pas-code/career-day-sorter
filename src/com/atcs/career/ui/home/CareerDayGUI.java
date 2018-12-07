@@ -162,6 +162,6 @@ public class CareerDayGUI extends JPanel
     public static void main(String[] args)
     {
         
-        new CareerDayGUI(new Event("Career Day 2018"));
+        new CareerDayGUI(new Event());
     }
 }

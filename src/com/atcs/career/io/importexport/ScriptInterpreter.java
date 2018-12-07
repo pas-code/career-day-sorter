@@ -7,8 +7,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
+import com.atcs.career.program.logging.BasicLogger;
 
 public class ScriptInterpreter {
+	private static final BasicLogger log = BasicLogger.getLogger(ScriptInterpreter.class.getName()); 
+	
+	
+	public static String[] runJar(String jrePath, String jarPath, String[] args) throws IOException, InterruptedException {
+		if (jrePath == null)
+			jrePath = "java";
+		String[] commands = new String[args.length + 3];
+		
+		commands[0] = jrePath;
+		commands[1] = "-jar";
+		commands[2] = jarPath;
+		
+		for (int i = 0; i < args.length; i++) {
+			commands[i + 3] = args[i];
+		}
+		ProcessBuilder pb = new ProcessBuilder(args);
+		return getProcessValues(pb);
+	}
 	
 	/**
 	 * Get the response of a process
@@ -36,7 +57,7 @@ public class ScriptInterpreter {
 		}
 		
 		p.waitFor();
-		System.out.println("Script input exit at "+p.exitValue());
+		log.log(Level.INFO, "Script input exit at "+p.exitValue());
 		return sb.toArray(new String[sb.size()]);
 	}
 }
