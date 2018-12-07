@@ -5,8 +5,11 @@
 package com.atcs.career.io.file;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.atcs.career.data.Event;
@@ -37,14 +40,20 @@ public class FileHandler {
       try {
          String location = SAVE_DIR + e.getEventName() + SUFFIX;
          new File(location).createNewFile();
-         FileOutputStream fos = new FileOutputStream(location);
-         ObjectOutputStream os = new ObjectOutputStream(fos);
+         ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location));
          os.writeObject(e);
-         fos.close();
          os.close();
       
       } catch(IOException i){
          i.printStackTrace();
       }
+   }
+   
+   public static Event load(String filepath) throws IOException, ClassNotFoundException{
+	   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filepath));
+	   Event e = (Event) ois.readObject();
+	   System.out.println("Event read.");
+	   ois.close();
+	   return e;
    }
 }
