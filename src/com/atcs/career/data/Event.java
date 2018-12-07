@@ -9,17 +9,16 @@ import java.util.ArrayList;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
 
-public class Event implements Serializable{
+public class Event implements Serializable {
 
-   private static final long serialVersionUID = -7463051683970561540L;
-   private int amountOfSessions;
+	private static final long serialVersionUID = -7463051683970561540L;
+	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName;
-	
-	
-	//TESTING
+
+	// TESTING
 	public static void main(String[] args) {
 		Event e = new Event("career");
 		FileHandler.save(e);
@@ -28,39 +27,54 @@ public class Event implements Serializable{
 	/**
 	 * Creates a new Event from scratch
 	 */
-	public Event(String name){
-	   eventName = name;
-	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
-	   amountOfSessions = sessions.size();
-	   rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
-	   sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+	public Event(String name) {
+		eventName = name;
+		// students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+		// rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+		// sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+		// amountOfSessions = sessions.size();
+		students = new ArrayList<Student>();
+		rooms = new ArrayList<Room>();
+		sessions = new ArrayList<Session>();
+		amountOfSessions = 0;
 	}
-	
 
+	public void selectStudentFile() {
+		students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+		amountOfSessions = sessions.size();
+	}
 
+	public void selectRoomFile() {
+		rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+	}
 
-   public int getAmountOfSessions() {
-      return amountOfSessions;
-   }
+	public void selectSessionFile() {
+		sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+		amountOfSessions = sessions.size();
+	}
 
-   public ArrayList<Session> getSessions() {
-      return sessions;
-   }
+	public int getAmountOfSessions() {
+		return amountOfSessions;
+	}
 
-   public ArrayList<Student> getStudents() {
-      return students;
-   }
+	public ArrayList<Session> getSessions() {
+		return sessions;
+	}
 
-   public ArrayList<Room> getRooms() {
-      return rooms;
-   }
+	public ArrayList<Student> getStudents() {
+		return students;
+	}
 
-   public String getEventName() {
-      return eventName;
-   }
+	public ArrayList<Room> getRooms() {
+		return rooms;
+	}
 
-   public void setEventName(String eventName) {
-      this.eventName = eventName;
-   }
-	
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+
 }
