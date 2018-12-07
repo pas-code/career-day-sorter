@@ -1,19 +1,17 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import com.atcs.career.resources.FontManager;
 
 //Edward Fominykh
 //Program Description
@@ -24,7 +22,7 @@ public class MenuCircleButton extends JPanel
     private String text;
     private Color background;
     private Color border;
-    private Font openSans = FontManager.getOpenSans(25);
+    private Font openSans = FontManager.finalFont(25);
     private RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
     private JLabel label1;
@@ -48,7 +46,7 @@ public class MenuCircleButton extends JPanel
     {
         
         label1.setFont(openSans);
-        label1.setForeground(Color.white);
+        label1.setForeground(border);
         label1.setAlignmentX(CENTER_ALIGNMENT);
         label1.setAlignmentY(CENTER_ALIGNMENT);
         

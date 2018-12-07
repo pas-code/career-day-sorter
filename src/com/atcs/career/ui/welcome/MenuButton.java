@@ -1,3 +1,5 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,18 +11,21 @@ import java.awt.RenderingHints;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.atcs.career.resources.FontManager;
+
 //Edward Fominykh
 //Program Description
 //Nov 15, 2018
 public class MenuButton extends JPanel
 {
-    private RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+	private static final long serialVersionUID = 1L;
+	private RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
     private final int strokeSize = 2;
     private String text;
     private Color background;
     private Color border;
-    private Font openSans = FontManager.getOpenSans(20);
+    private Font openSans = FontManager.finalFont(20);
     
     public MenuButton(String text, Color background, Color border)
     {

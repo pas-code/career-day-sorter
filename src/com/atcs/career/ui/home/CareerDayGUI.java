@@ -1,18 +1,9 @@
 package com.atcs.career.ui.home;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.RenderingHints;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -26,39 +17,40 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
+import com.atcs.career.data.Student;
+import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.ColorManager;
 
 //Jarrett Bierman
 //9/4/18
 //Default JPanel Class (Copy and Paste)
-public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, MouseMotionListener
+public class CareerDayGUI extends JPanel 
 {
     private static final long serialVersionUID = 1L;
     public static final int PREF_W = 1000;
     public static final int PREF_H = 700;
-    public JPanel east, west;
-    public JPanel ScrollBackPanel;
-    public JList studentList, classroomList;
-    public JScrollPane sessionScroll, studentScroll, classroomScroll;
-    public JLabel title;
-    public JTextArea info;
-    public ArrayList<JButton> periods;
-    public JTabbedPane tabs;
-    public int numOfPeriods = 3;
+    private JPanel east, west;
+    private JPanel scrollBackPanel;
+    private JList<Student> studentList;
+    private JList<Room> classroomList;
+    private JScrollPane sessionScroll, studentScroll, classroomScroll;
+    private JLabel title;
+    private JTextArea info;
+    private ArrayList<JButton> periods;
+    private JTabbedPane tabs;
     private Font bigFont;
     private Font smallFont;
-    // public ArrayList<String> exampleSessions;
-    // public ArrayList<String> exampleStudents;
-    // public ArrayList<String> exampleClassrooms;
-    private JPanel sessionPanelHolder;
+    private JPanel sessionPanelHolder; 
     private ArrayList<SessionInfoUtil> sessionPanels;
     private Event event;
 
-    public CareerDayGUI()
+    private final boolean testing = true;
+
+    public CareerDayGUI(Event masterEvent)
     {
-        addKeyListener(this);
-        addMouseListener(this);
-        addMouseMotionListener(this);
+   	 this.event = masterEvent;
         setFocusable(true);
         this.setLayout(new BorderLayout());
         bigFont = FontManager.finalFont(40f);
@@ -86,7 +78,7 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
         // west panel
         west = new JPanel(new GridLayout(0, 1));
         periods = new ArrayList<JButton>();
-        for (int i = 1; i <= numOfPeriods; i++)
+        for (int i = 1; i <= event.getAmountOfSessions(); i++)
         {
             JButton period = new JButton("Period " + i);
             period.setFont(smallFont);
@@ -105,32 +97,34 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
         // center panel
         tabs = new JTabbedPane();
         // sessions panel
-        ScrollBackPanel = new JPanel();
-        ScrollBackPanel.setLayout(new BorderLayout());
-        ScrollBackPanel.setBackground(Color.white);
+        scrollBackPanel = new JPanel();
+        scrollBackPanel.setLayout(new BorderLayout());
+        scrollBackPanel.setBackground(ColorManager.get("main.scroll.background"));
         sessionPanelHolder = new JPanel();
         sessionPanelHolder.setLayout(new GridLayout(0, 1));
-        ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
+        scrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 //        for (int i = 0; i < 10; i++)
+        if (testing) {
+      	  final int numSessions = event.getAmountOfSessions();
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump",numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey", numSessions)));
+            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive", numSessions)));
+        }
         
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive")));
-            
-        sessionScroll = new JScrollPane(ScrollBackPanel);
+        sessionScroll = new JScrollPane(scrollBackPanel);
         tabs.addTab("Sessions", sessionScroll);
         // students panel
-        studentList = new JList();
+        studentList = new JList<Student>();
         studentList.setFont(smallFont);
         studentScroll = new JScrollPane(studentList);
         tabs.addTab("Students", studentScroll);
         // classroom panel
-        classroomList = new JList();
+        classroomList = new JList<Room>();
         classroomList.setFont(smallFont);
         classroomScroll = new JScrollPane(classroomList);
         tabs.addTab("Classrooms", classroomScroll);
@@ -149,93 +143,16 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
     }
 
     /**
-     * The paintComponent is a method that is inherited from the JPanel class.
-     * Writing code in here overrides the method This is where you draw shapes,
-     * pictures, and objects
-     */
-    @Override
-    public void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
-    }
-
-    /**
-     * keyPressed does something when you press a key on a keyboard Every key
-     * has a unique int value (and can access with e.getKeyCode() you can choose
-     * which specific key with an if statement (shown below)
-     */
-    @Override
-    public void keyPressed(KeyEvent e)
-    {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_E)
-            System.out.println("I am pressing the 'E' key");
-    }
-
-    /**
-     * keyReleased is the same as keyPressed, but it does something when you
-     * release a key
-     */
-    @Override
-    public void keyReleased(KeyEvent e)
-    {
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e)
-    {
-    }
-
-    /**
-     * mousePressed does a think when you press your mouse down you can also
-     * access the location of the mouse through the methods e.getX() and
-     * e.getY()
-     */
-    @Override
-    public void mousePressed(MouseEvent e)
-    {
-        int x = e.getX();
-        int y = e.getY();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e)
-    {
-    }
-
-    public void mouseClicked(MouseEvent e)
-    {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e)
-    {
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e)
-    {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e)
-    {
-    }
-
-    /**
      * This overrides the JPanel's getPreferredSize() method It tells the JPanel
      * to be a certain width and height
      */
     public Dimension getPreferredSize()
     {
         return new Dimension(PREF_W, PREF_H);
+    }
+    
+    public Event getEvent() {
+   	 return event;
     }
 
     /**
@@ -244,6 +161,7 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
      */
     public static void main(String[] args)
     {
-        new CareerDayGUI();
+        
+        new CareerDayGUI(new Event("Career Day 2018"));
     }
 }

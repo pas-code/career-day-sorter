@@ -1,3 +1,5 @@
+package com.atcs.career.ui.welcome;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
+
+import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.ColorManager;
 
 public class WelcomeScreen extends JPanel{
 	
@@ -28,14 +33,14 @@ public class WelcomeScreen extends JPanel{
 		mainPanel = new JPanel();
 		leftPanel = new JPanel();
 		title = new JLabel("   " + programName);
-		openSans = FontManager.getOpenSans(25f);
+		openSans = FontManager.finalFont(25f);
 		topPanel = topPanelConfig();
-		cb = new MenuCircleButton("New", Color.darkGray,Color.lightGray);
-		lb = new MenuCircleButton("Open",  Color.darkGray, Color.lightGray);
-		gui();
+		cb = new MenuCircleButton("New", ColorManager.get("welcome.button.background"), ColorManager.get("welcome.foreground"));
+		lb = new MenuCircleButton("Open",ColorManager.get("welcome.button.background"), ColorManager.get("welcome.foreground"));
+		configGui();
 	}
 	
-	private void gui()
+	private void configGui()
 	{
 		//Frame config
 		f.setSize(600, 350);
