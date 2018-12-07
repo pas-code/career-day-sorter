@@ -30,15 +30,27 @@ public class Event implements Serializable{
 	 */
 	public Event(String name){
 	   eventName = name;
-	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
-	   amountOfSessions = sessions.size();
-	   rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
-	   sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+//	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+//	   rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+//	   sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+//	   amountOfSessions = sessions.size();
+	   students = new ArrayList<Student>();
+	   rooms = new ArrayList<Room>();
+	   sessions = new ArrayList<Session>();
+	   amountOfSessions = 0; 
 	}
 	
-
-
-
+	public void selectStudentFile(){
+	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+	}
+	public void selectRoomFile(){
+	   rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+	}
+	public void selectSessionFile(){
+	   sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+	   amountOfSessions = sessions.size();
+	}
+	
    public int getAmountOfSessions() {
       return amountOfSessions;
    }

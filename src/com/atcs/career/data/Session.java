@@ -70,7 +70,7 @@ public class Session implements Comparable<Session>, Serializable {
 
 @Override
 public String toString() {
-	return "Session [title=" + title + ", speaker=" + speaker + ", popularity=" + popularity + "]";
+	return "Session: [Title=" + title + ", Speaker=" + speaker + ", Popularity=" + popularity + "]";
 }
 	
 }
