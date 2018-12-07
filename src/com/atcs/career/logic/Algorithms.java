@@ -2,7 +2,6 @@
 //Program Description:
 //Nov 21, 2018
 /*TODO
- * - Rerank contentness between rounds
  * - Implement ability to randomly assign sessions to students who didn't answer/couldn't get in a selected session
  */
 
@@ -68,11 +67,6 @@ public class Algorithms{
       Collections.sort(students);
    }
    
-   //ALGORITHM 2.5
-   public static void rerankStudents() {
-      
-   }
-   
    //ALGORITHM 3
    public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
       //Creates Array Lists for Random Assignment
@@ -86,7 +80,7 @@ public class Algorithms{
             Student currentStud = students.get(i); //Makes it easier to refer to current students
             assignBasedOnChoice(currentStud, sessions, j);
          }
-         //ADD RERANK STUDENTS METHOD
+         Collections.sort(students);  //reranks students
       } 
       
       //Assign randoms
