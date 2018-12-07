@@ -23,6 +23,7 @@ public class Event implements Serializable{
 	public static void main(String[] args) {
 		Event e = new Event("career");
 		FileHandler.save(e);
+		
 	}
 
 	/**
