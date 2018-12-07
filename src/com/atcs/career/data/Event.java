@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.atcs.career.io.IOUtilities;
+import com.atcs.career.io.importexport.CSVReader;
 
 public class Event implements Serializable{
 
@@ -25,46 +26,32 @@ public class Event implements Serializable{
 	}
 	
 	
-	
-	
-	
-	
-	
 	/**
 	 * Creates a new Event from scratch
 	 */
 	public Event(String name){
 	   eventName = name;
-	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+	   students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
 	   amountOfSessions = sessions.size();
 	   rooms = IOUtilities.loadRoomArray();
 	   sessions = IOUtilities.loadSessionArray();
 	}
 	
-
-<<<<<<< HEAD
-=======
     public Event()
     {
         super();
         sessions = new ArrayList<Session>();
-        sessions.add(new Session("Business", "Donald Trump"));
-        sessions.add(new Session("Investment", "Warren Buffet"));
-        sessions.add(new Session("Military", "James Mattis"));
-        sessions.add(new Session("Electrical Engineering", "Elon Musk"));
-        sessions.add(new Session("Astronomy", "Albert Einstein"));
-        sessions.add( new Session("Criminal Defense", "Robert Shapiro"));
-        sessions.add(new Session("Intelligence", "James Comey"));
-        sessions.add(new Session("Software Development", "Johnny Ive"));
+        sessions.add(new Session("Business", "Donald Trump", 3));
+        sessions.add(new Session("Investment", "Warren Buffet", 3));
+        sessions.add(new Session("Military", "James Mattis", 3));
+        sessions.add(new Session("Electrical Engineering", "Elon Musk", 3));
+        sessions.add(new Session("Astronomy", "Albert Einstein", 3));
+        sessions.add( new Session("Criminal Defense", "Robert Shapiro", 3));
+        sessions.add(new Session("Intelligence", "James Comey", 3));
+        sessions.add(new Session("Software Development", "Johnny Ive", 3));
         
         students = new ArrayList<Student>();
-//        students.add(new Student("Peter", "Peter", "ppeter20@pascack.org", new Session[](sessions[0], sessions[1], sessions[2]), 0))
-        
-        this.students = students;
-        this.rooms = rooms;
-        this.eventName = eventName;
     }
->>>>>>> origin/ui-edward
 
 
    public int getAmountOfSessions() {
