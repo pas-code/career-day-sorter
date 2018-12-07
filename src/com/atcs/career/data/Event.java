@@ -24,9 +24,30 @@ public class Event implements Serializable{
 	   eventName = name;
 	   students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
 	   amountOfSessions = sessions.size();
-	   rooms = IOUtilities.loadRoomArray();
+//	   rooms = IOUtilities.loadRoomArray();
 	   //sessions =
 	}
+	
+	 public Event()
+	    {
+	        super();
+	        sessions = new ArrayList<Session>();
+	        sessions.add(new Session("Business", "Donald Trump", 2));
+	        sessions.add(new Session("Investment", "Warren Buffet", 2));
+	        sessions.add(new Session("Military", "James Mattis", 2));
+	        sessions.add(new Session("Electrical Engineering", "Elon Musk", 2));
+	        sessions.add(new Session("Astronomy", "Albert Einstein", 2));
+	        sessions.add( new Session("Criminal Defense", "Robert Shapiro", 2));
+	        sessions.add(new Session("Intelligence", "James Comey", 2));
+	        sessions.add(new Session("Software Development", "Johnny Ive", 2));
+	        
+	        students = new ArrayList<Student>();
+//	        students.add(new Student("Peter", "Peter", "ppeter20@pascack.org", new Session[](sessions[0], sessions[1], sessions[2]), 0))
+	        
+	        this.students = students;
+	        this.rooms = rooms;
+	        this.eventName = eventName;
+	    }
 	
 	public void save(){
 	   
