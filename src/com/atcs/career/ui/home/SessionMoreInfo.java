@@ -44,6 +44,7 @@ public class SessionMoreInfo extends JPanel implements KeyListener, MouseListene
 
    public SessionMoreInfo() 
    { 
+	   
 	   periodOne = new JButton("1");
 	   periodTwo = new JButton("2");
 	   periodThree = new JButton("3");
@@ -98,11 +99,7 @@ public class SessionMoreInfo extends JPanel implements KeyListener, MouseListene
 	  
 	   
 	  
-      addKeyListener(this);
-      addMouseListener(this);
-      addMouseMotionListener(this);
-      setFocusable(true);
-      this.setBackground(Color.WHITE);
+      
       
       
       SessionMoreInfo allContent = this;
@@ -147,16 +144,20 @@ public class SessionMoreInfo extends JPanel implements KeyListener, MouseListene
       southSouth.add(editClassroom);
       southSouth.add(editSpeakerName);
       
-      
-      
-      
-      //east.add(new Button("Remove Student"));
-      
+      addKeyListener(this);
+      addMouseListener(this);
+      addMouseMotionListener(this);
+      setFocusable(true);
+      this.setBackground(Color.WHITE);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add(allContent);
       frame.pack();
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
+      
+      //east.add(new Button("Remove Student"));
+      
+      
    }
  
    public void update()
