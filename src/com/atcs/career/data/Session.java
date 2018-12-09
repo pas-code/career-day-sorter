@@ -16,7 +16,7 @@ public class Session implements Comparable<Session>{
 	private int[] gradesAvailable;
 	private int popularity;
 	private int numOfPeriods;
-
+	
    public Session(String title, String speaker, int numOfPeriods){
       this.title = title;
       this.speaker = speaker;
@@ -27,6 +27,10 @@ public class Session implements Comparable<Session>{
       }
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
+   }
+   
+   public Session(String title, String speaker) {
+   	this(title, speaker, 3);
    }
    
    public String getTitle()

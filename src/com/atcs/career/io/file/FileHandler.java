@@ -6,14 +6,20 @@ package com.atcs.career.io.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
+import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.ResourceAccess;
 
 public class FileHandler {
+	private static final BasicLogger log = BasicLogger.getLogger(FileHandler.class.getName());
+	
    public static String HOME_DIR, SAVE_DIR, LOG_DIR, EMAIL_DIR;
    public static String JAVA_EXEC;
-   //initialFileWork()
+   
+   //initial file work
    static {
+   	log.log(Level.CONFIG, "initial file work commenced");
    	createFileNames();
    	try {
 			createFiles();
@@ -21,6 +27,7 @@ public class FileHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+   	log.log(Level.CONFIG, "file work completed");
    }
    
    public static void createFileNames() {

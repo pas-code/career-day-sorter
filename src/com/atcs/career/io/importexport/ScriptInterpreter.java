@@ -15,9 +15,20 @@ public class ScriptInterpreter {
 	private static final BasicLogger log = BasicLogger.getLogger(ScriptInterpreter.class.getName()); 
 	
 	
+	/**
+	 * runs a jar with the specified parameters
+	 * @param jrePath the java runner that executes the jar. can be null if using System libs
+	 * @param jarPath where the jar is (full path)
+	 * @param args the arguments to give the jar. can be null
+	 * @return a string array containing the responses of the jar running. 
+	 * @throws IOException if any path is invalid
+	 * @throws InterruptedException if the process (of running the jar) is interrupted
+	 */
 	public static String[] runJar(String jrePath, String jarPath, String[] args) throws IOException, InterruptedException {
 		if (jrePath == null)
 			jrePath = "java";
+		if (args == null)
+			args = new String[0];
 		String[] commands = new String[args.length + 3];
 		
 		commands[0] = jrePath;

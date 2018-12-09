@@ -92,9 +92,9 @@ public class IOUtilities
 			for (int k = 4; k < lines.get(i).length; k++)
 				sessionRequests.add(new Session(
 						lines.get(i)[k].substring(lines.get(i)[k].indexOf("-") + 2),
-						lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-") - 1),
-						// TODO change amt sessions from 3
-						3));
+						lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-") - 1)
+						// TODO change amt sessions from
+						));
 
 			// Adds Student object to the ArrayList to be returned
 			students.add(new Student(lastName, firstName, email, sessionRequests,
