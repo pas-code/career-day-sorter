@@ -76,5 +76,4 @@ public class Event implements Serializable {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-
 }

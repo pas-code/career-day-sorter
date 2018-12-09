@@ -129,16 +129,20 @@ public class Student implements Comparable<Student>, Serializable  {
 		return priority;
 	}
 
-	@Override
-	public String toString() {
-		return "Student: [" + fName + " " + lName + "] [email: " + email
-				+ "] [grade: " + grade + "] [timeEntered: " + timeEntered
-				+ "] [priority: " + priority + "]";
-	}
-
-	@Override
-	public int compareTo(Student o) {
-		return (int) (this.getStudentPriority().getPriority()
-				- o.getStudentPriority().getPriority());
-	}
+   
+   public void setStudentPriority(Priority newPriority) {
+      this.priority = newPriority;
+   }
+   
+   @Override
+  public String toString()
+  {
+      return "Student: [" + fName +" " + lName + "] [email: " + email + 
+            "] [grade: " + grade + "] [timeEntered: " + timeEntered + "] [priority: " + priority+"]";  
+  }
+   
+   @Override
+   public int compareTo(Student o){
+      return (int)(this.getStudentPriority().getPriority() - o.getStudentPriority().getPriority());
+   }
 }
