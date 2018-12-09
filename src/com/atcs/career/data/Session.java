@@ -29,7 +29,6 @@ public class Session implements Comparable<Session>, Serializable {
       this.popularity = popularity;
    }
 
-
    public Session(String title, String speaker, int numOfPeriods){
       this.title = title;
       this.speaker = speaker;
@@ -41,16 +40,25 @@ public class Session implements Comparable<Session>, Serializable {
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
    }
-	public String getTitle() {
+   
+   public Session(String title, String speaker) {
+   	this(title, speaker, 3);
+   }
+   
+   public String getTitle()
+   {
       return title;
    }
-   public void setTitle(String title){
+   public void setTitle(String title)
+   {
       this.title = title;
    }
-   public String getSpeaker() {
+   public String getSpeaker()
+   {
       return speaker;
    }
-   public void setSpeaker(String speaker) {
+   public void setSpeaker(String speaker)
+   {
       this.speaker = speaker;
    }
 
@@ -68,10 +76,12 @@ public class Session implements Comparable<Session>, Serializable {
    {
       return gradesAvailable;
    }
-   public void setGradesAvailable(int[] gradesAvailable) {
+   public void setGradesAvailable(int[] gradesAvailable)
+   {
       this.gradesAvailable = gradesAvailable;
    }
-   public int getPopularity() {
+   public int getPopularity()
+   {
       return popularity;
    }
 
@@ -93,7 +103,7 @@ public class Session implements Comparable<Session>, Serializable {
    }
 
    @Override
-   public int compareTo(Session o) {
+   public int compareTo(Session o){
       return this.popularity - o.getPopularity();
    }
 
@@ -110,3 +120,4 @@ public String toString() {
    }
    	
 }
+

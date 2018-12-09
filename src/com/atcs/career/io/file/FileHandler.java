@@ -6,38 +6,61 @@ package com.atcs.career.io.file;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.program.logging.BasicLogger;
+import com.atcs.career.resources.ResourceAccess;
+
 
 public class FileHandler {
+	private static final BasicLogger log = BasicLogger.getLogger(FileHandler.class.getName());
+	
    public static String HOME_DIR, SAVE_DIR, LOG_DIR, EMAIL_DIR;
+   public static String JAVA_EXEC;
    public static final String SUFFIX = ".event";
+      
+   //initial file work
+   static {
+   	log.log(Level.CONFIG, "initial file work commenced");
+   	createFileNames();
+   	try {
+			createFiles();
+			ResourceAccess.transfer("java", new File(JAVA_EXEC), 0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+   	log.log(Level.CONFIG, "file work completed");
+   }
    
-   //initialFileWork()
    public static void createFileNames() {
       HOME_DIR = Addresses.getHome();
       SAVE_DIR = HOME_DIR + "Events/";
       LOG_DIR = HOME_DIR + "Logs/";
       EMAIL_DIR = HOME_DIR + "EmailTemp/";
+      
+      JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
    }
    
-   public static void createFiles() {
-      new File(HOME_DIR).mkdirs();
+   public static void createFiles() throws IOException {
+      new File(HOME_DIR).mkdir();
       new File(SAVE_DIR).mkdir();
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
       
+      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin").mkdir();
+      
+      new File(JAVA_EXEC).createNewFile();
    }
    
    public static void save(Event e){
       createFileNames();
-      createFiles();
       try {
+      	createFiles();
          String location = SAVE_DIR + e.getEventName() + SUFFIX;
          new File(location).createNewFile();
          ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location));

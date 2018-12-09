@@ -4,6 +4,9 @@
 
 package com.atcs.career.io.file;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.atcs.career.program.MainClass;
 
 public class Addresses {
@@ -18,5 +21,14 @@ public class Addresses {
       if (MainClass.isApp)
          return getExecutiveDir() + "/Contents/Data/";
       return System.getProperty("user.home") + "/Applications/" + MainClass.APP_NAME + "/Data/";
+   }
+   
+   public static final URL githubHome() {
+   	try {
+			return new URL("https://github.com/pas-code");
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return null;
+		}
    }
 }

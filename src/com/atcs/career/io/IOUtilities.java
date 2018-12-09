@@ -27,6 +27,7 @@ public class IOUtilities
    }
    
    /**
+<<<<<<< HEAD
     * Prompts user to open a file (.csv)
     * @return 
     * String representing the .csv file path
@@ -48,6 +49,8 @@ public class IOUtilities
    }
    
    /**
+=======
+>>>>>>> ui-merge
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
@@ -61,7 +64,7 @@ public class IOUtilities
 //         if(l[0] != null)
 //            size++;
       for(int i = 0; i < lines.size(); i++){
-         int roomNum = Integer.parseInt(lines.get(i)[0].trim());
+         String roomNum = lines.get(i)[0].trim();
          int roomCap = Integer.parseInt(lines.get(i)[1].trim());
          System.out.println(roomNum + ", " + roomCap);
          rooms.add(new Room(roomNum, roomCap));

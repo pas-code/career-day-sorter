@@ -4,10 +4,12 @@
 
 package com.atcs.career.io.importexport;
 
+import java.awt.FileDialog;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import javax.swing.JFrame;
 
 public class CSVReader {
 
@@ -49,5 +51,22 @@ public class CSVReader {
 		}
 		return lines;
 
+	}
+	
+	/**
+	 * returns a string location of a file to open, as selected by the user.
+	 * @param acceptableSuffix the preferred file suffix (.txt, .csv) as a string
+	 */
+	public static String getFileLocation(String acceptableSuffix) {
+		JFrame parent = new JFrame();
+		FileDialog fd = new FileDialog(parent, "Choose a file", FileDialog.LOAD);
+		fd.setDirectory(System.getProperty("user.home"));
+		fd.setFile("*."+acceptableSuffix);
+		fd.setFilenameFilter((dir, name) -> name.endsWith(acceptableSuffix));
+		fd.setVisible(true);
+		String ret = (fd.getFile() == null) ? null : fd.getDirectory() + fd.getFile();
+		parent.dispose();
+		System.out.println(ret);
+		return ret;
 	}
 }

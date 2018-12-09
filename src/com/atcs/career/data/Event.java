@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
+import com.atcs.career.io.importexport.CSVReader;
 
 public class Event implements Serializable {
 
@@ -38,6 +39,21 @@ public class Event implements Serializable {
 		sessions = new ArrayList<Session>();
 		amountOfSessions = 0;
 	}
+	
+	public Event()
+	{
+		sessions = new ArrayList<Session>();
+		sessions.add(new Session("Business", "Donald Trump", 3));
+		sessions.add(new Session("Investment", "Warren Buffet", 3));
+		sessions.add(new Session("Military", "James Mattis", 3));
+		sessions.add(new Session("Electrical Engineering", "Elon Musk", 3));
+		sessions.add(new Session("Astronomy", "Albert Einstein", 3));
+		sessions.add( new Session("Criminal Defense", "Robert Shapiro", 3));
+		sessions.add(new Session("Intelligence", "James Comey", 3));
+		sessions.add(new Session("Software Development", "Johnny Ive", 3));
+		
+		students = new ArrayList<Student>();
+	}
 
 	public void selectStudentFile() {
 		students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
@@ -47,6 +63,7 @@ public class Event implements Serializable {
 	public void selectRoomFile() {
 		rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
 	}
+	
 
 	public void selectSessionFile() {
 		sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
