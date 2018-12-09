@@ -27,7 +27,6 @@ public class IOUtilities
    }
    
    /**
-<<<<<<< HEAD
     * Prompts user to open a file (.csv)
     * @return 
     * String representing the .csv file path
@@ -49,8 +48,6 @@ public class IOUtilities
    }
    
    /**
-=======
->>>>>>> ui-merge
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
