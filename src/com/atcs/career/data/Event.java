@@ -12,6 +12,7 @@ import com.atcs.career.io.IOUtilities;
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
+	private static final int minRequiredForSession = 10; //COME BACK AND CHANGE TO PROPER VALUE
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();

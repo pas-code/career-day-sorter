@@ -108,13 +108,27 @@ public class Algorithms{
       changeStudentContentness(currentStud); //Deals with contentness
    }
    
+//   public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){   //COME BACK AND UNCOMMENT
+////      for(int i = 0; i < sessions.size(); i++) {
+////         for(int j=0; j< sessions.get(i).size(); j++){
+////            if(sessions.get(i).get(j).size()<min)
+////               return false;
+////            
+////         }
+////        
+////      }
+////      return true;
+//   }
    
    
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
       
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
-            getLeastPopulatedSessionPerPeriod(sessions, i).getStudents().get(i).add(toBeRandomlyAssigned.get(i).remove(j));
+            Session session = getLeastPopulatedSessionPerPeriod(sessions, i);
+            Student stud = toBeRandomlyAssigned.get(i).remove(j);
+            session.getStudents().get(i).add(stud);
+            stud.getAssignments().set(j, session);
          }
       }
    }
