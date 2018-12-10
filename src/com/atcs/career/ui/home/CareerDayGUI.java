@@ -24,10 +24,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 import com.atcs.career.data.Event;
-import com.atcs.career.data.Session;
+import com.atcs.career.data.Gui_Listable;
+import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman
@@ -57,6 +57,17 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
     private static Event event;
 
     public CareerDayGUI()
+    {
+        gui();
+    }
+    
+    public CareerDayGUI(Event event)
+    {
+        this.event = event;
+        gui();
+    }
+    
+    private void gui()
     {
         addKeyListener(this);
         addMouseListener(this);
@@ -106,40 +117,55 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
     {
         // center panel
         tabs = new JTabbedPane();
-        // sessions panel
-        ScrollBackPanel = new JPanel();
-        ScrollBackPanel.setLayout(new BorderLayout());
-        ScrollBackPanel.setBackground(Color.white);
-        sessionPanelHolder = new JPanel();
-        sessionPanelHolder.setLayout(new GridLayout(0, 1));
-        ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-//        for (int i = 0; i < 10; i++)
-        
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Business", "Donald Trump")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Investment", "Warren Buffet")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Military", "James Mattis")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Electrical Engineering", "Elon Musk")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Astronomy", "Albert Einstein")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Criminal Defense", "Robert Shapiro")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Intelligence", "James Comey")));
-            sessionPanelHolder.add(new SessionInfoUtil(new Session("Software Development", "Johnny Ive")));
-            
-        sessionScroll = new JScrollPane(ScrollBackPanel);
-        tabs.addTab("Sessions", sessionScroll);
+       addTab(event.getSessions());
         // students panel
-        studentList = new JList();
-        studentList.setFont(smallFont);
-        studentScroll = new JScrollPane(studentList);
-        tabs.addTab("Students", studentScroll);
+        addTab(event.getStudents());
+        addTab(event.getRooms());
+//        ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
+//        
+//        for (int i = 0; i < event.getStudents().size(); i++)
+//        {
+//            Student student = event.getStudents().get(i);
+//            StudentInfoUtil siu = new StudentInfoUtil(student, 1);
+//            sessionPanelHolder.add(siu);
+//        }
+//        
+//            
+//        sessionScroll = new JScrollPane(ScrollBackPanel);
+//        tabs.addTab("Students", sessionScroll);
         // classroom panel
-        classroomList = new JList();
-        classroomList.setFont(smallFont);
-        classroomScroll = new JScrollPane(classroomList);
-        tabs.addTab("Classrooms", classroomScroll);
+//        classroomList = new JList();
+//        classroomList.setFont(smallFont);
+//        classroomScroll = new JScrollPane(classroomList);
+//        tabs.addTab("Classrooms", classroomScroll);
         tabs.setFont(smallFont);
         this.add(tabs, BorderLayout.CENTER);
     }
-
+    
+    /**Precondition: ArrayList contents must of type Gui_Listable*/
+    private void addTab(ArrayList eventData)
+    {
+        // sessions panel
+        JPanel ScrollBackPanel = new JPanel();
+        ScrollBackPanel.setLayout(new BorderLayout());
+        ScrollBackPanel.setBackground(Color.white);
+        JPanel sessionPanelHolder = new JPanel();
+        sessionPanelHolder.setLayout(new GridLayout(0, 1));
+        ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
+        
+        for (int i = 0; i < eventData.size(); i++)
+        {
+            System.out.println("Added " + ((Gui_Listable) eventData.get(i)).getType());
+        sessionPanelHolder.add(new InfoPanel((Gui_Listable) eventData.get(i)));
+        
+        }
+            
+        JScrollPane sessionScroll = new JScrollPane(ScrollBackPanel);
+        sessionScroll.getVerticalScrollBar().setUnitIncrement(10);
+        sessionScroll.getVerticalScrollBar().setValue(1);
+        tabs.addTab(( (Gui_Listable) eventData.get(0) ).getType(), sessionScroll);
+    }
+    
     private void makeWindow()
     {
         JFrame frame = new JFrame("Default JPanel");
@@ -248,6 +274,6 @@ public class CareerDayGUI extends JPanel implements KeyListener, MouseListener, 
     {
 //        event = new Event("Career Day 2018");
         
-        new CareerDayGUI();
+        new CareerDayGUI(new Event());
     }
 }

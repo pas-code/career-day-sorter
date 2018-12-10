@@ -14,10 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import com.atcs.career.data.Gui_Listable;
 import com.atcs.career.data.Session;
 import com.atcs.career.resources.FontManager;
 
-public abstract class InfoPanel extends JPanel
+public class InfoPanel extends JPanel
 {   
     private JPanel titlePanel;
     private JPanel infoPanel;
@@ -34,6 +35,14 @@ public abstract class InfoPanel extends JPanel
         this.title = title;
         this.info1 = info1;
         this.info2 = info2;
+        initializePanels();
+    }
+    
+    public InfoPanel(Gui_Listable gl)
+    {
+        this.title = gl.getTitle();
+        this.info1 = gl.getInfo(0);
+        this.info2 = gl.getInfo(1);
         initializePanels();
     }
     

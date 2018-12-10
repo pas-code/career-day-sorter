@@ -3,7 +3,7 @@
 
 package com.atcs.career.data;
 
-public class Room implements Comparable<Room>{
+public class Room implements Comparable<Room>, Gui_Listable{
 	private int roomNumber, maxCapacity;
 	private Session[] residentSessions;
 	
@@ -38,4 +38,26 @@ public class Room implements Comparable<Room>{
    public String toString(){
       return "Room: " + "[Room Number: " + roomNumber +"] [Capacity: " + maxCapacity +"]" ; 
    }
+
+@Override
+public String getTitle()
+{
+    return roomNumber+"";
+}
+
+@Override
+public String getInfo(int i)
+{
+    switch(i)
+    {
+    case 0: return maxCapacity+"";
+    default: return roomNumber+"";
+    }
+}
+
+@Override
+public String getType()
+{
+    return "Room";
+}
 }

@@ -6,7 +6,7 @@ package com.atcs.career.data;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Student implements Comparable<Student> {
+public class Student implements Comparable<Student>, Gui_Listable {
 	private String lName, fName, email;
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;
@@ -27,6 +27,7 @@ public class Student implements Comparable<Student> {
 		grade = getGradeFromEmail();
 		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
+		this.assignments = new ArrayList<Session>();
 	}
 
 	/**
@@ -140,4 +141,38 @@ public class Student implements Comparable<Student> {
 		return (int) (this.getStudentPriority().getPriority()
 				- o.getStudentPriority().getPriority());
 	}
+
+    @Override
+    public String getTitle()
+    {
+        return fName + " " + lName;
+    }
+
+    @Override
+    public String getInfo(int i)
+    {
+        switch(i)
+        {
+        case 0: return getGrade() + "";
+        case 1: return getAssignment(0).getTitle();
+        case 2: return getEmail();
+        default: return lName;
+        }
+        
+    }
+    
+    /**Mainly used for tested, creates a fake session for a given period*/
+    public Session getAssignment(int period)
+    {
+        if(period < assignments.size())
+        return assignments.get(period);
+        else return new Session();
+        
+    }
+
+    @Override
+    public String getType()
+    {
+        return "Student";
+    }
 }

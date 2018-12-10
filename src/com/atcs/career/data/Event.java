@@ -41,11 +41,31 @@ public class Event implements Serializable
         sessions.add(new Session("Software Development", "Johnny Ive"));
         
         students = new ArrayList<Student>();
-//        students.add(new Student("Peter", "Peter", "ppeter20@pascack.org", new Session[](sessions[0], sessions[1], sessions[2]), 0))
+        {
+         ArrayList<Session> sessions = new ArrayList<Session>();
+         sessions.add(this.sessions.get(0));
+         sessions.add(this.sessions.get(1));
+         sessions.add(this.sessions.get(2));
         
-        this.students = students;
-        this.rooms = rooms;
-        this.eventName = eventName;
+        
+        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+        
+        students.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
+        students.add(new Student("Eric", "Wang", "ppeter20@pascack.org",sessions, 0));
+        students.add(new Student("Jarret", "Bierman", "ppeter20@pascack.org",sessions, 0));
+        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+        
+        rooms = new ArrayList<Room>();
+        for(int i = 121; i< 140; i++)
+        rooms.add(new Room(i, 30));
+        
+        
+        
+        }
+        
+        eventName = "TEST";
+        
     }
 
     public void save()

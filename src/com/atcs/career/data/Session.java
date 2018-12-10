@@ -5,7 +5,7 @@ package com.atcs.career.data;
 
 import java.util.ArrayList;
 
-public class Session implements Comparable<Session>{
+public class Session implements Comparable<Session>, Gui_Listable{
 	private String title, speaker;
 	private ArrayList<Student> students;
 	/**
@@ -31,6 +31,16 @@ public class Session implements Comparable<Session>{
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
    }
+   
+   public Session()
+   {
+       title = "New Session";
+       speaker = "New Speaker";
+       this.students = new ArrayList<Student>();
+       this.gradesAvailable = new int[]{9,10,11,12};
+       this.popularity = 0;
+   }
+   
 	public String getTitle() {
       return title;
    }
@@ -70,6 +80,23 @@ public class Session implements Comparable<Session>{
 @Override
 public String toString() {
 	return "Session [title=" + title + ", speaker=" + speaker + ", popularity=" + popularity + "]";
+}
+
+@Override
+public String getInfo(int i)
+{
+    switch(i)
+    {
+    case 0: return speaker;
+    case 1: return students.size()+"";
+    default: return getTitle();
+    }
+}
+
+@Override
+public String getType()
+{
+    return "Session";
 }
 	
 }

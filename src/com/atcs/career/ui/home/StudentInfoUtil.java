@@ -14,7 +14,7 @@ public class StudentInfoUtil extends InfoPanel
 
     public StudentInfoUtil(Student s, int period)
     {
-        super(s.getFullName(), s.getGrade()+"", s.getAssignments().get(period).getTitle());
+        super(s.getFullName(), s.getGrade()+"", s.getAssignment(period).getTitle());
         // TODO Auto-generated constructor stub
     }
     
