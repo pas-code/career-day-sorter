@@ -7,14 +7,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Student implements Comparable<Student>, Serializable  {
+public class Student implements Comparable<Student>, Serializable, GuiListable {
+
+	private static final long serialVersionUID = 2820547053629559120L;
 	private String lName, fName, email;
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;
 	private Priority priority;
 
 	public static void main(String[] args) {
-		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org", null, 100);
+		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
+				null, 100);
 		System.out.println(s.getGrade());
 		System.out.println(s);
 	}
@@ -28,6 +31,7 @@ public class Student implements Comparable<Student>, Serializable  {
 		grade = getGradeFromEmail();
 		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
+		this.assignments = new ArrayList<Session>();
 	}
 
 	/**
@@ -129,20 +133,54 @@ public class Student implements Comparable<Student>, Serializable  {
 		return priority;
 	}
 
-   
-   public void setStudentPriority(Priority newPriority) {
-      this.priority = newPriority;
-   }
-   
-   @Override
-  public String toString()
-  {
-      return "Student: [" + fName +" " + lName + "] [email: " + email + 
-            "] [grade: " + grade + "] [timeEntered: " + timeEntered + "] [priority: " + priority+"]";  
-  }
-   
-   @Override
-   public int compareTo(Student o){
-      return (int)(this.getStudentPriority().getPriority() - o.getStudentPriority().getPriority());
-   }
+	public void setStudentPriority(Priority newPriority) {
+		this.priority = newPriority;
+	}
+
+	@Override
+	public String toString() {
+		return "Student: [" + fName + " " + lName + "] [email: " + email
+				+ "] [grade: " + grade + "] [timeEntered: " + timeEntered
+				+ "] [priority: " + priority + "]";
+	}
+
+	@Override
+	public int compareTo(Student o) {
+		return (int) (this.getStudentPriority().getPriority()
+				- o.getStudentPriority().getPriority());
+	}
+
+	@Override
+	public String getTitle() {
+		return fName + " " + lName;
+	}
+
+	@Override
+	public String getInfo(int i) {
+		switch (i) {
+			case 0 :
+				return getGrade() + "";
+			case 1 :
+				return getAssignment(0).getTitle();
+			case 2 :
+				return getEmail();
+			default :
+				return lName;
+		}
+
+	}
+
+	/** Mainly used for tested, creates a fake session for a given period */
+	public Session getAssignment(int period) {
+		if (period < assignments.size())
+			return assignments.get(period);
+		else
+			return new Session();
+
+	}
+
+	@Override
+	public String getType() {
+		return "Student";
+	}
 }

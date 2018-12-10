@@ -5,7 +5,9 @@ package com.atcs.career.data;
 
 import java.io.Serializable;
 
-public class Room implements Comparable<Room>, Serializable {
+public class Room implements Comparable<Room>, Serializable, GuiListable {
+	
+	private static final long serialVersionUID = -406223752974907136L;
 	private String roomNumber;
 	private int maxCapacity;
 	private Session[] residentSessions;
@@ -45,4 +47,26 @@ public class Room implements Comparable<Room>, Serializable {
    public String toString(){
       return "Room: " + "[Room Number: " + roomNumber +"] [Capacity: " + maxCapacity +"]" ; 
    }
+
+@Override
+public String getTitle()
+{
+    return roomNumber+"";
+}
+
+@Override
+public String getInfo(int i)
+{
+    switch(i)
+    {
+    case 0: return maxCapacity+"";
+    default: return roomNumber+"";
+    }
+}
+
+@Override
+public String getType()
+{
+    return "Room";
+}
 }

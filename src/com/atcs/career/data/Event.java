@@ -14,7 +14,7 @@ import com.atcs.career.io.importexport.CSVReader;
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
-	private static final int minRequiredForSession = 10; //COME BACK AND CHANGE TO PROPER VALUE
+	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
@@ -44,19 +44,45 @@ public class Event implements Serializable {
 	}
 	
 	public Event()
-	{
-		sessions = new ArrayList<Session>();
-		sessions.add(new Session("Business", "Donald Trump", 3));
-		sessions.add(new Session("Investment", "Warren Buffet", 3));
-		sessions.add(new Session("Military", "James Mattis", 3));
-		sessions.add(new Session("Electrical Engineering", "Elon Musk", 3));
-		sessions.add(new Session("Astronomy", "Albert Einstein", 3));
-		sessions.add( new Session("Criminal Defense", "Robert Shapiro", 3));
-		sessions.add(new Session("Intelligence", "James Comey", 3));
-		sessions.add(new Session("Software Development", "Johnny Ive", 3));
-		
-		students = new ArrayList<Student>();
-	}
+   {
+       super();
+       sessions = new ArrayList<Session>();
+       sessions.add(new Session("Business", "Donald Trump"));
+       sessions.add(new Session("Investment", "Warren Buffet"));
+       sessions.add(new Session("Military", "James Mattis"));
+       sessions.add(new Session("Electrical Engineering", "Elon Musk"));
+       sessions.add(new Session("Astronomy", "Albert Einstein"));
+       sessions.add( new Session("Criminal Defense", "Robert Shapiro"));
+       sessions.add(new Session("Intelligence", "James Comey"));
+       sessions.add(new Session("Software Development", "Johnny Ive"));
+       
+       students = new ArrayList<Student>();
+       {
+        ArrayList<Session> sessions = new ArrayList<Session>();
+        sessions.add(this.sessions.get(0));
+        sessions.add(this.sessions.get(1));
+        sessions.add(this.sessions.get(2));
+       
+       
+       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       
+       students.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
+       students.add(new Student("Eric", "Wang", "ppeter20@pascack.org",sessions, 0));
+       students.add(new Student("Jarret", "Bierman", "ppeter20@pascack.org",sessions, 0));
+       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       
+       rooms = new ArrayList<Room>();
+       for(int i = 121; i< 140; i++)
+       rooms.add(new Room(i + "", 30));
+       
+       
+       
+       }
+       
+       eventName = "TEST";
+       
+   }
 
 	public void selectStudentFile() {
 		students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));

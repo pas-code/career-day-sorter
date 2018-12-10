@@ -152,7 +152,7 @@ public abstract class MoreInfo {
 			JList<String> listNames = new JList<String>(studentNames);
 			listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listNames);
-			String title = session.getTitle();
+			String title = session.getTitle(); // TODO what?
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
 					new Font("Arial", Font.PLAIN, 20), Color.BLACK));
