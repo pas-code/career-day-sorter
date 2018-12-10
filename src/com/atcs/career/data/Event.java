@@ -3,6 +3,7 @@
 
 package com.atcs.career.data;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -20,10 +21,14 @@ public class Event implements Serializable {
 	private String eventName;
 
 	// TESTING
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, IOException {
 		Event e = new Event("career");
 //		Event e = new Event();
 		FileHandler.save(e);
+		e = FileHandler.load(CSVReader.getFileLocation(".event"));
+		System.out.println(e.getStudents());
+		System.out.println(e.getRooms());
+		System.out.println(e.getSessions());
 	}
 
 	/**
@@ -35,10 +40,6 @@ public class Event implements Serializable {
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		 amountOfSessions = sessions.size();
-		students = new ArrayList<Student>();
-		rooms = new ArrayList<Room>();
-		sessions = new ArrayList<Session>();
-		amountOfSessions = 0;
 	}
 	
 	public Event()
