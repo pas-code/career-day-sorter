@@ -29,6 +29,8 @@ public class InfoPanel extends JPanel
     private String title, info1,info2;
     private LineBorder lineBorder;
     private TitledBorder titledBorder;
+//    private MoreInfo moreInfo;
+    private JPanel moreInfoContainer;
 
     public InfoPanel(String title, String info1, String info2)
     {
@@ -45,6 +47,8 @@ public class InfoPanel extends JPanel
         this.info2 = gl.getInfo(1);
         initializePanels();
     }
+    
+    
     
    /**Precondition: Integer Array numInfo must have a size of two*/
     public InfoPanel(String title, String info1, int[] numInfo)
