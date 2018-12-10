@@ -57,17 +57,17 @@ public class Event implements Serializable {
 	}
 
 	public void selectStudentFile() {
-		students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
+		students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
 		amountOfSessions = sessions.size();
 	}
 
 	public void selectRoomFile() {
-		rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
+		rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 	}
 	
 
 	public void selectSessionFile() {
-		sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
+		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		amountOfSessions = sessions.size();
 	}
 
