@@ -5,10 +5,9 @@ package com.atcs.career.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
 
 import com.atcs.career.io.IOUtilities;
-import com.atcs.career.io.file.FileHandler;
-import com.atcs.career.io.importexport.CSVReader;
 
 public class Event implements Serializable {
 

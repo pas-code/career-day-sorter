@@ -33,7 +33,7 @@ public class Session implements Comparable<Session>, Serializable {
       this.title = title;
       this.speaker = speaker;
       this.numOfPeriods = numOfPeriods;
-      this.students =  new ArrayList<ArrayList<Student>>();
+      this.students = new ArrayList<ArrayList<Student>>();
       for(int i = 0; i < numOfPeriods; i++) {
          students.add(new ArrayList<Student>());
       }
@@ -43,6 +43,10 @@ public class Session implements Comparable<Session>, Serializable {
    
    public Session(String title, String speaker) {
    	this(title, speaker, 3);
+   }
+   
+   public Session() {
+      this("", "", 3);
    }
    
    public String getTitle()
@@ -107,10 +111,11 @@ public class Session implements Comparable<Session>, Serializable {
       return this.popularity - o.getPopularity();
    }
 
-@Override
-public String toString() {
-	return "Session: [Title=" + title + ", Speaker=" + speaker + ", Popularity=" + popularity + "]";
-}
+   @Override
+   public String toString() {
+   	return "Session: [Title=" + title + ", Speaker=" + speaker + ", Popularity=" + popularity + "]";
+   }
+   
    @Override
    public boolean equals(Object obj)
    {
