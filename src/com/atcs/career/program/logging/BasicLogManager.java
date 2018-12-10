@@ -13,6 +13,10 @@ public class BasicLogManager {
    
    static {
       manager = new BasicLogManager();
+      
+      //configure the universal logger level
+      manager.setFilter(new BasicLogger.Filter(Level.ALL));
+      manager.master.setOut(System.out);
    }
    
    public static BasicLogger getGlobal() {

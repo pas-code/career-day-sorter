@@ -16,7 +16,7 @@ public class FontManager
     
     public static Font finalFont(float size) {
         if (f == null)
-            f =  finalFont(size);
+            f =  readOpenSans(size);
         return f.deriveFont(size);
     }
     

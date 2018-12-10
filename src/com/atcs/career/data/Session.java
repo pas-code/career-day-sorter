@@ -3,9 +3,12 @@
 
 package com.atcs.career.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Session implements Comparable<Session>{
+public class Session implements Comparable<Session>, Serializable {
+
+	private static final long serialVersionUID = -3388864228230228543L;
 	private String title, speaker;
 	private ArrayList<ArrayList<Student>> students;
 	private Room room;
@@ -17,6 +20,15 @@ public class Session implements Comparable<Session>{
 	private int popularity;
 	private int numOfPeriods;
 
+   public Session(String title, String speaker, ArrayList<ArrayList<Student>> students, int[] gradesAvailable, int popularity){
+      super();
+      this.title = title;
+      this.speaker = speaker;
+      this.students = students;
+      this.gradesAvailable = gradesAvailable;
+      this.popularity = popularity;
+   }
+
    public Session(String title, String speaker, int numOfPeriods){
       this.title = title;
       this.speaker = speaker;
@@ -27,6 +39,10 @@ public class Session implements Comparable<Session>{
       }
       this.gradesAvailable = new int[]{9,10,11,12};
       this.popularity = 0;
+   }
+   
+   public Session(String title, String speaker) {
+   	this(title, speaker, 3);
    }
    
    public String getTitle()
@@ -45,6 +61,7 @@ public class Session implements Comparable<Session>{
    {
       this.speaker = speaker;
    }
+
    public ArrayList<ArrayList<Student>> getStudents()
    {
       return students;
@@ -67,6 +84,7 @@ public class Session implements Comparable<Session>{
    {
       return popularity;
    }
+
    public void addPopularity(int addBy)
    {
       popularity += addBy;
@@ -88,5 +106,18 @@ public class Session implements Comparable<Session>{
    public int compareTo(Session o){
       return this.popularity - o.getPopularity();
    }
-	
+
+@Override
+public String toString() {
+	return "Session: [Title=" + title + ", Speaker=" + speaker + ", Popularity=" + popularity + "]";
 }
+   @Override
+   public boolean equals(Object obj)
+   {
+      Session otherSession = (Session) obj;
+         return this.speaker.equals(otherSession.getSpeaker()) && this.title.equals(otherSession.getTitle());
+   
+   }
+   	
+}
+

@@ -42,7 +42,7 @@ public class BasicLogger {
       	String caller = getCallerMethod();
          getOut().println(LocalDate.now() + " " + LocalTime.now() + " "+ caller
          		+ " - " + getPrintName(caller.substring(0, caller.indexOf(" "))) + ":");
-         getOut().println(l.getLevel().getName() + ": "+l.getMessage());
+         getOut().println(l.getLevel().getName() + ": "+l.getMessage() + "\n");
       } else {
          getOut().println(LocalTime.now() + " " +name + " -- "+l.getLevel().getName() + ": "+l.getMessage());
       }

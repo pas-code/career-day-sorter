@@ -33,6 +33,14 @@ public class CSVReader {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
 			while ((line = br.readLine()) != null) {
+			   boolean checkingForCommas = false;
+			   for(int i = 0; i < line.length(); i++) {
+			      if(line.charAt(i) == '"')
+			         checkingForCommas = !checkingForCommas;
+			      if(checkingForCommas)
+			         if(line.charAt(i) == ',')
+			            line = line.substring(0, i) + "/" + line.substring(i+1);
+			   }
 				String[] lineArr = line.split(",");
 //				System.out.println(Arrays.asList(lineArr));
 				lines.add(lineArr);
