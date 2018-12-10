@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
+import com.atcs.career.data.Student;
 
 public abstract class MoreInfo {
 
@@ -40,6 +41,8 @@ public abstract class MoreInfo {
 			this.setBackground(Color.WHITE);
 		}
 
+		public abstract void changePeriod(int newPeriod);
+		
 	}
 
 	public static class RoomPanel extends InfoPanel {
@@ -95,7 +98,13 @@ public abstract class MoreInfo {
 			      this.add(south, BorderLayout.SOUTH);
 			      south.setPreferredSize(new Dimension(PREF_W, 100));
 			      south.add(editRoomNumber);
-			   }  
+			   }
+
+		@Override
+		public void changePeriod(int newPeriod) {
+			// TODO Auto-generated method stub
+			
+		}  
 
 	}
 
@@ -103,6 +112,56 @@ public abstract class MoreInfo {
 		private static final long serialVersionUID = 1L;
 		// Student instance variables (scrollPane already created with Room)
 		private JButton editStudentName, editStudentEmail;
+		
+		@Override
+		public void changePeriod(int newPeriod) {
+			
+		}
+		
+		public StudentPanel(Event event, Student student)
+		{
+			editStudentName = new JButton("Edit Student Name");
+			editStudentName.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+				}
+				});
+			
+			editStudentEmail = new JButton("Edit Student Email");
+			editStudentEmail.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+				}
+				});
+			
+			generalSetup();
+			
+			setLayout(new BorderLayout());
+			
+			JPanel north = new JPanel(new GridLayout(2, 0));
+			JPanel center = new JPanel(new BorderLayout());
+			JPanel south = new JPanel(new BorderLayout());
+			
+			add(center, BorderLayout.CENTER);
+			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+					"J"};
+			JList<String> listNames = new JList<String>(studentNames);
+			listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			JScrollPane scrollPane = new JScrollPane(listNames);
+			String title = session.getTitle(); // TODO what?
+			setBorder(BorderFactory.createTitledBorder(null, title,
+					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
+					new Font("Arial", Font.PLAIN, 20), Color.BLACK));
+
+			center.add(scrollPane);
+			
+		}
+		
+		
 	}
 
 	public static class SessionPanel extends InfoPanel {
@@ -149,7 +208,7 @@ public abstract class MoreInfo {
 			});
 
 			// DELETE THIS
-			editSpeakerName = new JButton("Edit Spreaker Name");
+			editSpeakerName = new JButton("Edit Speaker Name");
 			editSpeakerName.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -193,6 +252,12 @@ public abstract class MoreInfo {
 			south.add(editClassroom);
 			south.add(editSpeakerName);
 		}
+
+		@Override
+		public void changePeriod(int newPeriod) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 
@@ -200,6 +265,10 @@ public abstract class MoreInfo {
 
 		private static final long serialVersionUID = 1L;
 
+		@Override
+		public void changePeriod(int newPeriod) {
+			
+		}
 	}
 	
 	private static void show(InfoPanel p) {

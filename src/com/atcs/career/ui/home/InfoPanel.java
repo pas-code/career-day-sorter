@@ -14,10 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Session;
 import com.atcs.career.resources.FontManager;
 
-public abstract class InfoPanel extends JPanel
+public class InfoPanel extends JPanel
 {   
     private JPanel titlePanel;
     private JPanel infoPanel;
@@ -28,6 +29,8 @@ public abstract class InfoPanel extends JPanel
     private String title, info1,info2;
     private LineBorder lineBorder;
     private TitledBorder titledBorder;
+//    private MoreInfo moreInfo;
+    private JPanel moreInfoContainer;
 
     public InfoPanel(String title, String info1, String info2)
     {
@@ -36,6 +39,16 @@ public abstract class InfoPanel extends JPanel
         this.info2 = info2;
         initializePanels();
     }
+    
+    public InfoPanel(GuiListable gl)
+    {
+        this.title = gl.getTitle();
+        this.info1 = gl.getInfo(0);
+        this.info2 = gl.getInfo(1);
+        initializePanels();
+    }
+    
+    
     
    /**Precondition: Integer Array numInfo must have a size of two*/
     public InfoPanel(String title, String info1, int[] numInfo)

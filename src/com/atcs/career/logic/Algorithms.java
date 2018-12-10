@@ -3,6 +3,7 @@
 //Nov 21, 2018
 /*TODO
  * - Implement ability to randomly assign sessions to students who didn't answer/couldn't get in a selected session
+ * - give proper weight to time
  */
 
 
@@ -58,10 +59,10 @@ public class Algorithms{
          Student currentStud = students.get(i);
          int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
          if (currentStud.getGrade() >= classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag)); //Dont set priority w/ constructor
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag));
          }
          else if (currentStud.getGrade() < classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag)); //Same
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
          }
       }
       Collections.sort(students);
@@ -83,7 +84,7 @@ public class Algorithms{
          Collections.sort(students);  //reranks students
       } 
       
-      //Assign randoms
+      assignRandomsAtEnd(sessions);
    }
    
    
@@ -100,11 +101,46 @@ public class Algorithms{
       }
       
       //They couldn't get in any session they chose this period
-      currentStud.getAssignments().set(period - 1, null); //PLACEHOLDER LINE UNTIL RANDOM STUFF WORKS
+      currentStud.getAssignments().set(period - 1, new Session());
       toBeRandomlyAssigned.get(period - 1).add(currentStud);
       
       
       changeStudentContentness(currentStud); //Deals with contentness
+   }
+   
+//   public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){   //COME BACK AND UNCOMMENT
+////      for(int i = 0; i < sessions.size(); i++) {
+////         for(int j=0; j< sessions.get(i).size(); j++){
+////            if(sessions.get(i).get(j).size()<min)
+////               return false;
+////            
+////         }
+////        
+////      }
+////      return true;
+//   }
+   
+   
+   public static void assignRandomsAtEnd(ArrayList<Session> sessions){
+      
+      for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
+         for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
+            Session session = getLeastPopulatedSessionPerPeriod(sessions, i);
+            Student stud = toBeRandomlyAssigned.get(i).remove(j);
+            session.getStudents().get(i).add(stud);
+            stud.getAssignments().set(j, session);
+         }
+      }
+   }
+   
+   private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
+      Session min = sessions.get(0);
+      for(int i = 0; i < sessions.size(); i++){
+         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()){
+            min = sessions.get(i);
+         }
+      }
+      return min;
    }
    
    public static void changeStudentContentness(Student currentStud){
