@@ -22,6 +22,7 @@ public class Event implements Serializable {
 	// TESTING
 	public static void main(String[] args) {
 		Event e = new Event("career");
+//		Event e = new Event();
 		FileHandler.save(e);
 	}
 
@@ -30,10 +31,10 @@ public class Event implements Serializable {
 	 */
 	public Event(String name) {
 		eventName = name;
-		// students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
-		// rooms = IOUtilities.loadRoomArray(IOUtilities.importCSV());
-		// sessions = IOUtilities.loadSessionArray(IOUtilities.importCSV());
-		// amountOfSessions = sessions.size();
+		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
+		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
+		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
+		 amountOfSessions = sessions.size();
 		students = new ArrayList<Student>();
 		rooms = new ArrayList<Room>();
 		sessions = new ArrayList<Session>();

@@ -27,27 +27,6 @@ public class IOUtilities
    }
    
    /**
-    * Prompts user to open a file (.csv)
-    * @return 
-    * String representing the .csv file path
-    */
-   public static String importCSV(){
-      String filePath = "";
-      URL importer = CSVReader.class.getResource("ImportLocation.scpt");
-       try {
-          filePath = ScriptInterpreter.getProcessValues(new ProcessBuilder("osascript", importer.getPath()))[0];
-          filePath = filePath.replace(":", "/");
-          filePath = filePath.substring(filePath.indexOf("/"));
-          System.out.println("File: " + filePath);
-//        loadStudentArray(filePath); 
-          return filePath;
-       } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
-          return "File not found";
-       }
-   }
-   
-   /**
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
