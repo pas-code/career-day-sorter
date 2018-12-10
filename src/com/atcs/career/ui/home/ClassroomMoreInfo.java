@@ -1,7 +1,6 @@
 package com.atcs.career.ui.home;
 //Screen for when you want more information on the student
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,11 +24,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 
 public class ClassroomMoreInfo extends JPanel implements KeyListener, MouseListener, MouseMotionListener
@@ -206,6 +204,7 @@ public class ClassroomMoreInfo extends JPanel implements KeyListener, MouseListe
     * This makes your whole program work.
     */
    public static void main(String[] args) {
-      new ClassroomMoreInfo();
+   	Event e = new Event();
+      new ClassroomMoreInfo(e);
    }
 }

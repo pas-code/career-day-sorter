@@ -78,11 +78,7 @@ public class IOUtilities
    public static ArrayList<Session> loadSessionArray(String fileName){
       ArrayList<Session> sessions = new ArrayList<Session>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
-//      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/sessions.csv");
       for(int i = 0; i < lines.size(); i++){
-//    	  System.out.println(lines.get(i)[0]);
-//    	  System.out.println(lines.get(i)[0].indexOf("-"));
-//    	  System.out.println(lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3));
          String speaker = lines.get(i)[0].substring(0, lines.get(i)[0].indexOf(" - "));
          String title = lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3);
          sessions.add(new Session(title, speaker));

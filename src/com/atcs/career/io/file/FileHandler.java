@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.program.MainClass;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.ResourceAccess;
 
@@ -30,6 +31,7 @@ public class FileHandler {
    	createFileNames();
    	try {
 			createFiles();
+			if (MainClass.isApp)
 			ResourceAccess.transfer("java", new File(JAVA_EXEC), 0);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -43,7 +45,7 @@ public class FileHandler {
       LOG_DIR = HOME_DIR + "Logs/";
       EMAIL_DIR = HOME_DIR + "EmailTemp/";
       
-      JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
+    	JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
    }
    
    public static void createFiles() throws IOException {
@@ -52,16 +54,16 @@ public class FileHandler {
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
       
-      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin").mkdir();
+//      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/").mkdir();
+      if (MainClass.isApp) 
+	      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin").mkdir();
       
-      new File(JAVA_EXEC).createNewFile();
    }
    
    public static void save(Event e){
-      createFileNames();
-      try {
-      	createFiles();
+   	try {
          String location = SAVE_DIR + e.getEventName() + SUFFIX;
+         System.out.println("Create "+location);
          new File(location).createNewFile();
          ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location));
          os.writeObject(e);

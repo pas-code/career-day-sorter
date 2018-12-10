@@ -6,17 +6,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,14 +18,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
+
+//NOTE create an abstract class called MoreInfo
+// then create subclasses for each type. (room, event, session, etc)
+// syntax MoreInfo.Room()
 
 public class MoreInfoGeneral extends JPanel 
 {
