@@ -57,7 +57,6 @@ public class Event implements Serializable {
 
 	public void selectStudentFile() {
 		students = IOUtilities.loadStudentArray(IOUtilities.importCSV());
-		amountOfSessions = sessions.size();
 	}
 
 	public void selectRoomFile() {
