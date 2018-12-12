@@ -32,6 +32,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.atcs.career.io.importexport.CSVReader;
 //Jarrett Bierman
 //11/18/18
 //Properties
@@ -40,14 +42,18 @@ public class PropertiesPane extends JPanel
    private static final long serialVersionUID = 1L;
    public static final int PREF_W = 700;
    public static final int PREF_H = 300;
+   public static final int BORDER_SIZE = 50;
+   
+   
    private JPanel gridPanel;
-   private JLabel sessionLabel, studentLabel, classroomLabel;
+   private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel;
    private JButton sessionButton, studentButton, classroomButton;
    private File sessionFile, studentFile, classroomFile;
    private JButton submit;
    private JTextField title;
+   private final String textPrompt = "Enter Project Name Here";
    
-   private JSpinner periodCount2;
+   private JSpinner periodCount;
    
    private final String BUTTON_DEFAULT_TEXT = "Choose File";
 
@@ -55,21 +61,34 @@ public class PropertiesPane extends JPanel
    public PropertiesPane() 
    {     
       setFocusable(true);   
-      
-      final String textPrompt = "Enter Project Name Here";
-
-      
       this.setLayout(new BorderLayout());
-      this.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 100));
-      
+      this.setBorder(BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));  
       gridPanel = new JPanel(new GridLayout(4,2));
-      gridPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
       
-      sessionLabel = new JLabel("Session File (.csv): ");
-      studentLabel = new JLabel("Student File (.csv): ");
-      classroomLabel = new JLabel("Classroom File (.csv): ");
+      createLabels();
+      createButtons();
+      createFieldAndSpinner();
+      addGridStuff();
       
-      sessionButton = new JButton(BUTTON_DEFAULT_TEXT);
+      
+      this.add(submit, BorderLayout.SOUTH);  
+      this.add(title, BorderLayout.NORTH);         
+      this.add(gridPanel);
+   }
+
+   
+   
+   public void createLabels()
+   {
+      sessionLabel = new JLabel("Session File (.csv): ");   
+      studentLabel = new JLabel("Student File (.csv): ");    
+      classroomLabel = new JLabel("Classroom File (.csv): ");    
+      periodLabel = new JLabel("Number of Periods: ");
+   }
+   
+   public void createButtons()
+   {
+      sessionButton = new JButton(BUTTON_DEFAULT_TEXT);            
       sessionButton.addActionListener(new ActionListener() {
 
          @Override
@@ -100,28 +119,6 @@ public class PropertiesPane extends JPanel
             classroomFile = selectFile(classroomButton);
          }
       });
-   
-      gridPanel.add(sessionLabel);
-      gridPanel.add(sessionButton);
-      
-      gridPanel.add(studentLabel);
-      gridPanel.add(studentButton);
-      
-      gridPanel.add(classroomLabel);
-      gridPanel.add(classroomButton);
-      
-      gridPanel.add(new JLabel("Number of Periods: "));
-      periodCount2 = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
-      periodCount2.setPreferredSize(new Dimension(30, 0));
-      periodCount2.setFont(new Font("Ariel", Font.PLAIN, 50));
-      periodCount2.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
-      ((JSpinner.DefaultEditor)periodCount2.getEditor()).getTextField().setEditable(false);
-      
-      
-      gridPanel.add(periodCount2);
-      
-      
-      
       
       submit = new JButton("Submit");
       submit.addActionListener(new ActionListener() {
@@ -131,14 +128,14 @@ public class PropertiesPane extends JPanel
          {
             try 
             {  
-               if(!(title.getText().isEmpty() || periodCount2.getValue() == null || title.getText().equals(textPrompt)))
+               if(!(title.getText().isEmpty() || periodCount.getValue() == null || title.getText().equals(textPrompt)))
                {
                   //Do all of the important info work here
                   System.out.println("Title: " + title.getText());
                   System.out.println(sessionFile.getName());
                   System.out.println(studentFile.getName());
                   System.out.println(classroomFile.getName());
-                  System.out.println("Periods: " + (int)periodCount2.getValue());
+                  System.out.println("Periods: " + (int)periodCount.getValue());
                }
                else
                {
@@ -152,8 +149,10 @@ public class PropertiesPane extends JPanel
 
          }
       });
-      this.add(submit, BorderLayout.SOUTH);  
-      
+   }
+   
+   public void createFieldAndSpinner()
+   {
       title = new JTextField(textPrompt);
       title.setForeground(Color.GRAY);
       title.setFont(new Font("Ariel", Font.PLAIN, 40));
@@ -177,43 +176,50 @@ public class PropertiesPane extends JPanel
          }
          
       });
-      this.add(title, BorderLayout.NORTH);
       
+      periodCount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
+      periodCount.setPreferredSize(new Dimension(30, 0));
+      periodCount.setFont(new Font("Ariel", Font.PLAIN, 50));
+      periodCount.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+      ((JSpinner.DefaultEditor)periodCount.getEditor()).getTextField().setEditable(false);  
       
-      this.add(gridPanel);
-    
    }
    
-   private File selectFile(JButton b)
+   public void addGridStuff()
    {
-      
-      //THIS IS THE TEMP VERSION TOM MADE A BETTER VERSION THAT ILL IMPLEMENT LATER
-      JFileChooser chooser = new JFileChooser();
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv files", "csv");
-      chooser.setFileFilter(filter);
-      int returnVal = chooser.showOpenDialog(this);
-      if(returnVal == JFileChooser.APPROVE_OPTION)
+      gridPanel.add(sessionLabel);
+      gridPanel.add(sessionButton);     
+      gridPanel.add(studentLabel);
+      gridPanel.add(studentButton);     
+      gridPanel.add(classroomLabel);
+      gridPanel.add(classroomButton);    
+      gridPanel.add(periodLabel);
+      gridPanel.add(periodCount);
+   }
+   
+   
+   
+   /**
+    * The Select the File Method
+    * @param b
+    * @return
+    */
+   public File selectFile(JButton b)
+   {
+      String location = CSVReader.getFileLocation(".csv");
+      int index = 0;
+      for(int i = 0; i < location.length(); i++)
       {
-         b.setText(chooser.getSelectedFile().getName());
-         return chooser.getSelectedFile();
-      }
-      return null;
+         if(location.charAt(i) == File.separatorChar)
+            index = i;
+      }        
+      String name = location.substring(index + 1);
+      b.setText(name);
       
+      return new File(location);
    }
    
 
-   /**
-    * The paintComponent is a method that is inherited from the JPanel class.
-    * Writing code in here overrides the method
-    * This is where you draw shapes, pictures, and objects
-    */
-   @Override
-   public void paintComponent(Graphics g) 
-   {
-      super.paintComponent(g);
-      Graphics2D g2 = (Graphics2D) g;
-      g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));     
-   }
 
    
    /**

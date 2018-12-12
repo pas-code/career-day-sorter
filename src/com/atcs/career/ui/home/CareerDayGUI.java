@@ -92,14 +92,22 @@ public class CareerDayGUI extends JPanel {
 		}
 		this.add(west, BorderLayout.WEST);
 	}
+	
+	// XXX this might break continuity... changes of the returned array will not affect the original. 
+	private static ArrayList<GuiListable> toListable(ArrayList<?> arr) {
+		ArrayList<GuiListable> ret = new ArrayList<GuiListable>();
+		for (int i = 0; i < arr.size(); i++) 
+			ret.add((GuiListable)arr.get(i));
+		return ret;
+	}
 
 	private void tabConfig() {
 		// center panel
 		tabs = new JTabbedPane();
-		addTab(event.getSessions());
+		addTab(toListable(event.getSessions()));
 		// students panel
-		addTab(event.getStudents());
-		addTab(event.getRooms());
+		addTab(toListable(event.getStudents()));
+		addTab(toListable(event.getRooms()));
 		// ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 		//
 		// for (int i = 0; i < event.getStudents().size(); i++)
