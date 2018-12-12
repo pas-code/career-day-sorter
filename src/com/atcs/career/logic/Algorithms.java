@@ -51,7 +51,7 @@ public class Algorithms{
          ArrayList<Session> requests = stud.getRequests();
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
-            sessionHash.get(requests.get(i)).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
+            sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
          }
       }
       
