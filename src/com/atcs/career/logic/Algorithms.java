@@ -25,6 +25,18 @@ public class Algorithms{
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
+   //BIG METHOD THAT DOES EVERYTHING
+   public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
+      int classCutOffForGroupLevel = 0;
+      int upperClassmanLevelMag = 0;
+      int lowerClassmanLevelMag = 0;
+      
+      assignRoomsToSessions(students, rooms, sessions);
+      rankStudents(students, classCutOffForGroupLevel, upperClassmanLevelMag, lowerClassmanLevelMag);
+      assignStudentsToSessions(students, sessions);
+   }
+   
+   
    //ALGORITHM 1
    public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
@@ -85,7 +97,39 @@ public class Algorithms{
       } 
       
       assignRandomsAtEnd(sessions);
+      
+      while(!allSessionAreFilledToMin(sessions)){
+         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
+         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
+         
+         boolean successfullyChangedSomeone = false;
+         for(int i = students.size() - 1; i >= 0; i--){
+            if(students.get(i).getPeriodOfLeastDesired() == getLeastPopulatedSessionIndex(sessions, 3) && students.get(i).isSwitchable()){
+               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
+               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+               students.get(i).getRequests().set(period, minSession); //Tell them they're in the new session
+               students.get(i).setSwitchable(false);
+               successfullyChangedSomeone = true;
+            }
+            break;
+         }
+         
+         if(!successfullyChangedSomeone){
+            for(int i = students.size() - 1; i >= 0; i--){
+               if(students.get(i).isSwitchable()){
+                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+                  sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
+                  minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+                  students.get(i).getRequests().set(period, minSession); //Tell them they're in the new session
+                  students.get(i).setSwitchable(false);
+               }
+            }
+         }
+      }
    }
+   
+   
    
    
    public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
@@ -108,21 +152,19 @@ public class Algorithms{
       changeStudentContentness(currentStud); //Deals with contentness
    }
    
-//   public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){   //COME BACK AND UNCOMMENT
-////      for(int i = 0; i < sessions.size(); i++) {
-////         for(int j=0; j< sessions.get(i).size(); j++){
-////            if(sessions.get(i).get(j).size()<min)
-////               return false;
-////            
-////         }
-////        
-////      }
-////      return true;
-//   }
+   public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
+      int minCapacity = 10;
+      for(int i = 0; i < sessions.size(); i++) {
+         for(int j=0; j < sessions.get(i).getStudents().size(); j++){
+            if(sessions.get(i).getStudents().get(i).size() < minCapacity)
+               return false;
+         }        
+      }
+      return true;
+   }
    
    
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
-      
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
             Session session = getLeastPopulatedSessionPerPeriod(sessions, i);
@@ -141,6 +183,21 @@ public class Algorithms{
          }
       }
       return min;
+   }
+   
+   private static int getLeastPopulatedSessionIndex(ArrayList<Session> sessions, int numberOfPeriods){
+      ArrayList<Session> leastPopulatedSessions = new ArrayList<Session>();
+      for(int i = 0; i < numberOfPeriods; i++){
+         leastPopulatedSessions.add(getLeastPopulatedSessionPerPeriod(sessions, i));  
+      }
+      
+      Session min = leastPopulatedSessions.get(0);
+      for(int i = 0; i < leastPopulatedSessions.size(); i++){
+         if(leastPopulatedSessions.get(i).getStudents().get(i).size() < min.getStudents().get(leastPopulatedSessions.indexOf(min)).size()){
+            min = leastPopulatedSessions.get(i);
+         }
+      }
+      return leastPopulatedSessions.indexOf(min);
    }
    
    public static void changeStudentContentness(Student currentStud){

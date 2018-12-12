@@ -14,6 +14,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;
 	private Priority priority;
+	private boolean isSwitchable;
 
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
@@ -32,6 +33,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
 		this.assignments = new ArrayList<Session>();
+		isSwitchable = true;
 	}
 
 	/**
@@ -69,6 +71,17 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		return 0;
 	}
 
+	public int getPeriodOfLeastDesired(){
+	   int leastDesiredPeriodIndex = 0;
+	   for(int i = 1; i < assignments.size(); i++){
+	      if(requests.indexOf(assignments.get(i)) == -1)
+	         return i;
+	      if(requests.indexOf(assignments.get(i)) > requests.indexOf(assignments.get(leastDesiredPeriodIndex)))
+	         leastDesiredPeriodIndex = i;
+	   }
+	   return leastDesiredPeriodIndex;
+	}
+	
 	public String getlName() {
 		return lName;
 	}
@@ -183,4 +196,14 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	public String getType() {
 		return "Student";
 	}
+
+   public boolean isSwitchable()
+   {
+      return isSwitchable;
+   }
+
+   public void setSwitchable(boolean isSwitchable)
+   {
+      this.isSwitchable = isSwitchable;
+   }
 }
