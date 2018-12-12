@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -64,6 +66,40 @@ public class WelcomeScreen extends JPanel{
 		this.add(leftPanel, BorderLayout.WEST);
 		
 		f.setVisible(true);
+		
+		//Create New Event
+		cb.addMouseListener(new MouseListener()
+		        {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e)
+                    {
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e)
+                    {
+//                        System.out.println("Pressed");
+                        new PropertiesPane();
+                        
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e)
+                    {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e)
+                    {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e)
+                    {
+                    }
+		    
+		        });
 	}
 	
 	private JPanel topPanelConfig()

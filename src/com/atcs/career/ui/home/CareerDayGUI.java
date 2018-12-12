@@ -102,30 +102,11 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	private void tabConfig() {
-		// center panel
 		tabs = new JTabbedPane();
+		tabs.setFont(smallFont);
 		addTab(toListable(event.getSessions()));
-		// students panel
 		addTab(toListable(event.getStudents()));
 		addTab(toListable(event.getRooms()));
-		// ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-		//
-		// for (int i = 0; i < event.getStudents().size(); i++)
-		// {
-		// Student student = event.getStudents().get(i);
-		// StudentInfoUtil siu = new StudentInfoUtil(student, 1);
-		// sessionPanelHolder.add(siu);
-		// }
-		//
-		//
-		// sessionScroll = new JScrollPane(ScrollBackPanel);
-		// tabs.addTab("Students", sessionScroll);
-		// classroom panel
-		// classroomList = new JList();
-		// classroomList.setFont(smallFont);
-		// classroomScroll = new JScrollPane(classroomList);
-		// tabs.addTab("Classrooms", classroomScroll);
-		tabs.setFont(smallFont);
 		this.add(tabs, BorderLayout.CENTER);
 	}
 

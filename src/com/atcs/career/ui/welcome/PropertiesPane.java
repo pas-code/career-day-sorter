@@ -60,6 +60,7 @@ public class PropertiesPane extends JPanel
 
    public PropertiesPane() 
    {     
+       System.out.println("this should work");
       setFocusable(true);   
       this.setLayout(new BorderLayout());
       this.setBorder(BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));  
@@ -74,6 +75,7 @@ public class PropertiesPane extends JPanel
       this.add(submit, BorderLayout.SOUTH);  
       this.add(title, BorderLayout.NORTH);         
       this.add(gridPanel);
+      createAndShowGUI();
    }
 
    
@@ -226,10 +228,10 @@ public class PropertiesPane extends JPanel
     * The createAndShowGUI class puts your JPanel into a JFrame and creates the GUI interface.
     * This pretty much sets up your screen so you can see what you have coded.
     */
-   private static void createAndShowGUI() {
-      PropertiesPane gamePanel = new PropertiesPane();
+   private  void createAndShowGUI() {
+      PropertiesPane gamePanel = this;
       JFrame frame = new JFrame("Selection Panel");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add(gamePanel);
       frame.pack();
       frame.setLocationRelativeTo(null);
@@ -250,10 +252,6 @@ public class PropertiesPane extends JPanel
     * This makes your whole program work.
     */
    public static void main(String[] args) {
-      SwingUtilities.invokeLater(new Runnable() {
-         public void run() {
-            createAndShowGUI();
-         }
-      });
+      new PropertiesPane();
    }
 }
