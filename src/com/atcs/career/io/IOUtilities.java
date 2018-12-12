@@ -25,7 +25,6 @@ public class IOUtilities
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
    }
-   
    /**
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
