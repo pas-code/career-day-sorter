@@ -22,17 +22,14 @@ public class Algorithms{
     /*Each sub ArrayList corresponds to a period
     * Students who didn't submit a request will be placed into every sub array
     * Students who couldn't get a top 5 choice placed into specific sub array for that period
+    * ADD Magnitudes and Weight from priority class
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
    //BIG METHOD THAT DOES EVERYTHING
    public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
-      int classCutOffForGroupLevel = 0;
-      int upperClassmanLevelMag = 0;
-      int lowerClassmanLevelMag = 0;
-      
       assignRoomsToSessions(students, rooms, sessions);
-      rankStudents(students, classCutOffForGroupLevel, upperClassmanLevelMag, lowerClassmanLevelMag);
+      rankStudents(students);
       assignStudentsToSessions(students, sessions);
    }
    
@@ -74,7 +71,10 @@ public class Algorithms{
    }
    
    //ALGORITHM 2
-   public static void rankStudents(ArrayList<Student> students, int classCutOffForGroupLevel, int upperClassmanLevelMag, int lowerClassmanLevelMag){
+   public static void rankStudents(ArrayList<Student> students){
+      int classCutOffForGroupLevel = 11;
+      int upperClassmanLevelMag = 0;  //add magnitude 
+      int lowerClassmanLevelMag = 0;  //add magnitude
       for(int i = 0; i < students.size(); i++) {
          Student currentStud = students.get(i);
          int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
