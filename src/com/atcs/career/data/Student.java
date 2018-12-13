@@ -34,6 +34,20 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this.assignments = new ArrayList<Session>();
 	}
 
+   public Student(String lName, String fName, String email) {
+      this.lName = lName;
+      this.fName = fName;
+      this.email = email;
+      this.requests = new ArrayList<Session>();
+      grade = getGradeFromEmail();
+      priority = getStudentPriority();
+      this.timeEntered = 0;
+   }
+   
+   public boolean equals(Student s){
+      return (lName.equals(s.getlName()) && fName.equals(s.getfName()) && email.equals(s.getEmail()));
+   }
+
 	/**
 	 * Returns 0 if an invalid email is used
 	 * 
