@@ -108,7 +108,7 @@ public class Algorithms{
                Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
                sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
                minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-               students.get(i).getRequests().set(period, minSession); //Tell them they're in the new session
+               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
                students.get(i).setSwitchable(false);
                successfullyChangedSomeone = true;
             }
@@ -121,24 +121,27 @@ public class Algorithms{
                   Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
                   sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
                   minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-                  students.get(i).getRequests().set(period, minSession); //Tell them they're in the new session
+                  students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
                   students.get(i).setSwitchable(false);
                }
             }
          }
       }
+      
+      for(int i = 0; i < students.size(); i++){
+         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
+            changeStudentContentness(students.get(i));
+         }
+      }
    }
-   
-   
-   
-   
+      
    public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
       for(int k = 0; k < currentStud.getRequests().size(); k++){ //Check every request the student makes
          Session desiredSession = sessions.get(findIndexOfSession(currentStud.getRequests().get(k), sessions));
          if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity() &&
            !currentStud.getAssignments().contains(desiredSession)){
             desiredSession.getStudents().get(period).add(currentStud);
-            currentStud.getAssignments().set(period - 1, desiredSession);
+            currentStud.getAssignments().add(period - 1, desiredSession); //Changed from set --> add
             changeStudentContentness(currentStud); //Deals with contentness
             return;
          }
