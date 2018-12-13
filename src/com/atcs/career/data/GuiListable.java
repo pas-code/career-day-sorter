@@ -10,5 +10,5 @@ public interface GuiListable
     public String getTitle();
     public String getInfo(int i);
     public String getType();
-    
+    public byte getTypeNum();
 }

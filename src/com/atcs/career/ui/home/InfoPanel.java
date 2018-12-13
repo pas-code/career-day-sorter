@@ -14,41 +14,53 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Session;
 import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
 public class InfoPanel extends JPanel
 {   
     private JPanel titlePanel;
     private JPanel infoPanel;
-    private JPanel optionPanel;
     private JLabel titleLabel;
     private JLabel numAttending;
-    private JPanel moreInfoPanel;
     private String title, info1,info2;
     private LineBorder lineBorder;
     private TitledBorder titledBorder;
-//    private MoreInfo moreInfo;
-    private JPanel moreInfoContainer;
+    private JPanel moreInfoHolder;
+    private MoreInfo.SideInfoPanel moreInfo;
+    private GuiListable gl;
+    private Event event;
 
-    public InfoPanel(String title, String info1, String info2)
+    public InfoPanel(String title, String info1, String info2, Event e)
     {
         this.title = title;
         this.info1 = info1;
         this.info2 = info2;
+        event = e;
         initializePanels();
     }
     
-    public InfoPanel(GuiListable gl)
+    public InfoPanel(GuiListable gl, JPanel moreInfoHolder)
     {
-        this.title = gl.getTitle();
-        this.info1 = gl.getInfo(0);
-        this.info2 = gl.getInfo(1);
+        this.gl = gl;
+        title = gl.getTitle();
+        info1 = gl.getInfo(0);
+        info2 = gl.getInfo(1);
+        this.moreInfoHolder = moreInfoHolder;
         initializePanels();
     }
     
-    
+    public void initMoreInfo()
+    {
+        String type = gl.getType();
+       if(type.equals("Session"))
+           moreInfo = new MoreInfo.SessionPanel(event, (Session) gl);
+       
+        
+    }
     
    /**Precondition: Integer Array numInfo must have a size of two*/
     public InfoPanel(String title, String info1, int[] numInfo)
@@ -63,7 +75,6 @@ public class InfoPanel extends JPanel
     {
         titlePanel = new JPanel();
         infoPanel = new JPanel();
-        optionPanel = new JPanel();
         titleLabel = new JLabel("     " + info1);
         numAttending = new JLabel("     " + info2);
         this.setPreferredSize(new Dimension(0, 100));

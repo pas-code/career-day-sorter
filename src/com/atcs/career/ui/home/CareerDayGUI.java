@@ -114,7 +114,7 @@ public class CareerDayGUI extends JPanel {
 		for (int i = 0; i < eventData.size(); i++) {
 			System.out
 					.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i)));
+			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i), east));
 
 		}
 
