@@ -36,6 +36,14 @@ public class Algorithms{
       assignStudentsToSessions(students, sessions);
    }
    
+   public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
+      double totalCont = 0;
+      for(int i = 0; i < students.size(); i++){
+         totalCont += students.get(i).getStudentPriority().getContentness();
+      }
+      return totalCont/students.size();
+   }
+   
    
    //ALGORITHM 1
    public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
