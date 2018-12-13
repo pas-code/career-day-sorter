@@ -19,15 +19,18 @@ public class WelcomeGUIMaster extends JPanel
    private PropertiesPane propertiesPane;
    private JFrame frame;
    private Event event;
+   private CardLayout cards;
 
    public WelcomeGUIMaster() 
    {  
-      super(new CardLayout());            
-      welcomeScreen = new WelcomeScreen();
+      cards = new CardLayout();
+      this.setLayout(cards);
+      welcomeScreen = new WelcomeScreen(this);
       this.add(welcomeScreen, "welcome");
       propertiesPane = new PropertiesPane(this);
-      this.add(propertiesPane, "props");
+      this.add(propertiesPane, "properties");
    }
+   
    
    public void sendEvent()
    {
@@ -37,7 +40,8 @@ public class WelcomeGUIMaster extends JPanel
    public void changePanel(String name)
    {
       // if the thing isnt null... else create it
-      ((CardLayout)this.getLayout()).show(frame, name);
+      cards.show(frame, name);
+//      ((CardLayout)this.getLayout()).show(frame, name);
    }
 
    private void constructFrame() {

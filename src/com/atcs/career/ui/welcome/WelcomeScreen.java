@@ -24,12 +24,13 @@ public class WelcomeScreen extends JPanel {
 	private JPanel topPanel;
 	private JPanel leftPanel;
 	private Font openSans;
-
+	private boolean newClicked, openClicked;
 	private JButton newButton, openButton;
-
 	private JLabel title;
+	private WelcomeGUIMaster master;
 
-	public WelcomeScreen() {
+	public WelcomeScreen(WelcomeGUIMaster master) {
+	    this.master = master;
 		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
@@ -42,10 +43,13 @@ public class WelcomeScreen extends JPanel {
 
 		newButton.addActionListener(e -> {
 			System.out.println("new");
+			master.changePanel("props");
+			
 		});
 
 		openButton.addActionListener(e -> {
 			System.out.println("open");
+			
 		});
 
 		// cb = new MenuCircleButton("New",
@@ -108,4 +112,24 @@ public class WelcomeScreen extends JPanel {
 
 	public static void main(String args[]) {
 	}
+
+   public boolean isNewClicked()
+   {
+      return newClicked;
+   }
+
+   public void setNewClicked(boolean newClicked)
+   {
+      this.newClicked = newClicked;
+   }
+
+   public boolean isOpenClicked()
+   {
+      return openClicked;
+   }
+
+   public void setOpenClicked(boolean openclicked)
+   {
+      this.openClicked = openclicked;
+   }
 }

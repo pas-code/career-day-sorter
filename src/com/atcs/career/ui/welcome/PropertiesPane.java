@@ -220,7 +220,7 @@ public class PropertiesPane extends JPanel
    
 
    private void sendEvent() {
-      master.sendEvent();
+//      master.sendEvent();
    }
 
    
