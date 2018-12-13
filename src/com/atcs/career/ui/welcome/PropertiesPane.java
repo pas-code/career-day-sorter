@@ -57,7 +57,7 @@ public class PropertiesPane extends JPanel
    private final String BUTTON_DEFAULT_TEXT = "Choose File";
 
 
-   public PropertiesPane() 
+   public PropertiesPane(WelcomeGUIMaster master) 
    {     
       setFocusable(true);   
       this.setLayout(new BorderLayout());
@@ -73,7 +73,7 @@ public class PropertiesPane extends JPanel
       this.add(submit, BorderLayout.SOUTH);  
       this.add(title, BorderLayout.NORTH);         
       this.add(gridPanel);
-      createAndShowGUI();
+//      createAndShowGUI();
    }
    
    
@@ -219,21 +219,24 @@ public class PropertiesPane extends JPanel
    }
    
 
+   private void sendEvent() {
+      master.sendEvent();
+   }
 
    
    /**
     * The createAndShowGUI class puts your JPanel into a JFrame and creates the GUI interface.
     * This pretty much sets up your screen so you can see what you have coded.
-    */
-   private  void createAndShowGUI() {
-      PropertiesPane gamePanel = this;
-      JFrame frame = new JFrame("Selection Panel");
-//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.getContentPane().add(gamePanel);
-      frame.pack();
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
-   }
+//    */
+//   private  void createAndShowGUI() {
+//      PropertiesPane gamePanel = this;
+//      JFrame frame = new JFrame("Selection Panel");
+////      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//      frame.getContentPane().add(gamePanel);
+//      frame.pack();
+//      frame.setLocationRelativeTo(null);
+//      frame.setVisible(true);
+//   }
 
    /**
     * This overrides the JPanel's getPreferredSize() method
@@ -249,6 +252,5 @@ public class PropertiesPane extends JPanel
     * This makes your whole program work.
     */
    public static void main(String[] args) {
-      new PropertiesPane();
    }
 }

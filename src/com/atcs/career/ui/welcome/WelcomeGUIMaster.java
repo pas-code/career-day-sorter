@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.atcs.career.data.Event;
 //Jarrett Bierman
 //9/4/18
 //Default JPanel Class (Copy and Paste)
@@ -16,12 +18,26 @@ public class WelcomeGUIMaster extends JPanel
    private WelcomeScreen welcomeScreen;
    private PropertiesPane propertiesPane;
    private JFrame frame;
+   private Event event;
 
    public WelcomeGUIMaster() 
    {  
       super(new CardLayout());            
-      welcomeScreen = new WelcomeScreen("A Thing");
-      this.add(welcomeScreen);
+      welcomeScreen = new WelcomeScreen();
+      this.add(welcomeScreen, "welcome");
+      propertiesPane = new PropertiesPane(this);
+      this.add(propertiesPane, "props");
+   }
+   
+   public void sendEvent()
+   {
+      
+   }
+   
+   public void changePanel(String name)
+   {
+      // if the thing isnt null... else create it
+      ((CardLayout)this.getLayout()).show(frame, name);
    }
 
    private void constructFrame() {

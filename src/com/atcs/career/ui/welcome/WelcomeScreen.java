@@ -29,7 +29,7 @@ public class WelcomeScreen extends JPanel {
 
 	private JLabel title;
 
-	public WelcomeScreen(JFrame parentFrame) {
+	public WelcomeScreen() {
 		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
@@ -107,6 +107,5 @@ public class WelcomeScreen extends JPanel {
 	}
 
 	public static void main(String args[]) {
-		new WelcomeScreen(new JFrame("TestWelcome"));
 	}
 }
