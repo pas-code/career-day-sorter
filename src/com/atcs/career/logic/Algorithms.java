@@ -148,7 +148,7 @@ public class Algorithms{
       }
       
       //They couldn't get in any session they chose this period
-      currentStud.getAssignments().set(period - 1, new Session());
+      currentStud.getAssignments().add(period - 1, new Session()); //Changed from set --> add
       toBeRandomlyAssigned.get(period - 1).add(currentStud);
       
       
