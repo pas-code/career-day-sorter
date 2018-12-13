@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
@@ -25,6 +26,12 @@ public class IOUtilities
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
    }
+   
+   public static ArrayList<Student> getUnsubmittedStudents(Event e){
+      ArrayList<Student> arr = new ArrayList<Student>();
+      return arr;
+   }
+   
    
    /**
     * Loads ArrayList with Room objects from local .csv file

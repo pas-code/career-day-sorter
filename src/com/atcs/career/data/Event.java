@@ -124,4 +124,36 @@ public class Event implements Serializable {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
+
+   public ArrayList<Student> getMasterStudents() {
+      return masterStudents;
+   }
+
+   public void setMasterStudents(ArrayList<Student> masterStudents) {
+      this.masterStudents = masterStudents;
+   }
+
+   public static long getSerialversionuid() {
+      return serialVersionUID;
+   }
+
+   public static int getMinsessionsize() {
+      return minSessionSize;
+   }
+
+   public void setAmountOfSessions(int amountOfSessions) {
+      this.amountOfSessions = amountOfSessions;
+   }
+
+   public void setSessions(ArrayList<Session> sessions) {
+      this.sessions = sessions;
+   }
+
+   public void setStudents(ArrayList<Student> students) {
+      this.students = students;
+   }
+
+   public void setRooms(ArrayList<Room> rooms) {
+      this.rooms = rooms;
+   }
 }
