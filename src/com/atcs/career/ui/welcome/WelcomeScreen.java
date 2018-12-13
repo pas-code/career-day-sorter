@@ -5,8 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,22 +14,21 @@ import javax.swing.JPanel;
 
 import com.atcs.career.program.MainClass;
 import com.atcs.career.resources.FontManager;
-import com.atcs.career.ui.ColorManager;
 
 public class WelcomeScreen extends JPanel {
 
 	public static final int PREF_W = 600, PREF_H = 400;
-	private JFrame f;
 	private JPanel topPanel;
 	private JPanel leftPanel;
 	private Font openSans;
-
+	private WelcomeGUIMaster master;
 	private JButton newButton, openButton;
 
 	private JLabel title;
 
-	public WelcomeScreen(JFrame parentFrame) {
+	public WelcomeScreen(WelcomeGUIMaster master) {
 		leftPanel = new JPanel();
+		this.master = master;
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
 		topPanel = topPanelConfig();
@@ -60,7 +58,7 @@ public class WelcomeScreen extends JPanel {
 	private void configureButton(JButton b) {
 		b.setFont(openSans);
 		// b.setBorderPainted(false);
-		// b.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+		 b.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 25));
 		b.setOpaque(true);
 		// b.setBackground(Color.red);
 	}
@@ -107,6 +105,10 @@ public class WelcomeScreen extends JPanel {
 	}
 
 	public static void main(String args[]) {
-		new WelcomeScreen(new JFrame("TestWelcome"));
+		JFrame f = new JFrame("Testwelcome");
+		f.getContentPane().add(new WelcomeScreen(null));
+		f.pack();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
 	}
 }
