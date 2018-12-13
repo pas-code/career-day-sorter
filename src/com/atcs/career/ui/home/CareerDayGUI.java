@@ -94,8 +94,8 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	private void tabConfig() {
-		// center panel
 		tabs = new JTabbedPane();
+<<<<<<< HEAD
 		addTab(event.getSessions());
 		// students panel
 		addTab(event.getStudents());
@@ -118,6 +118,12 @@ public class CareerDayGUI extends JPanel {
 		// classroomScroll = new JScrollPane(classroomList);
 		// tabs.addTab("Classrooms", classroomScroll);
 		tabs.setFont(smallFont);
+=======
+		tabs.setFont(smallFont);
+		addTab(toListable(event.getSessions()));
+		addTab(toListable(event.getStudents()));
+		addTab(toListable(event.getRooms()));
+>>>>>>> origin/ui-jarrett
 		this.add(tabs, BorderLayout.CENTER);
 	}
 

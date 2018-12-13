@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -74,8 +73,8 @@ public class PropertiesPane extends JPanel
       this.add(submit, BorderLayout.SOUTH);  
       this.add(title, BorderLayout.NORTH);         
       this.add(gridPanel);
+      createAndShowGUI();
    }
-
    
    
    public void createLabels()
@@ -226,10 +225,10 @@ public class PropertiesPane extends JPanel
     * The createAndShowGUI class puts your JPanel into a JFrame and creates the GUI interface.
     * This pretty much sets up your screen so you can see what you have coded.
     */
-   private static void createAndShowGUI() {
-      PropertiesPane gamePanel = new PropertiesPane();
+   private  void createAndShowGUI() {
+      PropertiesPane gamePanel = this;
       JFrame frame = new JFrame("Selection Panel");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add(gamePanel);
       frame.pack();
       frame.setLocationRelativeTo(null);
@@ -250,10 +249,6 @@ public class PropertiesPane extends JPanel
     * This makes your whole program work.
     */
    public static void main(String[] args) {
-      SwingUtilities.invokeLater(new Runnable() {
-         public void run() {
-            createAndShowGUI();
-         }
-      });
+      new PropertiesPane();
    }
 }
