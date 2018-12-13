@@ -75,7 +75,6 @@ public class PropertiesPane extends JPanel
       this.add(submit, BorderLayout.SOUTH);  
       this.add(title, BorderLayout.NORTH);         
       this.add(gridPanel);
-      createAndShowGUI();
    }
 
    
@@ -228,16 +227,27 @@ public class PropertiesPane extends JPanel
     * The createAndShowGUI class puts your JPanel into a JFrame and creates the GUI interface.
     * This pretty much sets up your screen so you can see what you have coded.
     */
-   private  void createAndShowGUI() {
+   public  void createAndShowGUI() {
       PropertiesPane gamePanel = this;
       JFrame frame = new JFrame("Selection Panel");
-//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add(gamePanel);
       frame.pack();
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
    }
 
+   public  void addToFrame(JFrame f, int x, int y) {
+       PropertiesPane gamePanel = this;
+       f.setTitle("New Event");
+       f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       f.getContentPane().add(gamePanel);
+       f.setSize(x,y);
+       f.pack();
+       f.setLocationRelativeTo(null);
+       f.setVisible(true);
+    }
+   
    /**
     * This overrides the JPanel's getPreferredSize() method
     * It tells the JPanel to be a certain width and height

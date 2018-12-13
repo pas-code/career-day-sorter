@@ -33,21 +33,13 @@ public class CareerDayGUI extends JPanel {
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
 	private JPanel east, west;
-	private JPanel scrollBackPanel;
-	private JList<Student> studentList;
-	private JList<Room> classroomList;
-	private JScrollPane sessionScroll, studentScroll, classroomScroll;
 	private JLabel title;
 	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
-	private JPanel sessionPanelHolder;
-	private ArrayList<SessionInfoUtil> sessionPanels;
 	private Event event;
-
-	private final boolean testing = true;
 
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -59,11 +51,10 @@ public class CareerDayGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		bigFont = FontManager.finalFont(40f);
 		smallFont = FontManager.finalFont(15f);
-		// this.event = event;
-		sessionPanels = new ArrayList<SessionInfoUtil>();
+		new ArrayList<SessionInfoUtil>();
 		layoutConfig();
 		tabConfig();
-		makeWindow();
+//		makeWindow();
 	}
 
 	private void layoutConfig() {
@@ -133,7 +124,7 @@ public class CareerDayGUI extends JPanel {
 		tabs.addTab(((GuiListable) eventData.get(0)).getType(), sessionScroll);
 	}
 
-	private void makeWindow() {
+	public void makeWindow() {
 		JFrame frame = new JFrame("Default JPanel");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
@@ -160,6 +151,7 @@ public class CareerDayGUI extends JPanel {
 	 */
 	public static void main(String[] args) {
 
-		new CareerDayGUI(new Event());
+		CareerDayGUI program = new CareerDayGUI(new Event());
+		program.makeWindow();
 	}
 }

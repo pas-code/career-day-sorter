@@ -79,9 +79,7 @@ public class WelcomeScreen extends JPanel{
                     @Override
                     public void mousePressed(MouseEvent e)
                     {
-//                        System.out.println("Pressed");
-                        new PropertiesPane();
-                        
+                        pressed();
                     }
 
                     @Override
@@ -100,6 +98,16 @@ public class WelcomeScreen extends JPanel{
                     }
 		    
 		        });
+	}
+	
+	private void pressed()
+	{
+	    System.out.println("Pressed");
+        f.removeAll();
+        
+        PropertiesPane p = new PropertiesPane();
+        f.add(p);
+        
 	}
 	
 	private JPanel topPanelConfig()
