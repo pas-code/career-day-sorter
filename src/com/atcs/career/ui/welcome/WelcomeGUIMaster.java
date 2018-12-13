@@ -1,43 +1,36 @@
 package com.atcs.career.ui.welcome;
 
-import java.awt.Color;
+import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 //Jarrett Bierman
 //9/4/18
 //Default JPanel Class (Copy and Paste)
-public class WelcomeGUIMaster extends JFrame
+public class WelcomeGUIMaster extends JPanel
 {
    private static final long serialVersionUID = 1L;
-   public static final int PREF_W = 400;
-   public static final int PREF_H = 600;
+   public static final int PREF_W = 600;
+   public static final int PREF_H = 400;
+   private WelcomeScreen welcomeScreen;
+   private PropertiesPane propertiesPane;
+   private JFrame frame;
 
    public WelcomeGUIMaster() 
    {  
-      createAndShowGUI();
+      super(new CardLayout());            
+      welcomeScreen = new WelcomeScreen("A Thing");
+      this.add(welcomeScreen);
    }
 
-   private void createAndShowGUI() {
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.getContentPane().add(new WelcomeScreen("E"));
-      this.pack();
-      this.setLocationRelativeTo(null);
-      this.setVisible(true);
+   private void constructFrame() {
+      frame = new JFrame("Welcome!");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.getContentPane().add(this);
+      frame.pack();
+      frame.setLocationRelativeTo(null);
+      frame.setVisible(true);
    }
 
    /**
@@ -55,7 +48,11 @@ public class WelcomeGUIMaster extends JFrame
     */
    public static void main(String[] args) 
    {
-      new WelcomeGUIMaster();
+      new Thread(new Runnable() {
+         public void run() {
+            new WelcomeGUIMaster().constructFrame();
+         }
+      }).start();
    }
 
 

@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +18,7 @@ import com.atcs.career.ui.ColorManager;
 
 public class WelcomeScreen extends JPanel{
 	
-	private JFrame f;
+//	private JFrame f;
 	private JPanel topPanel;
 	private JPanel mainPanel;
 	private JPanel leftPanel;
@@ -31,7 +30,7 @@ public class WelcomeScreen extends JPanel{
 	
 	public WelcomeScreen(String programName)
 	{
-		f = new JFrame("PasCode");
+//		f = new JFrame("PasCode");
 		mainPanel = new JPanel();
 		leftPanel = new JPanel();
 		title = new JLabel("   " + programName);
@@ -45,9 +44,9 @@ public class WelcomeScreen extends JPanel{
 	private void configGui()
 	{
 		//Frame config
-		f.setSize(600, 350);
-		f.setLocationRelativeTo(null);
-		f.add(this);
+//		f.setSize(600, 350);
+//		f.setLocationRelativeTo(null);
+//		f.add(this);
 		
 		//Class Panel config
 		this.setLayout(new BorderLayout());
@@ -65,7 +64,7 @@ public class WelcomeScreen extends JPanel{
 		
 		this.add(leftPanel, BorderLayout.WEST);
 		
-		f.setVisible(true);
+//		f.setVisible(true);
 		
 		//Create New Event
 		cb.addMouseListener(new MouseListener()
@@ -79,8 +78,6 @@ public class WelcomeScreen extends JPanel{
                     @Override
                     public void mousePressed(MouseEvent e)
                     {
-//                        System.out.println("Pressed");
-                        new PropertiesPane();
                         
                     }
 

@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -60,7 +59,6 @@ public class PropertiesPane extends JPanel
 
    public PropertiesPane() 
    {     
-       System.out.println("this should work");
       setFocusable(true);   
       this.setLayout(new BorderLayout());
       this.setBorder(BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));  
@@ -77,7 +75,6 @@ public class PropertiesPane extends JPanel
       this.add(gridPanel);
       createAndShowGUI();
    }
-
    
    
    public void createLabels()
