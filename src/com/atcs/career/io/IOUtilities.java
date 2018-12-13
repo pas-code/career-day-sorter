@@ -89,7 +89,7 @@ public class IOUtilities
             sessionRequests.add(new Session(lines.get(i)[k].substring(lines.get(i)[k].indexOf("-")+2), lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-")-1)));         
          
          //Adds Student object to the ArrayList to be returned
-         students.add(new Student(lastName, firstName, email, sessionRequests, daySubmitted.get(Calendar.DAY_OF_YEAR)));
+         students.add(new Student(lastName, firstName, email, sessionRequests, daySubmitted.get(Calendar.DAY_OF_YEAR), true));
          System.out.println(students.get(i-1));
       }
       return students;

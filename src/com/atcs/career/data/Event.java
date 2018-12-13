@@ -18,6 +18,7 @@ public class Event implements Serializable {
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
+	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName;
 
@@ -38,6 +39,7 @@ public class Event implements Serializable {
 	public Event(String name) {
 		eventName = name;
 		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
+		 masterStudents = IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		 amountOfSessions = sessions.size();
