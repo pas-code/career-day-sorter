@@ -19,7 +19,7 @@ public class Event implements Serializable {
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
-	private String eventName;
+	private String eventName, oldName;
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
@@ -43,10 +43,16 @@ public class Event implements Serializable {
 		 amountOfSessions = sessions.size();
 	}
 	
-	public Event()
+	public Event() {
+		students = new ArrayList<Student>();
+		rooms = new ArrayList<Room>();
+		sessions = new ArrayList<Session>();
+	}
+	
+	public static Event testEvent()
    {
-       super();
-       sessions = new ArrayList<Session>();
+		Event ret = new Event();
+       ArrayList<Session> sessions = ret.sessions;
        sessions.add(new Session("Business", "Donald Trump"));
        sessions.add(new Session("Investment", "Warren Buffet"));
        sessions.add(new Session("Military", "James Mattis"));
@@ -56,14 +62,7 @@ public class Event implements Serializable {
        sessions.add(new Session("Intelligence", "James Comey"));
        sessions.add(new Session("Software Development", "Johnny Ive"));
        
-       students = new ArrayList<Student>();
-       {
-        ArrayList<Session> sessions = new ArrayList<Session>();
-        sessions.add(this.sessions.get(0));
-        sessions.add(this.sessions.get(1));
-        sessions.add(this.sessions.get(2));
-       
-       
+       ArrayList<Student> students = ret.students;
        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
        
        students.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
@@ -72,15 +71,13 @@ public class Event implements Serializable {
        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
        students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
        
-       rooms = new ArrayList<Room>();
+       ArrayList<Room> rooms = ret.rooms;
        for(int i = 121; i< 140; i++)
        rooms.add(new Room(i + "", 30));
        
        
-       
-       }
-       
-       eventName = "TEST";
+       ret.eventName = "TEST";
+       return ret;
        
    }
 
@@ -119,7 +116,24 @@ public class Event implements Serializable {
 		return eventName;
 	}
 
-	public void setEventName(String eventName) {
+	public void setInitialName(String name) {
+		this.eventName = name;
+	}
+	
+	public void changeName(String eventName) {
+		oldName = this.eventName;
 		this.eventName = eventName;
+	}
+	
+	public String getOldName() {
+		return oldName;
+	}
+	
+	public boolean nameChanged() {
+		return !oldName.equals(eventName);
+	}
+	
+	public static String saveFileName(String eventName) {
+		return eventName + FileHandler.SUFFIX;
 	}
 }
