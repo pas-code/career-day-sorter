@@ -20,7 +20,7 @@ public class IOUtilities
 {
    public static void main(String[] args)
    {
-//      loadStudentArray(importCSV());
+      IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
 //      ArrayList<Room> arr = loadRoomArray(importCSV());
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
@@ -93,6 +93,22 @@ public class IOUtilities
          System.out.println(students.get(i-1));
       }
       return students;
+   }
+   
+   public static ArrayList<Student> loadMasterStudentArray(String fileName){
+      ArrayList<Student> masterStudents = new ArrayList<Student>();
+      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
+      for(int i = 1; i < lines.size(); i++){
+         //Stores each element of the line as an appropriately name variable
+         String lastName = lines.get(i)[0].trim().substring(lines.get(i)[0].trim().indexOf(" ")+1).replace("\"", "");
+         String firstName = lines.get(i)[0].trim().substring(0,lines.get(i)[0].trim().indexOf(" ")).replace("\"", "");
+         String email = lines.get(i)[2].trim().replace("\"", "");
+         
+         //Adds Student object to the ArrayList to be returned
+         masterStudents.add(new Student(lastName, firstName, email));
+         System.out.println(masterStudents.get(i-1));
+      }
+      return masterStudents;
    }
    
    public static ArrayList<Student> getAllStudents(String fileName){

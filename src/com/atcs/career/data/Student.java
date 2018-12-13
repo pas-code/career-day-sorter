@@ -45,7 +45,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
    }
    
    public boolean equals(Student s){
-      return (lName.equals(s.getlName()) && fName.equals(s.getfName()) && email.equals(s.getEmail()));
+      return email.equals(s.getEmail());
    }
 
 	/**
