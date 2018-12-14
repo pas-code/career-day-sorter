@@ -29,34 +29,8 @@ public class WelcomeGUIMaster extends JPanel
 
    public WelcomeGUIMaster() 
    {  
-<<<<<<< HEAD
       super(new CardLayout());            
       this.add(welcomeScreen, "welcome");
-=======
-      cards = new CardLayout();
-      this.setLayout(cards);
-      welcomeScreen = new WelcomeScreen(this);
-      this.add(welcomeScreen, "welcome");
-      propertiesPane = new PropertiesPane(this);
-      this.add(propertiesPane, "properties");
-   }
-   
-   
-   public void sendEvent()
-   {
-      
->>>>>>> 7727feae6050bd454b71e63a9a1b02038c927e71
-   }
-   
-   public void changePanel(String name)
-   {
-      // if the thing isnt null... else create it
-<<<<<<< HEAD
-      ((CardLayout)this.getLayout()).show(this, name);
-=======
-      cards.show(frame, name);
-//      ((CardLayout)this.getLayout()).show(frame, name);
->>>>>>> 7727feae6050bd454b71e63a9a1b02038c927e71
    }
 
    private void constructFrame() {
