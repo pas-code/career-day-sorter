@@ -29,8 +29,10 @@ public class WelcomeScreen extends JPanel {
 	private Event selected;
 
 	private JLabel title;
+	private WelcomeGUIMaster master;
 
 	public WelcomeScreen() {
+	    this.master = master;
 		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
@@ -43,10 +45,13 @@ public class WelcomeScreen extends JPanel {
 
 		newButton.addActionListener(e -> {
 			System.out.println("new");
+			master.changePanel("props");
+			
 		});
 
 		openButton.addActionListener(e -> {
 			System.out.println("open");
+			
 		});
 
 		configGui();
@@ -115,13 +120,12 @@ public class WelcomeScreen extends JPanel {
 		
 	}
 	
-	static 
-
 	public static void main(String args[]) {
 		JFrame f = new JFrame("Testwelcome");
-		f.getContentPane().add(new WelcomeScreen(null));
+		f.getContentPane().add(new WelcomeScreen());
 		f.pack();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 	}
+
 }

@@ -214,7 +214,6 @@ public class PropertiesPane extends JPanel {
 		}
 		String name = location.substring(index + 1);
 		b.setText(name);
-
 		return new File(location);
 	}
 
