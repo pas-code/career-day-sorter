@@ -44,7 +44,6 @@ public class WelcomeScreen extends JPanel {
 
 		newButton.addActionListener(e -> {
 			System.out.println("new");
-			master.changePanel("props");
 			
 		});
 
