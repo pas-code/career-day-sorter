@@ -20,12 +20,16 @@ public class Event implements Serializable {
 	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
+	
+	private String studentFile, sessionFile;
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 		Event e = new Event("career");
 //		Event e = new Event();
+		System.out.println("WHAT");
 		FileHandler.save(e);
+		System.out.println("WHAT");
 		e = FileHandler.load(CSVReader.getFileLocation(".event"));
 		System.out.println(e.getStudents());
 		System.out.println(e.getRooms());
