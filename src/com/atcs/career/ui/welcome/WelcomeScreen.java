@@ -32,7 +32,6 @@ public class WelcomeScreen extends JPanel {
 	private WelcomeGUIMaster master;
 
 	public WelcomeScreen() {
-	    this.master = master;
 		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
