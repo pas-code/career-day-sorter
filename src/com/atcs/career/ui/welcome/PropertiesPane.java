@@ -76,6 +76,7 @@ public class PropertiesPane extends JPanel {
 		this.add(title, BorderLayout.NORTH);
 		this.add(gridPanel);
 		// createAndShowGUI();
+		revalidate();
 	}
 
 	private void createFrame() {
