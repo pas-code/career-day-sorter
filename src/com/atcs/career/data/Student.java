@@ -149,6 +149,12 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	public void setStudentPriority(Priority newPriority) {
 		this.priority = newPriority;
 	}
+	
+	@Override
+   public boolean equals(Object obj) {
+      Student otherStudent = (Student) obj;
+      return this.getFullName().equals(otherStudent.getFullName()) && this.getGrade() == otherStudent.getGrade();
+   }
 
 	@Override
 	public String toString() {

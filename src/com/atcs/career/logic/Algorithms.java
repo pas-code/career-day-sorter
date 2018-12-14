@@ -2,7 +2,6 @@
 //Program Description:
 //Nov 21, 2018
 /*TODO
- * - Add people who didn't submit to the toBeRandomlyAssigned array list
  * - give proper weight to time
  */
 
@@ -26,9 +25,9 @@ public class Algorithms{
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
    //BIG METHOD THAT DOES EVERYTHING
-   public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
+   public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
       assignRoomsToSessions(students, rooms, sessions);
-      rankStudents(students);
+      rankStudents(students, master);
       assignStudentsToSessions(students, sessions);
    }
    
@@ -70,7 +69,19 @@ public class Algorithms{
    }
    
    //ALGORITHM 2
-   public static void rankStudents(ArrayList<Student> students){
+   public static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
+    //Creates Array Lists for Random Assignment
+      for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
+         toBeRandomlyAssigned.add(new ArrayList<Student>());
+      }
+      for(int i = 0; i < master.size(); i++) {
+         if(!students.contains(master.get(i))) {
+            for(int j = 0; j < toBeRandomlyAssigned.size(); j++) {
+               toBeRandomlyAssigned.get(j).add(master.get(i));
+            }
+         }
+      }
+      
       int classCutOffForGroupLevel = 11;
       int upperClassmanLevelMag = 0;  //add magnitude 
       int lowerClassmanLevelMag = 0;  //add magnitude
@@ -89,11 +100,6 @@ public class Algorithms{
    
    //ALGORITHM 3
    public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
-      //Creates Array Lists for Random Assignment
-      for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
-         toBeRandomlyAssigned.add(new ArrayList<Student>());
-      }
-      
       int numOfPeriods = 3;
       for(int j = 0; j < numOfPeriods; j++) { //For each period
          for(int i = 0; i < students.size(); i++) { //Go through every student
