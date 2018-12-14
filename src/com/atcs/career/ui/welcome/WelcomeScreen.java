@@ -5,31 +5,33 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.concurrent.CancellationException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.program.MainClass;
 import com.atcs.career.resources.FontManager;
-import com.atcs.career.ui.ColorManager;
 
 public class WelcomeScreen extends JPanel {
 
 	public static final int PREF_W = 600, PREF_H = 400;
-	private JFrame f;
 	private JPanel topPanel;
 	private JPanel leftPanel;
 	private Font openSans;
-	private boolean newClicked, openClicked;
 	private JButton newButton, openButton;
+	private Event selected;
+
 	private JLabel title;
 	private WelcomeGUIMaster master;
 
-	public WelcomeScreen(WelcomeGUIMaster master) {
+	public WelcomeScreen() {
 	    this.master = master;
 		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
@@ -52,26 +54,18 @@ public class WelcomeScreen extends JPanel {
 			
 		});
 
-		// cb = new MenuCircleButton("New",
-		// ColorManager.get("welcome.button.background"),
-		// ColorManager.get("welcome.foreground"));
-		// lb = new
-		// MenuCircleButton("Open",ColorManager.get("welcome.button.background"),
-		// ColorManager.get("welcome.foreground"));
 		configGui();
 	}
 
 	private void configureButton(JButton b) {
 		b.setFont(openSans);
 		// b.setBorderPainted(false);
-		// b.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+		 b.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 25));
 		b.setOpaque(true);
 		// b.setBackground(Color.red);
 	}
 
 	private void configGui() {
-		// Frame config
-
 		// Class Panel config
 		this.setLayout(new BorderLayout());
 		this.add(topPanel, BorderLayout.NORTH);
@@ -89,8 +83,11 @@ public class WelcomeScreen extends JPanel {
 
 		this.add(leftPanel, BorderLayout.WEST);
 
-		// f.setVisible(true);
 
+	}
+	
+	public Event getEvent() {
+		return selected;
 	}
 
 	private JPanel topPanelConfig() {
@@ -105,31 +102,30 @@ public class WelcomeScreen extends JPanel {
 		t.add(title, BorderLayout.WEST);
 		return t;
 	}
-
-	private void sendEvent() {
-
+	
+	public static Event openAndRetrieveEvent() throws CancellationException {
+		JFrame frame = new JFrame("Welcome");
+		WelcomeScreen welcome = new WelcomeScreen();
+		frame.getContentPane().add(welcome);
+		frame.pack();
+		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				throw new CancellationException();
+			}
+		});
 	}
 
+	private static Event createNewEventFromProps() {
+		
+	}
+	
 	public static void main(String args[]) {
+		JFrame f = new JFrame("Testwelcome");
+		f.getContentPane().add(new WelcomeScreen());
+		f.pack();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
 	}
 
-   public boolean isNewClicked()
-   {
-      return newClicked;
-   }
-
-   public void setNewClicked(boolean newClicked)
-   {
-      this.newClicked = newClicked;
-   }
-
-   public boolean isOpenClicked()
-   {
-      return openClicked;
-   }
-
-   public void setOpenClicked(boolean openclicked)
-   {
-      this.openClicked = openclicked;
-   }
 }

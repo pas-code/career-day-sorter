@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.program.MainClass;
+import com.atcs.career.ui.welcome.WelcomeGUIMaster;
 import com.atcs.career.ui.welcome.WelcomeScreen;
 
 public class MasterUI {
@@ -19,9 +20,6 @@ public class MasterUI {
 	}
 	
 	public Event openWelcomeAndRetrieveEvent() throws CancellationException{
-		JFrame frame = new JFrame(MainClass.APP_NAME);
-		WelcomeScreen welcome = new WelcomeScreen(frame);
-		
-		
+		return WelcomeScreen.openAndRetrieveEvent();
 	}
 }
