@@ -25,7 +25,7 @@ import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.ColorManager;
 
-//Jarrett Bierman
+//Jarrett Bierman & Edward Fominykh
 //9/4/18
 //Default JPanel Class (Copy and Paste)
 public class CareerDayGUI extends JPanel {

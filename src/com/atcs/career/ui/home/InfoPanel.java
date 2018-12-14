@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,11 +18,12 @@ import javax.swing.border.TitledBorder;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
+import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
+import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
-import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
-public class InfoPanel extends JPanel
+public class InfoPanel extends JPanel implements MouseListener
 {   
     private JPanel titlePanel;
     private JPanel infoPanel;
@@ -51,15 +54,33 @@ public class InfoPanel extends JPanel
         info2 = gl.getInfo(1);
         this.moreInfoHolder = moreInfoHolder;
         initializePanels();
+        initMoreInfo();
     }
     
     public void initMoreInfo()
     {
-        String type = gl.getType();
-       if(type.equals("Session"))
+        int type = gl.getTypeNum();
+       if(type == 0)
            moreInfo = new MoreInfo.SessionPanel(event, (Session) gl);
-       
-        
+       else if(type == 1)
+           moreInfo = new MoreInfo.StudentPanel(event, (Student) gl);
+       else if(type == 2)
+           moreInfo = new MoreInfo.RoomPanel(event, (Room) gl);
+       else 
+       {
+           System.out.println("Did not initialize panels");
+           return;
+       }
+       System.out.println("Initialized More info panels");
+    }
+    
+    public void select()
+    {
+        System.out.println("Selected");
+        moreInfoHolder.removeAll();
+        moreInfoHolder.add(moreInfo);
+        moreInfoHolder.setVisible(true);
+        moreInfoHolder.revalidate();
     }
     
    /**Precondition: Integer Array numInfo must have a size of two*/
@@ -83,6 +104,7 @@ public class InfoPanel extends JPanel
                 TitledBorder.DEFAULT_POSITION, FontManager.finalFont(15f));
         this.setBorder(titledBorder);
         panelConfig();
+        this.addMouseListener(this);
     }
     
     public void refresh()
@@ -150,6 +172,32 @@ public class InfoPanel extends JPanel
     }
 
     private void optionPanelConfig()
+    {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+        select();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
     {
     }
 }

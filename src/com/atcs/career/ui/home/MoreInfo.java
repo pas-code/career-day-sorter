@@ -124,8 +124,8 @@ public abstract class MoreInfo {
 			      JList<String> listNames = new JList<String>(studentNames);
 			      listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			      scrollPane = new JScrollPane(listNames);
-			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + "  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
-			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
+//			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + "  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
+//			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
 			      
 			      this.add(north, BorderLayout.NORTH);
