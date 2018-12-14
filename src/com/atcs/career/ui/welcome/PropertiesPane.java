@@ -101,7 +101,7 @@ public class PropertiesPane extends JPanel {
 	}
 
 	public void createButtons() {
-		sessionButton = new JButton(BUTTON_DEFAULT_TEXT);
+		sessionButton = new JButton(event.getSessionFile() == null ? BUTTON_DEFAULT_TEXT : event.getSessionFile());
 		sessionButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -110,7 +110,7 @@ public class PropertiesPane extends JPanel {
 			}
 		});
 
-		studentButton = new JButton(BUTTON_DEFAULT_TEXT);
+		studentButton = new JButton(event.getRequestFile() == null ? BUTTON_DEFAULT_TEXT : event.getRequestFile());
 		studentButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -119,7 +119,7 @@ public class PropertiesPane extends JPanel {
 			}
 		});
 
-		classroomButton = new JButton(BUTTON_DEFAULT_TEXT);
+		classroomButton = new JButton(event.getRoomFile() == null ? BUTTON_DEFAULT_TEXT : event.getRoomFile());
 		classroomButton.addActionListener(new ActionListener() {
 
 			@Override

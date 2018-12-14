@@ -21,7 +21,7 @@ public class Event implements Serializable {
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
 	
-	private String studentFile, sessionFile;
+	private String studentFile, sessionFile, requestFile, roomFile;
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
@@ -114,6 +114,38 @@ public class Event implements Serializable {
 
 	public ArrayList<Room> getRooms() {
 		return rooms;
+	}
+
+	public String getStudentFile() {
+		return studentFile;
+	}
+
+	public void setStudentFile(String studentFile) {
+		this.studentFile = studentFile;
+	}
+
+	public String getSessionFile() {
+		return sessionFile;
+	}
+
+	public void setSessionFile(String sessionFile) {
+		this.sessionFile = sessionFile;
+	}
+
+	public String getRequestFile() {
+		return requestFile;
+	}
+
+	public void setRequestFile(String requestFile) {
+		this.requestFile = requestFile;
+	}
+
+	public String getRoomFile() {
+		return roomFile;
+	}
+
+	public void setRoomFile(String roomFile) {
+		this.roomFile = roomFile;
 	}
 
 	public String getEventName() {
