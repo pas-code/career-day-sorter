@@ -1,11 +1,10 @@
-//Michael Ruberto
+//Michael Ruberto, Joshua Kent, Bennett Bierman
 //Program Description:
 //Nov 21, 2018
 /*TODO
- * - Implement ability to randomly assign sessions to students who didn't answer/couldn't get in a selected session
+ * - Add people who didn't submit to the toBeRandomlyAssigned array list
  * - give proper weight to time
  */
-
 
 package com.atcs.career.logic;
 
