@@ -82,17 +82,14 @@ public class Algorithms{
          }
       }
       
-      int classCutOffForGroupLevel = 11;
-      int upperClassmanLevelMag = 0;  //add magnitude 
-      int lowerClassmanLevelMag = 0;  //add magnitude
       for(int i = 0; i < students.size(); i++) {
          Student currentStud = students.get(i);
          int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
-         if (currentStud.getGrade() >= classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, upperClassmanLevelMag));
+         if (currentStud.getGrade() >= Priority.classCutOff) {
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, Priority.upperClassMagnitudeValue));
          }
-         else if (currentStud.getGrade() < classCutOffForGroupLevel) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, lowerClassmanLevelMag));
+         else if (currentStud.getGrade() < Priority.classCutOff) {
+            currentStud.setStudentPriority(new Priority(timeMagForPriority, Priority.lowerClassMagnitudeValue));
          }
       }
       Collections.sort(students);
