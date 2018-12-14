@@ -21,10 +21,11 @@ public class IOUtilities
 {
    public static void main(String[] args)
    {
-      IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
+//      IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
 //      ArrayList<Room> arr = loadRoomArray(importCSV());
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
+      loadStudentArray(CSVReader.getFileLocation(".csv"));
    }
    
    public static ArrayList<Student> getUnsubmittedStudents(Event e){

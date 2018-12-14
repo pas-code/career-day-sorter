@@ -59,6 +59,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
       submitted = false;
    }
    
+
    public boolean equals(Student s){
       return email.equals(s.getEmail());
    }
