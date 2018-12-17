@@ -82,7 +82,7 @@ public class Algorithms{
       for(int i = 0; i < students.size(); i++) {
          Student currentStud = students.get(i);
          int yearEntered = (currentStud.getTimeEntered()/1000) - Event.startYear;
-         int dayEntered = (yearEntered * 365) + (currentStud.getTimeEntered()%1000);
+         int dayEntered = ((yearEntered * 365) + (currentStud.getTimeEntered()%1000)) - Event.startDay;
          if (currentStud.getGrade() >= Priority.classCutOff) {
             currentStud.setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
          }

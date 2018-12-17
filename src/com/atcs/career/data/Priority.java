@@ -25,7 +25,6 @@ public class Priority
    public static int classCutOff = 11;
    
    private double contentnessMagnitude, timeMagnitude, groupMagnitude;
-   private static double contentnessWeight, timeWeight, groupWeight;
    
    
    public Priority(double tMag, double gMag)
@@ -33,15 +32,10 @@ public class Priority
       contentnessMagnitude = 0;
       this.timeMagnitude = tMag;
       this.groupMagnitude = gMag;
-      
-    //RANDOM VALUES FOR WEIGHTS SO IT WORKS. WILL BE USER INPUT LATER
-      groupWeight = 1;
-      timeWeight = 1;
-      contentnessWeight = 0;
    }
    
    public double getContentness(){
-      return contentnessMagnitude*contentnessWeight;
+      return contentnessMagnitude*contentnessWeightValue;
    }
    
    public void setContentness(double cMag){
@@ -49,11 +43,11 @@ public class Priority
    }
    
    public double getTime(){
-      return timeMagnitude*timeWeight;
+      return timeMagnitude*timeWeightValue;
    }
    
    public double getGroup(){
-      return groupMagnitude*groupWeight;
+      return groupMagnitude*groupWeightValue;
    }
    
    public double getPriority(){
@@ -61,15 +55,15 @@ public class Priority
    }
 
    public static void setContentnessWeight(double cWeight){
-      Priority.contentnessWeight = cWeight;
+      Priority.contentnessWeightValue = cWeight;
    }
 
    public static void setTimeWeight(double tWeight){
-      Priority.timeWeight = tWeight;
+      Priority.timeWeightValue = tWeight;
    }
 
    public static void setGroupWeight(double gWeight){
-      Priority.groupWeight = gWeight;
+      Priority.groupWeightValue = gWeight;
    }
 
    
