@@ -20,7 +20,6 @@ public class Algorithms{
     /*Each sub ArrayList corresponds to a period
     * Students who didn't submit a request will be placed into every sub array
     * Students who couldn't get a top 5 choice placed into specific sub array for that period
-    * ADD Magnitudes and Weight from priority class
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
