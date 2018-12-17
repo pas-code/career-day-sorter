@@ -6,6 +6,7 @@ package com.atcs.career.data;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
@@ -15,8 +16,8 @@ public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
 	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE
-	public static int startYear = 2018; //ACTUALLY GET THIS CORRECTLY SOME HOW
-	public static int startDay = 2018;
+	public static int startYear = Calendar.getInstance().YEAR;
+	public static int startDay = Calendar.getInstance().DAY_OF_YEAR;
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();
