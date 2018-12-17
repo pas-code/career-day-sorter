@@ -32,6 +32,7 @@ public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
+	private byte selectedPeriod;
 	private JPanel east, west;
 	private JLabel title;
 	private JTextArea info;
@@ -41,7 +42,7 @@ public class CareerDayGUI extends JPanel {
 	private Font smallFont;
 	private Event event;
 	
-	private InfoPanel selectedInfoPanel;
+//	private InfoPanel selectedInfoPanel;
 
 	public CareerDayGUI(Event event) {
 		this.event = event;
