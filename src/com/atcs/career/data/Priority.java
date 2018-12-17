@@ -15,12 +15,12 @@ public class Priority
     * The "Weight" value is user inputted and controls how much the algorithm factors in that value
     * Magnitude and Weight are used to compute the overall Value for each factor, which in turn calculates their priority
     */
-   public static double upperClassMagnitudeValue = 0;
-   public static double lowerClassMagnitudeValue = 0;
+   public static double upperClassMagnitudeValue = 2;
+   public static double lowerClassMagnitudeValue = 1;
    
-   public static double contentnessWeightValue = 0;
-   public static double timeWeightValue = 0;
-   public static double groupWeightValue = 0;
+   public static double contentnessWeightValue = 50;
+   public static double timeWeightValue = 2;
+   public static double groupWeightValue = 100;
    
    public static int classCutOff = 11;
    
