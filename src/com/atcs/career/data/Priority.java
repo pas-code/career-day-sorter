@@ -57,7 +57,7 @@ public class Priority
    }
    
    public double getPriority(){
-      return getContentness() + getTime() + getGroup();
+      return getGroup() - getContentness() - getTime();
    }
 
    public static void setContentnessWeight(double cWeight){
