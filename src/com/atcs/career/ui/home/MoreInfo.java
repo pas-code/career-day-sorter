@@ -1,23 +1,22 @@
-//Thomas Varano
+//Thomas Varano and David DeScherer
 //Dec 10, 2018
 
 package com.atcs.career.ui.home;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -143,8 +142,7 @@ public abstract class MoreInfo {
 	public static class StudentPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Student instance variables (scrollPane already created with Room)
-		//DELETE
-		private JButton editStudentName, editStudentEmail;
+		
 		
 		private JTextField studentfName, studentlName, studentEmail;
 		
@@ -188,6 +186,22 @@ public abstract class MoreInfo {
 				}
 				
 			});
+			studentEmail = new JTextField(student.getEmail());
+			studentEmail.addFocusListener(new FocusListener(){
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					student.setEmail(studentEmail.getText());					
+				}
+				
+			});
+
 			studentEmail = new JTextField(student.getEmail());
 			studentEmail.addFocusListener(new FocusListener(){
 
@@ -300,10 +314,6 @@ public abstract class MoreInfo {
 				}
 			});
 
-			
-			
-
-
 			periodNum = 1;
 
 			generalSetup();
@@ -315,9 +325,16 @@ public abstract class MoreInfo {
 			JPanel south = new JPanel(new BorderLayout());
 
 			add(center, BorderLayout.CENTER);
-			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+			String sNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+			"J"}; //FOR TESTING ONLY
+			ArrayList<String> studentNames = new ArrayList<String>();
+			for (int i = 0; i < sNames.length; i++)
+				studentNames.add(sNames[i]);
+			String[] studentStandard = studentNames.toArray(new String[studentNames.size()]);
+			String studentNamesList[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
 					"J"};
-			JList<String> listStudents = new JList<String>(studentNames);
+
+			JList<String> listStudents = new JList<String>(studentStandard);
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
 			String title = session.getTitle();
@@ -328,7 +345,7 @@ public abstract class MoreInfo {
 			center.add(scrollPane);
 
 			add(north, BorderLayout.NORTH);
-			north.setLayout(new GridLayout(3,0));
+			north.setLayout(new GridLayout(2,0));
 			north.add(speakerName);
 			north.add(classroomNumber);
 			
@@ -343,7 +360,7 @@ public abstract class MoreInfo {
 
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
-			south.setLayout(new GridLayout(5, 1));
+			south.setLayout(new GridLayout(3, 1));
 			south.add(editStudent);
 			south.add(addStudent);
 			south.add(removeStudent);
@@ -351,9 +368,17 @@ public abstract class MoreInfo {
 			removeStudent.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					listStudents.remove(listStudents.getSelectedIndex());
-					
+
+					System.out.println("test");
+					if (listStudents.getSelectedIndex()!=-1)
+					{
+						System.out.println(studentNames);
+						studentNames.remove(listStudents.getSelectedIndex());
+						System.out.println(studentNames);
+						scrollPane.revalidate();
+						scrollPane.repaint();
+						//standard = studentNames.toArray(new String[studentNames.size()]);
+					}
 				}
 			});
 
