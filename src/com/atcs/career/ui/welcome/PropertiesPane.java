@@ -13,7 +13,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -99,7 +98,7 @@ public class PropertiesPane extends JPanel {
 		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
 		studentLabel = new JLabel("Google Form Result Student File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
-		periodLabel = new JLabel("Number of Periods <Required>");
+		periodLabel = new JLabel("Number of Periods");
 	}
 
 	public void createButtons() {
@@ -150,28 +149,20 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
 					if (readyToSubmit()) 
 					{
 						// Do all of the important info work here
 						System.out.println("Title: " + title.getText());
-						System.out.println(sessionFile.getName());
-						System.out.println(studentFile.getName());
-						System.out.println(classroomFile.getName());
-						System.out
-								.println("Periods: " + (int) periodCount.getValue());
-					} else {
-						JOptionPane.showMessageDialog(null,
-								"You did not select all of the needed files. Please select all options.");
-					}
-				} catch (NullPointerException f) {
-					JOptionPane.showMessageDialog(null,
-							"You did not select all of the needed files. Please select all options.");
-				}
-
-			}
-		});
-	}
+						System.out.println(sessionFile);
+						System.out.println(studentFile);
+						System.out.println(classroomFile);
+						System.out.println("Periods: " + (int) periodCount.getValue());
+					} 
+					else
+					   JOptionPane.showMessageDialog(null,"You did not select all of the needed files. Please select all options.");
+      			}
+      		});
+      	}
 
 	public void createFieldAndSpinner() {
 		title = new JTextField(textPrompt);
@@ -197,12 +188,9 @@ public class PropertiesPane extends JPanel {
 		});
 
 		periodCount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
-		periodCount.setPreferredSize(new Dimension(30, 0));
 		periodCount.setFont(new Font("Ariel", Font.PLAIN, 30));
-		periodCount.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
-		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField()
-				.setEditable(false);
-
+		periodCount.setBorder(BorderFactory.createEmptyBorder(0, 170, 0, 50));
+		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField().setEditable(false);
 	}
 
 	public void addGridStuff() {
@@ -218,19 +206,14 @@ public class PropertiesPane extends JPanel {
 		gridPanel.add(periodCount);
 	}
 
-	/**
-	 * The Select the File Method
-	 * 
-	 * @param b
-	 * @return
-	 */
 	public File selectFile(JButton b) {
 		String location = CSVReader.getFileLocation(".csv");
 		if (location == null) 
 			return null;
 		int index = 0;
 		for (int i = 0; i < location.length(); i++) {
-			if (location.charAt(i) == File.separatorChar) index = i;
+			if (location.charAt(i) == File.separatorChar) 
+			   index = i;
 		}
 		String name = location.substring(index + 1);
 		b.setText(name);
@@ -239,7 +222,8 @@ public class PropertiesPane extends JPanel {
 	
 	public boolean readyToSubmit()//edit this
 	{
-	   return !(title.getText().isEmpty() || periodCount.getValue() == null || title.getText().equals(textPrompt));
+	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
+	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
 	/**
