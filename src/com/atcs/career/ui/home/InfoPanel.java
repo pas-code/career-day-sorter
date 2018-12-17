@@ -6,6 +6,7 @@ package com.atcs.career.ui.home;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,8 @@ public class InfoPanel extends JPanel implements MouseListener
     private MoreInfo.SideInfoPanel moreInfo;
     private GuiListable gl;
     private Event event;
+//    private boolean isSelected;
+//    private CareerDayGUI home;
 
     public InfoPanel(String title, String info1, String info2, Event e)
     {
@@ -81,6 +84,13 @@ public class InfoPanel extends JPanel implements MouseListener
         moreInfoHolder.add(moreInfo);
         moreInfoHolder.setVisible(true);
         moreInfoHolder.revalidate();
+        Component[] c = this.getParent().getComponents();
+        for(Component component : c)
+        {
+            InfoPanel infoPanel = (InfoPanel) component;
+            infoPanel.configBorder(1);
+        }
+        this.configBorder(3);
     }
     
    /**Precondition: Integer Array numInfo must have a size of two*/
@@ -99,12 +109,17 @@ public class InfoPanel extends JPanel implements MouseListener
         titleLabel = new JLabel("     " + info1);
         numAttending = new JLabel("     " + info2);
         this.setPreferredSize(new Dimension(0, 100));
-        lineBorder = new LineBorder(Color.gray, 1, true);
+        configBorder(1);
+        panelConfig();
+        this.addMouseListener(this);
+    }
+    
+    public void configBorder(int size)
+    {
+        lineBorder = new LineBorder(Color.gray, size, true);
         titledBorder = new TitledBorder(lineBorder, title, TitledBorder.LEFT,
                 TitledBorder.DEFAULT_POSITION, FontManager.finalFont(15f));
         this.setBorder(titledBorder);
-        panelConfig();
-        this.addMouseListener(this);
     }
     
     public void refresh()
@@ -170,6 +185,12 @@ public class InfoPanel extends JPanel implements MouseListener
         infoPanel.setLayout(new BorderLayout());
         infoPanel.add(numAttending, BorderLayout.WEST);
     }
+    
+//    /**Only called from outside the class*/
+//    public void setSelected(boolean s)
+//    {
+//        isSelected = s;
+//    }
 
     private void optionPanelConfig()
     {

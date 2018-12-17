@@ -40,6 +40,8 @@ public class CareerDayGUI extends JPanel {
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
+	
+	private InfoPanel selectedInfoPanel;
 
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -145,6 +147,13 @@ public class CareerDayGUI extends JPanel {
 		return event;
 	}
 
+//	public void setSelectedInfoPanel(InfoPanel ip)
+//	{
+//	    selectedInfoPanel.setSelected(false);
+//	    ip.setSelected(true);
+//	    selectedInfoPanel = ip;
+//	}
+	
 	/**
 	 * The main method runs your entire program It has the method
 	 * createAndShowGUI() and runs it. This makes your whole program work.
@@ -154,4 +163,5 @@ public class CareerDayGUI extends JPanel {
 		CareerDayGUI program = new CareerDayGUI(new Event());
 		program.makeWindow();
 	}
+	
 }
