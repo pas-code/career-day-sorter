@@ -15,6 +15,7 @@ public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
 	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE
+	public static int startYear = 2019; //ACTUALLY GET THIS CORRECTLY SOME HOW
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> students = new ArrayList<Student>();

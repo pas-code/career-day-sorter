@@ -1,9 +1,6 @@
 //Michael Ruberto, Joshua Kent, Bennett Bierman
 //Program Description:
 //Nov 21, 2018
-/*TODO
- * - give proper weight to time
- */
 
 package com.atcs.career.logic;
 
@@ -11,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
@@ -83,12 +81,13 @@ public class Algorithms{
       
       for(int i = 0; i < students.size(); i++) {
          Student currentStud = students.get(i);
-         int timeMagForPriority = currentStud.getTimeEntered();     //**Fix how we are getting value for "timeMagForPriority" so its not just a time
+         int yearEntered = (currentStud.getTimeEntered()/1000) - Event.startYear;
+         int dayEntered = (yearEntered * 365) + (currentStud.getTimeEntered()%1000);
          if (currentStud.getGrade() >= Priority.classCutOff) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, Priority.upperClassMagnitudeValue));
+            currentStud.setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
          }
          else if (currentStud.getGrade() < Priority.classCutOff) {
-            currentStud.setStudentPriority(new Priority(timeMagForPriority, Priority.lowerClassMagnitudeValue));
+            currentStud.setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
          }
       }
       Collections.sort(students);
