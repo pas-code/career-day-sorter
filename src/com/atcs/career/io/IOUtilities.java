@@ -28,11 +28,6 @@ public class IOUtilities
       loadStudentArray(CSVReader.getFileLocation(".csv"));
    }
    
-   public static ArrayList<Student> getUnsubmittedStudents(Event e){
-      ArrayList<Student> arr = new ArrayList<Student>();
-      return arr;
-   }
-   
    
    /**
     * Loads ArrayList with Room objects from local .csv file
@@ -77,7 +72,7 @@ public class IOUtilities
    /**
     * Loads ArrayList with Student objects from .csv file
     * @param fileName the file name of the .csv file, including suffix and path
-    * @return ArrayList of Student objects
+    * @return ArrayList of Student objects who submitted a form
     */
    public static ArrayList<Student> loadStudentArray(String fileName){
       ArrayList<Student> students = new ArrayList<Student>();
@@ -103,7 +98,11 @@ public class IOUtilities
       }
       return students;
    }
-   
+   /**
+    * 
+    * @param fileName
+    * @return ArrayList of every student
+    */
    public static ArrayList<Student> loadMasterStudentArray(String fileName){
       ArrayList<Student> masterStudents = new ArrayList<Student>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
@@ -118,11 +117,5 @@ public class IOUtilities
          System.out.println(masterStudents.get(i-1));
       }
       return masterStudents;
-   }
-   
-   public static ArrayList<Student> getAllStudents(String fileName){
-	   ArrayList<Student> students = new ArrayList<Student>();
-	   
-	   return students;
    }
 }
