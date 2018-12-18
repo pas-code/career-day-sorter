@@ -25,6 +25,9 @@ public class MasterUI {
 		this.masterEvent = e;
 	}
 	
+	public void openMain() {
+		
+	}
 	
 	public static void main(String[] args) {
 		new MasterUI().openWelcome();

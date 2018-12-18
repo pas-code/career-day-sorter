@@ -102,6 +102,11 @@ public class WelcomeScreen extends JPanel {
 
 		openButton.addActionListener(e -> {
 			System.out.println("open");
+			try {
+				sendEventAndClose(OpenScreen.open());
+			} catch (Exception e1) {
+				System.out.println("cancelled");
+			}
 		});
 
 		// Class Panel config
@@ -194,7 +199,8 @@ public class WelcomeScreen extends JPanel {
 	}
 	
 	// -------------------------------------------------------------------------------------------------------
-
+	
+	
 	protected void sendEventAndClose(Event e) {
 		sendEvent(e);
 		//close
@@ -210,6 +216,7 @@ public class WelcomeScreen extends JPanel {
 	
 	private void constructProps() {
 		PropertiesPane props = new PropertiesPane(this, null);
+		props.revalidate();
 		revalidate();
 	}
 
