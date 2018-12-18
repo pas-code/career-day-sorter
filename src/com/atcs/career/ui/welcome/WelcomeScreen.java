@@ -5,14 +5,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.program.MainClass;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.MasterUI;
@@ -21,8 +29,7 @@ public class WelcomeScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 600, PREF_H = 400;
-	private JPanel topPanel;
-	private JPanel leftPanel;
+	private JPanel topPanel, leftPanel, rightPanel;
 	private Font openSans;
 
 	private JButton newButton, openButton;
@@ -110,8 +117,54 @@ public class WelcomeScreen extends JPanel {
 
 		this.add(leftPanel, BorderLayout.WEST);
 
-		// f.setVisible(true);
+		// right panel config (recents)
+		rightPanel = new JPanel();
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		ArrayList<String> recentEventNames = getRecentEvents();
+		for (String s : recentEventNames) 
+			model.addElement(s);
+		
+		JList<String> recents = new JList<String>(model);
+		recents.addListSelectionListener(new ListSelectionListener() {
 
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					// get the file name from the event selected, and open the corresponding file
+					sendEventAndClose(FileHandler
+							.load(FileHandler.SAVE_DIR + Event.extractEventName(
+									recentEventNames.get(e.getFirstIndex()))));
+				} catch (ClassNotFoundException | IOException e1) {
+					
+					// could not load the file.
+					e1.printStackTrace();
+				}
+			}
+			
+		});
+		rightPanel.add(recents);
+		
+		this.add(rightPanel, BorderLayout.EAST);
+	}
+	
+	/**
+	 * gets the last 4 events opened.
+	 */
+	private ArrayList<String> getRecentEvents() {
+		final int amtRecents = 4;
+		
+		ArrayList<String> ret = new ArrayList<String>();
+		File saveDir = new File(FileHandler.SAVE_DIR);
+		final File[] children = saveDir.listFiles();
+		System.out.println(children);
+		for (int i = 0; i < Math.min(children.length, amtRecents); i++) 
+			ret.add(getEventName(children[i].getPath()));
+		
+		return ret;
+	}
+	
+	private String getEventName(String filePath) {
+		return Event.extractEventName(filePath.substring(filePath.lastIndexOf(File.separatorChar)));
 	}
 
 	private JPanel topPanelConfig() {
@@ -129,6 +182,11 @@ public class WelcomeScreen extends JPanel {
 	
 	// -------------------------------------------------------------------------------------------------------
 
+	protected void sendEventAndClose(Event e) {
+		sendEvent(e);
+		//close
+	}
+	
 	/** 
 	 * sends an event (e) to its master, as called from itself or its props pane.
 	 */
@@ -142,5 +200,6 @@ public class WelcomeScreen extends JPanel {
 	}
 
 	public static void main(String args[]) {
+//		System.out.println(new File("/Users/varanoth/Desktop/My Files").getPath());
 	}
 }

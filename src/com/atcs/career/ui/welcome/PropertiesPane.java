@@ -11,8 +11,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -81,8 +81,12 @@ public class PropertiesPane extends JPanel {
 	
 	// -----------------------------------CONFIG GUI--------------------------------------------
 
-	private void createFrame() {
-		JFrame container = new JFrame("Set Event Data");
+	private JFrame createFrame() {
+		return new JFrame("Set Event Data");
+	}
+
+	private void configFrame() {
+		JFrame container = welc == null ? createFrame() : welc.parentFrame;
 		container.getContentPane().add(this);
 		container.pack();
 		container.setLocationRelativeTo(null);
@@ -93,10 +97,6 @@ public class PropertiesPane extends JPanel {
 			}
 		});
 		container.setVisible(true);
-	}
-
-	private void configFrame() {
-		JFrame frame = welc == null ? createFrame() : welc.pare
 	}
 	
 	private void createLabels() {
