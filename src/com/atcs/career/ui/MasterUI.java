@@ -15,13 +15,15 @@ public class MasterUI {
 	private Event masterEvent;
 	
 	public MasterUI() {
-		masterEvent = openWelcomeAndRetrieveEvent();
 	}
 	
-	public Event openWelcomeAndRetrieveEvent() throws CancellationException{
-		JFrame frame = new JFrame(MainClass.APP_NAME);
-		WelcomeScreen welcome = new WelcomeScreen(frame);
-		
-		
+	public void openWelcome() {
+		JFrame welcomeFrame = new JFrame("Welcome");
+		WelcomeScreen welcome = new WelcomeScreen(welcomeFrame, this);
 	}
+	
+	public void openEventFromWelcome(Event e) {
+		this.masterEvent = e;
+	}
+	
 }
