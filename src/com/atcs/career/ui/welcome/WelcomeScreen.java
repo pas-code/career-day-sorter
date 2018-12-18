@@ -3,6 +3,7 @@ package com.atcs.career.ui.welcome;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -45,8 +47,8 @@ public class WelcomeScreen extends JPanel {
 		// configure frame
 		this.parentFrame = parentFrame;
 	
-		configFrame();
 		configGui();
+		configFrame();
 	}
 	
 	
@@ -70,6 +72,7 @@ public class WelcomeScreen extends JPanel {
 		parentFrame.getContentPane().add(this);
 		parentFrame.pack();
 		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setResizable(false);
 		parentFrame.setVisible(true);
 	}
 	
@@ -94,6 +97,7 @@ public class WelcomeScreen extends JPanel {
 
 		newButton.addActionListener(e -> {
 			System.out.println("new");
+			constructProps();
 		});
 
 		openButton.addActionListener(e -> {
@@ -117,34 +121,9 @@ public class WelcomeScreen extends JPanel {
 
 		this.add(leftPanel, BorderLayout.WEST);
 
-		// right panel config (recents)
-		rightPanel = new JPanel();
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		ArrayList<String> recentEventNames = getRecentEvents();
-		for (String s : recentEventNames) 
-			model.addElement(s);
-		
-		JList<String> recents = new JList<String>(model);
-		recents.addListSelectionListener(new ListSelectionListener() {
+		rightPanelConfig();
 
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				try {
-					// get the file name from the event selected, and open the corresponding file
-					sendEventAndClose(FileHandler
-							.load(FileHandler.SAVE_DIR + Event.extractEventName(
-									recentEventNames.get(e.getFirstIndex()))));
-				} catch (ClassNotFoundException | IOException e1) {
-					
-					// could not load the file.
-					e1.printStackTrace();
-				}
-			}
-			
-		});
-		rightPanel.add(recents);
-		
-		this.add(rightPanel, BorderLayout.EAST);
+		this.add(rightPanel);
 	}
 	
 	/**
@@ -156,7 +135,6 @@ public class WelcomeScreen extends JPanel {
 		ArrayList<String> ret = new ArrayList<String>();
 		File saveDir = new File(FileHandler.SAVE_DIR);
 		final File[] children = saveDir.listFiles();
-		System.out.println(children);
 		for (int i = 0; i < Math.min(children.length, amtRecents); i++) 
 			ret.add(getEventName(children[i].getPath()));
 		
@@ -164,7 +142,7 @@ public class WelcomeScreen extends JPanel {
 	}
 	
 	private String getEventName(String filePath) {
-		return Event.extractEventName(filePath.substring(filePath.lastIndexOf(File.separatorChar)));
+		return Event.extractEventName(filePath.substring(filePath.lastIndexOf(File.separatorChar) + 1));
 	}
 
 	private JPanel topPanelConfig() {
@@ -178,6 +156,41 @@ public class WelcomeScreen extends JPanel {
 
 		t.add(title, BorderLayout.WEST);
 		return t;
+	}
+	
+	private void rightPanelConfig() {
+		// right panel config (recents)
+		rightPanel = new JPanel(new BorderLayout());
+		rightPanel.setBorder(BorderFactory.createTitledBorder(
+				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, openSans, Color.BLACK));
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		ArrayList<String> recentEventNames = getRecentEvents();
+		for (String s : recentEventNames) 
+			model.addElement(s);
+
+		JList<String> recents = new JList<String>(model);
+
+		rightPanel.add(recents);
+		JPanel lowerRight = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+		JButton openConfirmation = new JButton("Open");
+		openConfirmation.setEnabled(false);
+		openConfirmation.addActionListener(e -> {
+			try {
+				sendEventAndClose(FileHandler.load(FileHandler.SAVE_DIR
+						+ Event.saveFileName(recents.getSelectedValue())));
+			} catch (ClassNotFoundException | IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		recents.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				openConfirmation.setEnabled(true);
+			}
+		});
+		lowerRight.add(openConfirmation);
+		rightPanel.add(lowerRight, BorderLayout.SOUTH);
 	}
 	
 	// -------------------------------------------------------------------------------------------------------
@@ -197,9 +210,7 @@ public class WelcomeScreen extends JPanel {
 	
 	private void constructProps() {
 		PropertiesPane props = new PropertiesPane(this, null);
+		revalidate();
 	}
 
-	public static void main(String args[]) {
-//		System.out.println(new File("/Users/varanoth/Desktop/My Files").getPath());
-	}
 }

@@ -56,7 +56,6 @@ public class PropertiesPane extends JPanel {
 	public PropertiesPane(WelcomeScreen welc, Event e) {
 		setFocusable(true);
 		this.welc = welc;
-		configFrame();
 		if (e == null)
 			this.event = new Event();
 		else
@@ -76,6 +75,7 @@ public class PropertiesPane extends JPanel {
 		this.add(title, BorderLayout.NORTH);
 		this.add(gridPanel);
 		// createAndShowGUI();
+		configFrame();
 		revalidate();
 	}
 	
@@ -87,8 +87,12 @@ public class PropertiesPane extends JPanel {
 
 	private void configFrame() {
 		JFrame container = welc == null ? createFrame() : welc.parentFrame;
+		if (welc != null) {
+			container.getContentPane().remove(0);
+		}
 		container.getContentPane().add(this);
 		container.pack();
+//		container.setResizable(true);
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
