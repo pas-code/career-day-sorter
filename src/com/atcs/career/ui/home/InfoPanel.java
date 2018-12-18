@@ -84,6 +84,7 @@ public class InfoPanel extends JPanel implements MouseListener
         moreInfoHolder.add(moreInfo);
         moreInfoHolder.setVisible(true);
         moreInfoHolder.revalidate();
+        moreInfoHolder.repaint();
         Component[] c = this.getParent().getComponents();
         for(Component component : c)
         {
