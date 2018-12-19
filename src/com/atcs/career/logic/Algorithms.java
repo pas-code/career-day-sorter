@@ -59,7 +59,7 @@ public class Algorithms{
       Collections.sort(sessions);
       
       for(int i = 0; i < sessions.size(); i++){
-         if(rooms.size() < i) { //COME BACK WITH ERROR MANAGER STUFF
+         if(rooms.size() < i) { //COME BACK WITH ERROR MANAGER STUFF AAAAAAAH <=
             sessions.get(i).setRoom(rooms.get(i));
          }
       }
