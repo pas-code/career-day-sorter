@@ -16,6 +16,7 @@ public class MasterUI {
 	
 	public void openWelcome() {
 		JFrame welcomeFrame = new JFrame("Welcome");
+		welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // change later
 		new WelcomeScreen(welcomeFrame, this);
 	}
 	
@@ -29,8 +30,8 @@ public class MasterUI {
 		
 	}
 	
-	public void setEvent() {
-		
+	public void setEvent(Event e) {
+		this.masterEvent = e;
 	}
 	
 	public static void main(String[] args) {

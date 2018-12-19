@@ -6,10 +6,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,6 +28,7 @@ import javax.swing.event.ListSelectionListener;
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.program.MainClass;
+import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.MasterUI;
 
@@ -31,6 +36,8 @@ public class WelcomeScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 600, PREF_H = 400;
+	private static final BasicLogger log = BasicLogger.getLogger(WelcomeScreen.class.getName());
+	
 	private JPanel topPanel, leftPanel, rightPanel;
 	private Font openSans;
 
@@ -42,6 +49,7 @@ public class WelcomeScreen extends JPanel {
 	private MasterUI master;
 	
 	public WelcomeScreen(JFrame parentFrame, MasterUI master) {
+		log.config("construct welcome screen with master "+master);
 		this.master = master;
 		
 		// configure frame
@@ -49,6 +57,7 @@ public class WelcomeScreen extends JPanel {
 	
 		configGui();
 		configFrame();
+		log.config("completed init welcome");
 	}
 	
 	
@@ -59,7 +68,42 @@ public class WelcomeScreen extends JPanel {
 
 	private void configureButton(JButton b) {
 		b.setFont(openSans);
-		b.setOpaque(true);
+		b.setBorderPainted(false);
+//		b.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		b.setBackground(Color.GRAY);
+		b.setFocusable(false);
+		b.addMouseListener(buttonListener());
+	}
+	
+	private MouseListener buttonListener() {
+		return new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// indent
+				((AbstractButton) e.getSource()).setBorder(BorderFactory.createLoweredBevelBorder());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {				
+				((AbstractButton) e.getSource()).setBorder(UIManager.getBorder("Button.border"));
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((AbstractButton) e.getSource()).setBorderPainted(true);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				((AbstractButton) e.getSource()).setBorderPainted(false);
+				
+			}
+		};
 	}
 
 	/**
@@ -72,7 +116,7 @@ public class WelcomeScreen extends JPanel {
 		parentFrame.getContentPane().add(this);
 		parentFrame.pack();
 		parentFrame.setLocationRelativeTo(null);
-//		parentFrame.setResizable(false);
+		parentFrame.setResizable(false);
 		parentFrame.setVisible(true);
 	}
 	
@@ -85,7 +129,6 @@ public class WelcomeScreen extends JPanel {
 	
 	private void configGui() {
 		// initialize gui
-		leftPanel = new JPanel();
 		title = new JLabel(MainClass.APP_NAME);
 		openSans = FontManager.finalFont(25f);
 		topPanel = topPanelConfig();
@@ -96,30 +139,31 @@ public class WelcomeScreen extends JPanel {
 		configureButton(openButton);
 
 		newButton.addActionListener(e -> {
-			System.out.println("new");
+			log.info("new event button pressed");
 			constructProps();
 		});
 
 		openButton.addActionListener(e -> {
-			System.out.println("open");
+			log.info("open event button pressed");
 			try {
 				sendEventAndClose(OpenScreen.open());
 			} catch (Exception e1) {
-				System.out.println("cancelled");
+				log.info("open event prompt cancelled");
 			}
 		});
 
 		// Class Panel config
+		leftPanel = new JPanel(new GridLayout(2, 0));
 		this.setLayout(new BorderLayout());
 		this.add(topPanel, BorderLayout.NORTH);
 		this.setBackground(Color.gray);
 
 		// Left Panel config
-		leftPanel.setLayout(new GridLayout());
-		leftPanel.setBorder(
-				BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
+//		leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
 		leftPanel.setPreferredSize(new Dimension(150, 0));
-		leftPanel.setLayout(new GridLayout(2, 0));
+//		((GridLayout) leftPanel.getLayout()).setVgap(20);
+		
+		
 		leftPanel.setBackground(Color.gray);
 		leftPanel.add(newButton);
 		leftPanel.add(openButton);
@@ -174,12 +218,14 @@ public class WelcomeScreen extends JPanel {
 			model.addElement(s);
 
 		JList<String> recents = new JList<String>(model);
+		recents.setFont(FontManager.finalFont(24f).deriveFont(Font.BOLD));
 
 		rightPanel.add(recents);
 		JPanel lowerRight = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		JButton openConfirmation = new JButton("Open");
 		openConfirmation.setEnabled(false);
 		openConfirmation.addActionListener(e -> {
+			log.info("recent event "+recents.getSelectedValue() + " opened");
 			try {
 				sendEventAndClose(FileHandler.load(FileHandler.SAVE_DIR
 						+ Event.saveFileName(recents.getSelectedValue())));
@@ -210,7 +256,7 @@ public class WelcomeScreen extends JPanel {
 	 * close the props screen. should only be called from the props pane itself.
 	 */
 	protected void cancelProps() {
-		System.out.println("CANCEL");
+		log.info("props cancelled");
 		parentFrame.getContentPane().remove(0);
 		configFrame();
 	}
