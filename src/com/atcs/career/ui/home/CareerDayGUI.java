@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -19,11 +18,7 @@ import javax.swing.SwingConstants;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
-import com.atcs.career.data.Room;
-import com.atcs.career.data.Session;
-import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
-import com.atcs.career.ui.ColorManager;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
@@ -89,35 +84,10 @@ public class CareerDayGUI extends JPanel {
 
 	private void tabConfig() {
 		tabs = new JTabbedPane();
-<<<<<<< HEAD
+		tabs.setFont(smallFont);
 		addTab(event.getSessions());
-		// students panel
 		addTab(event.getStudents());
 		addTab(event.getRooms());
-		// ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-		//
-		// for (int i = 0; i < event.getStudents().size(); i++)
-		// {
-		// Student student = event.getStudents().get(i);
-		// StudentInfoUtil siu = new StudentInfoUtil(student, 1);
-		// sessionPanelHolder.add(siu);
-		// }
-		//
-		//
-		// sessionScroll = new JScrollPane(ScrollBackPanel);
-		// tabs.addTab("Students", sessionScroll);
-		// classroom panel
-		// classroomList = new JList();
-		// classroomList.setFont(smallFont);
-		// classroomScroll = new JScrollPane(classroomList);
-		// tabs.addTab("Classrooms", classroomScroll);
-		tabs.setFont(smallFont);
-=======
-		tabs.setFont(smallFont);
-		addTab(toListable(event.getSessions()));
-		addTab(toListable(event.getStudents()));
-		addTab(toListable(event.getRooms()));
->>>>>>> origin/ui-jarrett
 		this.add(tabs, BorderLayout.CENTER);
 	}
 
