@@ -15,16 +15,17 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private int grade, timeEntered;
 	private Priority priority;
 	private boolean isSwitchable;
+	private boolean submitted;
 
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
-				null, 100);
+				null, 100, true);
 		System.out.println(s.getGrade());
 		System.out.println(s);
 	}
 
 	public Student(String lName, String fName, String email,
-			ArrayList<Session> requests, int timeEntered) {
+			ArrayList<Session> requests, int timeEntered, boolean submitted) {
 		this.lName = lName;
 		this.fName = fName;
 		this.email = email;
@@ -34,7 +35,36 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this.timeEntered = timeEntered;
 		this.assignments = new ArrayList<Session>();
 		isSwitchable = true;
+		this.submitted = submitted;
 	}
+	public Student(String lName, String fName, String email,
+	      ArrayList<Session> requests, int timeEntered) {
+	   this.lName = lName;
+	   this.fName = fName;
+	   this.email = email;
+	   this.requests = requests;
+	   grade = getGradeFromEmail();
+	   priority = getStudentPriority();
+	   this.timeEntered = timeEntered;
+	   this.assignments = new ArrayList<Session>();
+	   this.submitted = true;
+	}
+
+   public Student(String lName, String fName, String email) {
+      this.lName = lName;
+      this.fName = fName;
+      this.email = email;
+      this.requests = new ArrayList<Session>();
+      grade = getGradeFromEmail();
+      priority = getStudentPriority();
+      this.timeEntered = 0;
+      submitted = false;
+   }
+   
+
+   public boolean equals(Student s){
+      return email.equals(s.getEmail());
+   }
 
 	/**
 	 * Returns 0 if an invalid email is used

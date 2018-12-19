@@ -104,7 +104,12 @@ public class CareerDayGUI extends JPanel {
 	private void tabConfig() {
 		// center panel
 		tabs = new JTabbedPane();
+<<<<<<< HEAD
 		addTab(toListable(event.getSessions()));
+=======
+		
+		addTab(event.getSessions());
+>>>>>>> origin/info-groundwork
 		// students panel
 		addTab(toListable(event.getStudents()));
 		addTab(toListable(event.getRooms()));
@@ -130,7 +135,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
-	private void addTab(ArrayList<GuiListable> eventData) {
+	private void addTab(ArrayList<?> eventData) {
 		// sessions panel
 		JPanel ScrollBackPanel = new JPanel();
 		ScrollBackPanel.setLayout(new BorderLayout());

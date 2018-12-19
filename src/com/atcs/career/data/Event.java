@@ -22,9 +22,10 @@ public class Event implements Serializable {
 	public static int startDay = 0;
 	public static int startYear = 0;
 	private int amountOfSessions;
-	private static ArrayList<Session> sessions = new ArrayList<Session>();  //changed to static
-	private static ArrayList<Student> students = new ArrayList<Student>();
-	private static ArrayList<Room> rooms = new ArrayList<Room>();
+	private ArrayList<Session> sessions = new ArrayList<Session>();
+	private ArrayList<Student> students = new ArrayList<Student>();
+	private ArrayList<Student> masterStudents = new ArrayList<Student>();
+	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName;
 
 	// TESTING
@@ -37,13 +38,14 @@ public class Event implements Serializable {
 //		System.out.println(e.getRooms());
 //		System.out.println(e.getSessions());
 		
+		
 		ArrayList<Student> master = new ArrayList<Student>();
-		Algorithms.myBigFatGreekWethod(students, master, rooms, sessions);
+		Algorithms.myBigFatGreekWethod(e.students, master, e.rooms, e.sessions);
 		
-		System.out.println(Algorithms.getSortingAccuracyAverage(students));
+		System.out.println(Algorithms.getSortingAccuracyAverage(e.students));
 		
-		for(int i = 0; i < sessions.size(); i++){
-		   System.out.println(sessions.toString());
+		for(int i = 0; i < e.sessions.size(); i++){
+		   System.out.println(e.sessions.toString());
 		}		
 		
 	}
@@ -54,6 +56,7 @@ public class Event implements Serializable {
 	public Event(String name) {
 		eventName = name;
 		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
+		 masterStudents = IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		 amountOfSessions = sessions.size();
@@ -141,4 +144,36 @@ public class Event implements Serializable {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
+
+   public ArrayList<Student> getMasterStudents() {
+      return masterStudents;
+   }
+
+   public void setMasterStudents(ArrayList<Student> masterStudents) {
+      this.masterStudents = masterStudents;
+   }
+
+   public static long getSerialversionuid() {
+      return serialVersionUID;
+   }
+
+   public static int getMinsessionsize() {
+      return minSessionSize;
+   }
+
+   public void setAmountOfSessions(int amountOfSessions) {
+      this.amountOfSessions = amountOfSessions;
+   }
+
+   public void setSessions(ArrayList<Session> sessions) {
+      this.sessions = sessions;
+   }
+
+   public void setStudents(ArrayList<Student> students) {
+      this.students = students;
+   }
+
+   public void setRooms(ArrayList<Room> rooms) {
+      this.rooms = rooms;
+   }
 }
