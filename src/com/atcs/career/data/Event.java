@@ -17,8 +17,10 @@ public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
 	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE
-	public static int startYear = Calendar.getInstance().YEAR;
-	public static int startDay = Calendar.getInstance().DAY_OF_YEAR;
+//	public static int startYear = Calendar.getInstance().YEAR;
+//	public static int startDay = Calendar.getInstance().DAY_OF_YEAR;
+	public static int startDay = 0;
+	public static int startYear = 0;
 	private int amountOfSessions;
 	private static ArrayList<Session> sessions = new ArrayList<Session>();  //changed to static
 	private static ArrayList<Student> students = new ArrayList<Student>();
@@ -55,6 +57,9 @@ public class Event implements Serializable {
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		 amountOfSessions = sessions.size();
+		 
+		 startYear = students.get(0).getTimeEntered()/1000;
+		 startDay = students.get(0).getTimeEntered()%1000;
 	}
 	
 	public Event()
