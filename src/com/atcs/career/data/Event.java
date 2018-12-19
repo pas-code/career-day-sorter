@@ -33,7 +33,7 @@ public class Event implements Serializable {
 		Event e = new Event("career");
 //		Event e = new Event();
 		FileHandler.save(e);
-		e = FileHandler.load(CSVReader.getFileLocation(".event"));
+//		e = FileHandler.load(CSVReader.getFileLocation(".event"));
 //		System.out.println(e.getStudents());
 //		System.out.println(e.getRooms());
 //		System.out.println(e.getSessions());
@@ -42,11 +42,10 @@ public class Event implements Serializable {
 		ArrayList<Student> master = new ArrayList<Student>();
 		Algorithms.myBigFatGreekWethod(e.students, master, e.rooms, e.sessions);
 		
-		System.out.println(Algorithms.getSortingAccuracyAverage(e.students));
 		
-		for(int i = 0; i < e.sessions.size(); i++){
-		   System.out.println(e.sessions.toString());
-		}		
+//		for(int i = 0; i < e.sessions.size(); i++){
+//		   System.out.println(e.sessions.toString());
+//		}		
 		
 	}
 
