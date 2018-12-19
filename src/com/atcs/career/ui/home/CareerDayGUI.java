@@ -142,13 +142,10 @@ public class CareerDayGUI extends JPanel {
 //	    selectedInfoPanel = ip;
 //	}
 	
-	/**
-	 * The main method runs your entire program It has the method
-	 * createAndShowGUI() and runs it. This makes your whole program work.
-	 */
+
 	public static void main(String[] args) {
 
-		CareerDayGUI program = new CareerDayGUI(new Event());
+		CareerDayGUI program = new CareerDayGUI(Event.testEvent());
 		program.makeWindow();
 	}
 	
