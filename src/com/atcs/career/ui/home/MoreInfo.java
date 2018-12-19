@@ -293,6 +293,7 @@ public abstract class MoreInfo {
 				@Override
 				public void focusLost(FocusEvent e) {
 					
+				    
 					session.getRoom().setRoomNumber(classroomNumber.getText());
 					
 					
