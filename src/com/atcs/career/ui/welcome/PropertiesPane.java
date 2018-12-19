@@ -11,8 +11,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+
 import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,6 +27,7 @@ import javax.swing.SwingConstants;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.importexport.CSVReader;
+
 //Jarrett Bierman
 //11/18/18
 //Properties
@@ -36,16 +38,17 @@ public class PropertiesPane extends JPanel {
 	public static final int BORDER_SIZE = 50;
 
 	private JPanel gridPanel;
-	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel, allStudentLabel;
-	private JButton sessionButton, studentButton, classroomButton, allStudentButton;
+	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel,
+			allStudentLabel;
+	private JButton sessionButton, studentButton, classroomButton,
+			allStudentButton;
 	private File sessionFile, studentFile, classroomFile, allStudentFile;
-	private JButton submit;
+	private JButton submit, cancel;
 	private JTextField title;
 	private final String textPrompt = "Enter Project Name Here";
 	private Event event;
-	
-	private WelcomeGUIMaster master;
 
+	private WelcomeScreen welc;
 	private JSpinner periodCount;
 
 	private final String BUTTON_DEFAULT_TEXT = "Choose File";
@@ -53,10 +56,9 @@ public class PropertiesPane extends JPanel {
 	/**
 	 * master can be none. will bring a popup if not.
 	 */
-	public PropertiesPane(WelcomeGUIMaster master, Event e) {
+	public PropertiesPane(WelcomeScreen welc, Event e) {
 		setFocusable(true);
-		this.master = master;
-		if (master == null) createFrame();
+		this.welc = welc;
 		if (e == null)
 			this.event = new Event();
 		else
@@ -72,17 +74,32 @@ public class PropertiesPane extends JPanel {
 		createFieldAndSpinner();
 		addGridStuff();
 
-		this.add(submit, BorderLayout.SOUTH);
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+		buttonPanel.add(cancel);
+		buttonPanel.add(submit);
+
+		this.add(buttonPanel, BorderLayout.SOUTH);
 		this.add(title, BorderLayout.NORTH);
 		this.add(gridPanel);
 		// createAndShowGUI();
+		configFrame();
 		revalidate();
 	}
 
-	private void createFrame() {
-		JFrame container = new JFrame("Set Event Data");
+	// -----------------------------------CONFIG GUI--------------------------------------------
+
+	private JFrame createFrame() {
+		return new JFrame("Set Event Data");
+	}
+
+	private void configFrame() {
+		JFrame container = welc == null ? createFrame() : welc.parentFrame;
+		if (welc != null) {
+			container.getContentPane().remove(0);
+		}
 		container.getContentPane().add(this);
 		container.pack();
+		// container.setResizable(true)
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
@@ -96,13 +113,15 @@ public class PropertiesPane extends JPanel {
 	public void createLabels() {
 		sessionLabel = new JLabel("Session File <Required> (.csv)");
 		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
-		studentLabel = new JLabel("Google Form Result Student File (.csv)");
+		studentLabel = new JLabel("Student Requests File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
 		periodLabel = new JLabel("Number of Periods");
 	}
 
-	public void createButtons() {
-		sessionButton = new JButton(event.getSessionFile() == null ? BUTTON_DEFAULT_TEXT : event.getSessionFile());
+	private void createButtons() {
+		sessionButton = new JButton(event.getSessionFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getSessionFile());
 		sessionButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -112,35 +131,40 @@ public class PropertiesPane extends JPanel {
 			}
 		});
 
-		allStudentButton = new JButton(event.getRequestFile() == null ? BUTTON_DEFAULT_TEXT : event.getRequestFile());
-		allStudentButton.addActionListener(new ActionListener() {		   
-		   @Override
-		   public void actionPerformed(ActionEvent e) {
-		      allStudentFile = selectFile(allStudentButton);
-              event.setRequestFile(allStudentFile.getName());
+		allStudentButton = new JButton(event.getRequestFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRequestFile());
+		allStudentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				allStudentFile = selectFile(allStudentButton);
+				event.setRequestFile(allStudentFile.getName());
 
-		   }
+			}
 		});
-		
-		studentButton = new JButton(event.getRequestFile() == null ? BUTTON_DEFAULT_TEXT : event.getRequestFile());
+
+		studentButton = new JButton(event.getRequestFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRequestFile());
 		studentButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				studentFile = selectFile(studentButton);
-                event.setRequestFile(studentFile.getName());
-
+				event.setRequestFile(studentFile.getName());
 			}
 		});
 
-		classroomButton = new JButton(event.getRoomFile() == null ? BUTTON_DEFAULT_TEXT : event.getRoomFile());
+		classroomButton = new JButton(event.getRoomFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRoomFile());
+
 		classroomButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				classroomFile = selectFile(classroomButton);
-                event.setRequestFile(classroomFile.getName());
-
+				event.setRequestFile(classroomFile.getName());
 			}
 		});
 
@@ -149,22 +173,25 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					if (readyToSubmit()) 
-					{
-						// Do all of the important info work here
-						System.out.println("Title: " + title.getText());
-						System.out.println(sessionFile);
-						System.out.println(studentFile);
-						System.out.println(classroomFile);
-						System.out.println("Periods: " + (int) periodCount.getValue());
-					} 
-					else
-					   JOptionPane.showMessageDialog(null,"You did not select all of the needed files. Please select all options.");
-      			}
-      		});
-      	}
+				if (readyToSubmit()) {
+					// Do all of the important info work here
+					System.out.println("Title: " + title.getText());
+					System.out.println(sessionFile);
+					System.out.println(studentFile);
+					System.out.println(classroomFile);
+					System.out.println("Periods: " + (int) periodCount.getValue());
+				} else
+					JOptionPane.showMessageDialog(null,
+							"You did not select all of the needed files. Please select all options.");
+			}
+		});
+		cancel = new JButton("Cancel");
+		cancel.addActionListener(e -> {
+			cancel();
+		});
+	}
 
-	public void createFieldAndSpinner() {
+	private void createFieldAndSpinner() {
 		title = new JTextField(textPrompt);
 		title.setForeground(Color.GRAY);
 		title.setFont(new Font("Ariel", Font.PLAIN, 40));
@@ -219,34 +246,21 @@ public class PropertiesPane extends JPanel {
 		b.setText(name);
 		return new File(location);
 	}
-	
-	public boolean readyToSubmit()//edit this
-	{
-	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
-	}
 
-	/**
-	 * The createAndShowGUI class puts your JPanel into a JFrame and creates the
-	 * GUI interface. This pretty much sets up your screen so you can see what
-	 * you have coded. //
-	 */
-//	 private void createAndShowGUI() {
-//	 PropertiesPane gamePanel = this;
-//	 JFrame frame = new JFrame("Selection Panel");
-//	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	 frame.getContentPane().add(gamePanel);
-//	 frame.pack();
-//	 frame.setLocationRelativeTo(null);
-//	 frame.setVisible(true);
-//	 }
-
-	/**
-	 * This overrides the JPanel's getPreferredSize() method It tells the JPanel
-	 * to be a certain width and height
-	 */
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
+	}
+
+	// ------------------------------------------END GUI CONFIGURATION----------------------------------------
+
+	private void cancel() {
+		if (welc != null) 
+			welc.cancelProps();
+	}
+	
+	public boolean readyToSubmit() { //edit this
+	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
+	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
 	/**

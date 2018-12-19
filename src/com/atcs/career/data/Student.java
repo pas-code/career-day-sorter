@@ -14,6 +14,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;
 	private Priority priority;
+	private byte TYPE_NUM  = 1;
 
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
@@ -182,5 +183,11 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	@Override
 	public String getType() {
 		return "Student";
+	}
+	
+	@Override
+	public byte getTypeNum()
+	{
+	    return TYPE_NUM;
 	}
 }

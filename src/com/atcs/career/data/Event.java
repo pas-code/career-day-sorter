@@ -22,10 +22,13 @@ public class Event implements Serializable {
 	private String eventName, oldName;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
+	
+	//HOLD ALGORITHM DATA IN OBJECT
+	private Priority weighting;
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		Event e = new Event("career");
+		Event e = testEvent();
 //		Event e = new Event();
 		System.out.println("WHAT");
 		FileHandler.save(e);
@@ -172,4 +175,14 @@ public class Event implements Serializable {
 	public static String saveFileName(String eventName) {
 		return eventName + FileHandler.SUFFIX;
 	}
+	
+	public static String extractEventName(String saveFileName) {
+		return saveFileName.substring(0, saveFileName.indexOf(FileHandler.SUFFIX));
+	}
+	
+	public String toString() {
+		return getEventName();
+	}
+	
+	
 }

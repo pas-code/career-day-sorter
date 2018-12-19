@@ -25,29 +25,24 @@ import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.ColorManager;
 
-//Jarrett Bierman
+//Jarrett Bierman & Edward Fominykh
 //9/4/18
 //Default JPanel Class (Copy and Paste)
 public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
+	private byte selectedPeriod;
 	private JPanel east, west;
-	private JPanel scrollBackPanel;
-	private JList<Student> studentList;
-	private JList<Room> classroomList;
-	private JScrollPane sessionScroll, studentScroll, classroomScroll;
 	private JLabel title;
 	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
-	private JPanel sessionPanelHolder;
-	private ArrayList<SessionInfoUtil> sessionPanels;
 	private Event event;
-
-	private final boolean testing = true;
+	
+//	private InfoPanel selectedInfoPanel;
 
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -59,11 +54,10 @@ public class CareerDayGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		bigFont = FontManager.finalFont(40f);
 		smallFont = FontManager.finalFont(15f);
-		// this.event = event;
-		sessionPanels = new ArrayList<SessionInfoUtil>();
+		new ArrayList<SessionInfoUtil>();
 		layoutConfig();
 		tabConfig();
-		makeWindow();
+//		makeWindow();
 	}
 
 	private void layoutConfig() {
@@ -140,7 +134,7 @@ public class CareerDayGUI extends JPanel {
 		for (int i = 0; i < eventData.size(); i++) {
 			System.out
 					.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i)));
+			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i), east));
 
 		}
 
@@ -150,7 +144,7 @@ public class CareerDayGUI extends JPanel {
 		tabs.addTab(((GuiListable) eventData.get(0)).getType(), sessionScroll);
 	}
 
-	private void makeWindow() {
+	public void makeWindow() {
 		JFrame frame = new JFrame("Default JPanel");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
@@ -171,12 +165,21 @@ public class CareerDayGUI extends JPanel {
 		return event;
 	}
 
+//	public void setSelectedInfoPanel(InfoPanel ip)
+//	{
+//	    selectedInfoPanel.setSelected(false);
+//	    ip.setSelected(true);
+//	    selectedInfoPanel = ip;
+//	}
+	
 	/**
 	 * The main method runs your entire program It has the method
 	 * createAndShowGUI() and runs it. This makes your whole program work.
 	 */
 	public static void main(String[] args) {
 
-		new CareerDayGUI(new Event());
+		CareerDayGUI program = new CareerDayGUI(new Event());
+		program.makeWindow();
 	}
+	
 }

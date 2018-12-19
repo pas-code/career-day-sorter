@@ -21,8 +21,7 @@ import com.atcs.career.io.file.FileHandler;
 public class OpenScreen {
 
 	public static Event open() throws CancellationException, IOException, ClassNotFoundException {
-//		File rootDir = new File(FileHandler.SAVE_DIR);
-		File rootDir = new File("/Users/varanoth/Desktop");
+		File rootDir = new File(FileHandler.SAVE_DIR);
 		JFileChooser jfc = new JFileChooser(rootDir, new DirectoryRestrictedFileSystemView(rootDir));
 		jfc.setDialogTitle("Open an Event File");
 		for (int i = 0; i < 3; i++)
