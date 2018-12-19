@@ -42,6 +42,8 @@ public abstract class MoreInfo {
 			this.setBackground(Color.WHITE);
 		}
 
+		
+		
 		public abstract void changePeriod(int newPeriod);
 		
 	}
@@ -251,6 +253,7 @@ public abstract class MoreInfo {
 				public void focusLost(FocusEvent e) {
 					session.setSpeaker(speakerName.getText());
 					System.out.println("speaker name saved");
+					 
 				}
 				
 			});

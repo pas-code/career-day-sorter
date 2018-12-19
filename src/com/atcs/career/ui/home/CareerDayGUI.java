@@ -37,9 +37,8 @@ public class CareerDayGUI extends JPanel {
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
+//	private InfoPanel selectedInfoPanel
 	
-//	private InfoPanel selectedInfoPanel;
-
 	public CareerDayGUI(Event event) {
 		this.event = event;
 		gui();
@@ -56,6 +55,11 @@ public class CareerDayGUI extends JPanel {
 //		makeWindow();
 	}
 
+//	private void refresh()
+//	{
+//	    
+//	}
+	
 	private void layoutConfig() {
 		// title
 		title = new JLabel("Event Scheduler", SwingConstants.CENTER);
@@ -83,7 +87,7 @@ public class CareerDayGUI extends JPanel {
 		this.add(west, BorderLayout.WEST);
 	}
 
-	private void tabConfig() {
+	public void tabConfig() {
 		tabs = new JTabbedPane();
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());
@@ -101,12 +105,13 @@ public class CareerDayGUI extends JPanel {
 		JPanel sessionPanelHolder = new JPanel();
 		sessionPanelHolder.setLayout(new GridLayout(0, 1));
 		ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-
+		
 		for (int i = 0; i < eventData.size(); i++) {
 			System.out
 					.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i), east));
-
+			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east);
+			sessionPanelHolder.add(infoPanel);
+//			infoPanel.getMoreInfoPanel()
 		}
 
 		JScrollPane sessionScroll = new JScrollPane(ScrollBackPanel);

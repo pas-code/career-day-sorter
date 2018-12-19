@@ -75,7 +75,11 @@ public class InfoPanel extends JPanel implements MouseListener
            return;
        }
        System.out.println("Initialized More info panels");
+       
+       
     }
+    
+    
     
     public void select()
     {
@@ -179,6 +183,11 @@ public class InfoPanel extends JPanel implements MouseListener
         titlePanel.add(titleLabel, BorderLayout.WEST);
     }
 
+    public MoreInfo.SideInfoPanel getMoreInfoPanel()
+    {
+        return moreInfo;
+    }
+    
     private void infoPanelConfig()
     {
         this.add(infoPanel);
