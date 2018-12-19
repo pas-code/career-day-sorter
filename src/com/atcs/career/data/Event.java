@@ -11,6 +11,7 @@ import java.util.Calendar;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVReader;
+import com.atcs.career.logic.Algorithms;
 
 public class Event implements Serializable {
 
@@ -19,9 +20,9 @@ public class Event implements Serializable {
 	public static int startYear = Calendar.getInstance().YEAR;
 	public static int startDay = Calendar.getInstance().DAY_OF_YEAR;
 	private int amountOfSessions;
-	private ArrayList<Session> sessions = new ArrayList<Session>();
-	private ArrayList<Student> students = new ArrayList<Student>();
-	private ArrayList<Room> rooms = new ArrayList<Room>();
+	private static ArrayList<Session> sessions = new ArrayList<Session>();  //changed to static
+	private static ArrayList<Student> students = new ArrayList<Student>();
+	private static ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName;
 
 	// TESTING
@@ -30,9 +31,19 @@ public class Event implements Serializable {
 //		Event e = new Event();
 		FileHandler.save(e);
 		e = FileHandler.load(CSVReader.getFileLocation(".event"));
-		System.out.println(e.getStudents());
-		System.out.println(e.getRooms());
-		System.out.println(e.getSessions());
+//		System.out.println(e.getStudents());
+//		System.out.println(e.getRooms());
+//		System.out.println(e.getSessions());
+		
+		ArrayList<Student> master = new ArrayList<Student>();
+		Algorithms.myBigFatGreekWethod(students, master, rooms, sessions);
+		
+		System.out.println(Algorithms.getSortingAccuracyAverage(students));
+		
+		for(int i = 0; i < sessions.size(); i++){
+		   System.out.println(sessions.toString());
+		}		
+		
 	}
 
 	/**
