@@ -29,6 +29,10 @@ public class MasterUI {
 		
 	}
 	
+	public void setEvent() {
+		
+	}
+	
 	public static void main(String[] args) {
 		new MasterUI().openWelcome();
 	}

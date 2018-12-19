@@ -36,14 +36,16 @@ public class PropertiesPane extends JPanel {
 	public static final int BORDER_SIZE = 50;
 
 	private JPanel gridPanel;
-	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel, allStudentLabel;
-	private JButton sessionButton, studentButton, classroomButton, allStudentButton;
+	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel,
+			allStudentLabel;
+	private JButton sessionButton, studentButton, classroomButton,
+			allStudentButton;
 	private File sessionFile, studentFile, classroomFile, allStudentFile;
-	private JButton submit;
+	private JButton submit, cancel;
 	private JTextField title;
 	private final String textPrompt = "Enter Project Name Here";
 	private Event event;
-	
+
 	private WelcomeScreen welc;
 
 	private JSpinner periodCount;
@@ -71,15 +73,20 @@ public class PropertiesPane extends JPanel {
 		createFieldAndSpinner();
 		addGridStuff();
 
-		this.add(submit, BorderLayout.SOUTH);
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+		buttonPanel.add(cancel);
+		buttonPanel.add(submit);
+
+		this.add(buttonPanel, BorderLayout.SOUTH);
 		this.add(title, BorderLayout.NORTH);
 		this.add(gridPanel);
 		// createAndShowGUI();
 		configFrame();
 		revalidate();
 	}
-	
-	// -----------------------------------CONFIG GUI--------------------------------------------
+
+	// -----------------------------------CONFIG
+	// GUI--------------------------------------------
 
 	private JFrame createFrame() {
 		return new JFrame("Set Event Data");
@@ -92,7 +99,7 @@ public class PropertiesPane extends JPanel {
 		}
 		container.getContentPane().add(this);
 		container.pack();
-//		container.setResizable(true);
+		// container.setResizable(true);
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
@@ -102,17 +109,20 @@ public class PropertiesPane extends JPanel {
 		});
 		container.setVisible(true);
 	}
-	
+
 	private void createLabels() {
 		sessionLabel = new JLabel("Session File <Required> (.csv)");
-		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
+		allStudentLabel = new JLabel(
+				"Master File of all students <Required> (.csv)");
 		studentLabel = new JLabel("Google Form Result Student File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
 		periodLabel = new JLabel("Number of Periods");
 	}
 
 	private void createButtons() {
-		sessionButton = new JButton(event.getSessionFile() == null ? BUTTON_DEFAULT_TEXT : event.getSessionFile());
+		sessionButton = new JButton(event.getSessionFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getSessionFile());
 		sessionButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -122,34 +132,40 @@ public class PropertiesPane extends JPanel {
 			}
 		});
 
-		allStudentButton = new JButton(event.getRequestFile() == null ? BUTTON_DEFAULT_TEXT : event.getRequestFile());
-		allStudentButton.addActionListener(new ActionListener() {		   
-		   @Override
-		   public void actionPerformed(ActionEvent e) {
-		      allStudentFile = selectFile(allStudentButton);
-              event.setRequestFile(allStudentFile.getName());
+		allStudentButton = new JButton(event.getRequestFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRequestFile());
+		allStudentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				allStudentFile = selectFile(allStudentButton);
+				event.setRequestFile(allStudentFile.getName());
 
-		   }
+			}
 		});
-		
-		studentButton = new JButton(event.getRequestFile() == null ? BUTTON_DEFAULT_TEXT : event.getRequestFile());
+
+		studentButton = new JButton(event.getRequestFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRequestFile());
 		studentButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				studentFile = selectFile(studentButton);
-                event.setRequestFile(studentFile.getName());
+				event.setRequestFile(studentFile.getName());
 
 			}
 		});
 
-		classroomButton = new JButton(event.getRoomFile() == null ? BUTTON_DEFAULT_TEXT : event.getRoomFile());
+		classroomButton = new JButton(event.getRoomFile() == null
+				? BUTTON_DEFAULT_TEXT
+				: event.getRoomFile());
 		classroomButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				classroomFile = selectFile(classroomButton);
-                event.setRequestFile(classroomFile.getName());
+				event.setRequestFile(classroomFile.getName());
 
 			}
 		});
@@ -159,20 +175,23 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					if (readyToSubmit()) 
-					{
-						// Do all of the important info work here
-						System.out.println("Title: " + title.getText());
-						System.out.println(sessionFile);
-						System.out.println(studentFile);
-						System.out.println(classroomFile);
-						System.out.println("Periods: " + (int) periodCount.getValue());
-					} 
-					else
-					   JOptionPane.showMessageDialog(null,"You did not select all of the needed files. Please select all options.");
-      			}
-      		});
-      	}
+				if (readyToSubmit()) {
+					// Do all of the important info work here
+					System.out.println("Title: " + title.getText());
+					System.out.println(sessionFile);
+					System.out.println(studentFile);
+					System.out.println(classroomFile);
+					System.out.println("Periods: " + (int) periodCount.getValue());
+				} else
+					JOptionPane.showMessageDialog(null,
+							"You did not select all of the needed files. Please select all options.");
+			}
+		});
+		cancel = new JButton("Cancel");
+		cancel.addActionListener(e -> {
+			cancel();
+		});
+	}
 
 	private void createFieldAndSpinner() {
 		title = new JTextField(textPrompt);
@@ -200,7 +219,8 @@ public class PropertiesPane extends JPanel {
 		periodCount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
 		periodCount.setFont(new Font("Ariel", Font.PLAIN, 30));
 		periodCount.setBorder(BorderFactory.createEmptyBorder(0, 170, 0, 50));
-		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField().setEditable(false);
+		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField()
+				.setEditable(false);
 	}
 
 	private void addGridStuff() {
@@ -218,24 +238,22 @@ public class PropertiesPane extends JPanel {
 
 	public File selectFile(JButton b) {
 		String location = CSVReader.getFileLocation(".csv");
-		if (location == null) 
-			return null;
+		if (location == null) return null;
 		int index = 0;
 		for (int i = 0; i < location.length(); i++) {
-			if (location.charAt(i) == File.separatorChar) 
-			   index = i;
+			if (location.charAt(i) == File.separatorChar) index = i;
 		}
 		String name = location.substring(index + 1);
 		b.setText(name);
 		return new File(location);
 	}
-	
-	public boolean readyToSubmit()//edit this
-	{
-	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
-	}
 
+	public boolean readyToSubmit()// edit this
+	{
+		return !(title.getText().isEmpty() || periodCount.getValue() == null
+				|| title.getText().equals(textPrompt) || sessionFile == null
+				|| allStudentFile == null);
+	}
 
 	/**
 	 * This overrides the JPanel's getPreferredSize() method It tells the JPanel
@@ -244,9 +262,14 @@ public class PropertiesPane extends JPanel {
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
-	
-	//------------------------------------------END GUI CONFIGURATION----------------------------------------
 
+	// ------------------------------------------END GUI CONFIGURATION----------------------------------------
+
+	private void cancel() {
+		if (welc != null) 
+			welc.cancelProps();
+	}
+	
 	/**
 	 * The main method runs your entire program It has the method
 	 * createAndShowGUI() and runs it. This makes your whole program work.

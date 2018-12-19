@@ -72,7 +72,7 @@ public class WelcomeScreen extends JPanel {
 		parentFrame.getContentPane().add(this);
 		parentFrame.pack();
 		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
+//		parentFrame.setResizable(false);
 		parentFrame.setVisible(true);
 	}
 	
@@ -204,6 +204,15 @@ public class WelcomeScreen extends JPanel {
 	protected void sendEventAndClose(Event e) {
 		sendEvent(e);
 		//close
+	}
+	
+	/**
+	 * close the props screen. should only be called from the props pane itself.
+	 */
+	protected void cancelProps() {
+		System.out.println("CANCEL");
+		parentFrame.getContentPane().remove(0);
+		configFrame();
 	}
 	
 	/** 
