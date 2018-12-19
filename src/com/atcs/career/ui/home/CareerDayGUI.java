@@ -106,7 +106,7 @@ public class CareerDayGUI extends JPanel {
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
 	private void addTab(ArrayList<GuiListable> eventData) {
-		// sessions panel
+		// sessions panel 
 		JPanel ScrollBackPanel = new JPanel();
 		ScrollBackPanel.setLayout(new BorderLayout());
 		ScrollBackPanel.setBackground(Color.white);
