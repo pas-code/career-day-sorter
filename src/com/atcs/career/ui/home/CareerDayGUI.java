@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
 import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18

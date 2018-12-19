@@ -1,4 +1,4 @@
-//Thomas Varano and David DeScherer
+//Thomas Varano
 //Dec 10, 2018
 
 package com.atcs.career.ui.home;
@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,7 +29,7 @@ import com.atcs.career.data.Student;
 
 public abstract class MoreInfo {
 
-	public static abstract class InfoPanel extends JPanel {
+	public static abstract class SideInfoPanel extends JPanel {
 	   public static final int PREF_W = 400;
 	   public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
@@ -47,7 +46,7 @@ public abstract class MoreInfo {
 		
 	}
 
-	public static class RoomPanel extends InfoPanel {
+	public static class RoomPanel extends SideInfoPanel {
 		/**
 		 * 
 		 */
@@ -110,7 +109,10 @@ public abstract class MoreInfo {
 			      JList<String> listNames = new JList<String>(studentNames);
 			      listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			      scrollPane = new JScrollPane(listNames);
-			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + "  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
+			      
+//			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
+//			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
+			      String sessionInfo = "Title";
 			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
 			      
@@ -126,11 +128,11 @@ public abstract class MoreInfo {
 
 	}
 
-	public static class StudentPanel extends InfoPanel {
+	public static class StudentPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Student instance variables (scrollPane already created with Room)
 		//DELETE
-		
+		private JButton editStudentName, editStudentEmail;
 		
 		private JTextField studentfName, studentlName, studentEmail;
 		
@@ -224,7 +226,7 @@ public abstract class MoreInfo {
 		
 	}
 
-	public static class SessionPanel extends InfoPanel {
+	public static class SessionPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Session instance variables
 		private JButton editStudent, addStudent, removeStudent;
@@ -285,6 +287,11 @@ public abstract class MoreInfo {
 
 				}
 			});
+
+			
+			
+
+
 			periodNum = 1;
 
 			generalSetup();
@@ -296,18 +303,11 @@ public abstract class MoreInfo {
 			JPanel south = new JPanel(new BorderLayout());
 
 			add(center, BorderLayout.CENTER);
-			String sNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-			"J"}; //FOR TESTING ONLY
-			ArrayList<String> studentNames = new ArrayList<String>();
-			for (int i = 0; i < sNames.length; i++)
-				studentNames.add(sNames[i]);
-			String[] standard = studentNames.toArray(new String[studentNames.size()]);
-			String studentNamesList[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
 					"J"};
-			JList<String> listStudents = new JList<String>(standard);
-			JList list = new JList(studentNames.toArray());
+			JList<String> listStudents = new JList<String>(studentNames);
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			JScrollPane scrollPane = new JScrollPane(list);
+			JScrollPane scrollPane = new JScrollPane(listStudents);
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
@@ -316,7 +316,7 @@ public abstract class MoreInfo {
 			center.add(scrollPane);
 
 			add(north, BorderLayout.NORTH);
-			north.setLayout(new GridLayout(2,0));
+			north.setLayout(new GridLayout(3,0));
 			north.add(speakerName);
 			north.add(classroomNumber);
 			
@@ -331,7 +331,7 @@ public abstract class MoreInfo {
 
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
-			south.setLayout(new GridLayout(3, 1));
+			south.setLayout(new GridLayout(5, 1));
 			south.add(editStudent);
 			south.add(addStudent);
 			south.add(removeStudent);
@@ -339,16 +339,9 @@ public abstract class MoreInfo {
 			removeStudent.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("test");
-					if (list.getSelectedIndex()!=-1)
-					{
-						System.out.println(studentNames);
-						studentNames.remove(list.getSelectedIndex());
-						System.out.println(studentNames);
-						scrollPane.revalidate();
-						scrollPane.repaint();
-						//standard = studentNames.toArray(new String[studentNames.size()]);
-					}
+					
+					listStudents.remove(listStudents.getSelectedIndex());
+					
 				}
 			});
 
@@ -363,7 +356,7 @@ public abstract class MoreInfo {
 	}
 
 
-	public static class EventPanel extends InfoPanel {
+	public static class EventPanel extends SideInfoPanel {
 
 		private static final long serialVersionUID = 1L;
 
@@ -373,7 +366,7 @@ public abstract class MoreInfo {
 		}
 	}
 	
-	private static void show(InfoPanel p) {
+	private static void show(SideInfoPanel p) {
 		JFrame f = new JFrame("test info panel");
 		f.getContentPane().add(p);
 		f.pack();
