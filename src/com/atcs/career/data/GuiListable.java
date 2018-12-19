@@ -8,6 +8,10 @@ package com.atcs.career.data;
 public interface GuiListable
 {
     public String getTitle();
+    
+    /**
+     * returns info specific to each class, dependent on the int given.
+     */
     public String getInfo(int i);
     public String getType();
     public byte getTypeNum();

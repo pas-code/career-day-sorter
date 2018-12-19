@@ -3,129 +3,276 @@ package com.atcs.career.ui.welcome;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JWindow;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import com.atcs.career.data.Event;
+import com.atcs.career.io.file.FileHandler;
+import com.atcs.career.program.MainClass;
+import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
-import com.atcs.career.ui.ColorManager;
+import com.atcs.career.ui.MasterUI;
 
-public class WelcomeScreen extends JPanel{
+public class WelcomeScreen extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+	public static final int PREF_W = 600, PREF_H = 400;
+	private static final BasicLogger log = BasicLogger.getLogger(WelcomeScreen.class.getName());
 	
-	private JFrame f;
-	private JPanel topPanel;
-	private JPanel mainPanel;
-	private JPanel leftPanel;
+	private JPanel topPanel, leftPanel, rightPanel;
 	private Font openSans;
-	
-	private MenuCircleButton cb, lb;
-	
+
+	private JButton newButton, openButton;
+
 	private JLabel title;
+	protected JFrame parentFrame;
+
+	private MasterUI master;
 	
-	public WelcomeScreen(String programName)
-	{
-		f = new JFrame("PasCode");
-		mainPanel = new JPanel();
-		leftPanel = new JPanel();
-		title = new JLabel("   " + programName);
-		openSans = FontManager.finalFont(25f);
-		topPanel = topPanelConfig();
-		cb = new MenuCircleButton("New", ColorManager.get("welcome.button.background"), ColorManager.get("welcome.foreground"));
-		lb = new MenuCircleButton("Open",ColorManager.get("welcome.button.background"), ColorManager.get("welcome.foreground"));
+	public WelcomeScreen(JFrame parentFrame, MasterUI master) {
+		log.config("construct welcome screen with master "+master);
+		this.master = master;
+		
+		// configure frame
+		this.parentFrame = parentFrame;
+	
 		configGui();
+		configFrame();
+		log.config("completed init welcome");
 	}
 	
-	private void configGui()
-	{
-		//Frame config
-		f.setSize(600, 350);
-		f.setLocationRelativeTo(null);
-		f.add(this);
-		
-		//Class Panel config
+	
+	// ----------------------------------- INITIAL CONFIGURATION OF GUI ---------------------------------------
+	public java.awt.Dimension getPreferredSize() {
+		return new java.awt.Dimension(PREF_W, PREF_H);
+	}
+
+	private void configureButton(JButton b) {
+		b.setFont(openSans);
+		b.setBorderPainted(false);
+//		b.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		b.setBackground(Color.GRAY);
+		b.setFocusable(false);
+		b.addMouseListener(buttonListener());
+	}
+	
+	private MouseListener buttonListener() {
+		return new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// indent
+				((AbstractButton) e.getSource()).setBorder(BorderFactory.createLoweredBevelBorder());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {				
+				((AbstractButton) e.getSource()).setBorder(UIManager.getBorder("Button.border"));
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((AbstractButton) e.getSource()).setBorderPainted(true);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				((AbstractButton) e.getSource()).setBorderPainted(false);
+				
+			}
+		};
+	}
+
+	/**
+	 * configure the frame surrounding the panel
+	 */
+	private void configFrame() {
+		if (parentFrame == null) {
+			parentFrame = createFrame();
+		}
+		parentFrame.getContentPane().add(this);
+		parentFrame.pack();
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setResizable(false);
+		parentFrame.setVisible(true);
+	}
+	
+	/**
+	 * create a new frame to put the welcome screen in, if needed.
+	 */
+	private JFrame createFrame() {
+		return new JFrame("TEST");
+	}
+	
+	private void configGui() {
+		// initialize gui
+		title = new JLabel(MainClass.APP_NAME);
+		openSans = FontManager.finalFont(25f);
+		topPanel = topPanelConfig();
+
+		newButton = new JButton("New");
+		openButton = new JButton("Open");
+		configureButton(newButton);
+		configureButton(openButton);
+
+		newButton.addActionListener(e -> {
+			log.info("new event button pressed");
+			constructProps();
+		});
+
+		openButton.addActionListener(e -> {
+			log.info("open event button pressed");
+			try {
+				sendEventAndClose(OpenScreen.open());
+			} catch (Exception e1) {
+				log.info("open event prompt cancelled");
+			}
+		});
+
+		// Class Panel config
+		leftPanel = new JPanel(new GridLayout(2, 0));
 		this.setLayout(new BorderLayout());
 		this.add(topPanel, BorderLayout.NORTH);
 		this.setBackground(Color.gray);
+
+		// Left Panel config
+//		leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
+		leftPanel.setPreferredSize(new Dimension(150, 0));
+//		((GridLayout) leftPanel.getLayout()).setVgap(20);
 		
-		//Left Panel config
-		leftPanel.setLayout(new GridLayout());
-		leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
-		leftPanel.setPreferredSize(new Dimension(150,0));
-		leftPanel.setLayout(new GridLayout(2,0));
+		
 		leftPanel.setBackground(Color.gray);
-		leftPanel.add(cb);
-		leftPanel.add(lb);
-		
+		leftPanel.add(newButton);
+		leftPanel.add(openButton);
+
 		this.add(leftPanel, BorderLayout.WEST);
-		
-		f.setVisible(true);
-		
-		//Create New Event
-		cb.addMouseListener(new MouseListener()
-		        {
 
-                    @Override
-                    public void mouseClicked(MouseEvent e)
-                    {
-                    }
+		rightPanelConfig();
 
-                    @Override
-                    public void mousePressed(MouseEvent e)
-                    {
-                        pressed();
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e)
-                    {
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e)
-                    {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e)
-                    {
-                    }
-		    
-		        });
+		this.add(rightPanel);
 	}
 	
-	private void pressed()
-	{
-	    System.out.println("Pressed");
-        f.removeAll();
-        
-        PropertiesPane p = new PropertiesPane();
-        f.add(p);
-        
+	/**
+	 * gets the last 4 events opened.
+	 */
+	private ArrayList<String> getRecentEvents() {
+		final int amtRecents = 4;
+		
+		ArrayList<String> ret = new ArrayList<String>();
+		File saveDir = new File(FileHandler.SAVE_DIR);
+		final File[] children = saveDir.listFiles();
+		for (int i = 0; i < Math.min(children.length, amtRecents); i++) 
+			ret.add(getEventName(children[i].getPath()));
+		
+		return ret;
 	}
 	
-	private JPanel topPanelConfig()
-	{
+	private String getEventName(String filePath) {
+		return Event.extractEventName(filePath.substring(filePath.lastIndexOf(File.separatorChar) + 1));
+	}
+
+	private JPanel topPanelConfig() {
 		JPanel t = new JPanel();
-		t.setPreferredSize(new Dimension(0,50));
+		t.setPreferredSize(new Dimension(0, 50));
 		t.setBackground(Color.black);
 		t.setLayout(new BorderLayout());
-		
+
 		title.setForeground(Color.white);
 		title.setFont(openSans);
-		
+
 		t.add(title, BorderLayout.WEST);
 		return t;
 	}
 	
-	public static void main(String args[])
-	{
-		new WelcomeScreen("Event Scheduler");
+	private void rightPanelConfig() {
+		// right panel config (recents)
+		rightPanel = new JPanel(new BorderLayout());
+		rightPanel.setBorder(BorderFactory.createTitledBorder(
+				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, openSans, Color.BLACK));
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		ArrayList<String> recentEventNames = getRecentEvents();
+		for (String s : recentEventNames) 
+			model.addElement(s);
+
+		JList<String> recents = new JList<String>(model);
+		recents.setFont(FontManager.finalFont(24f).deriveFont(Font.BOLD));
+
+		rightPanel.add(recents);
+		JPanel lowerRight = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+		JButton openConfirmation = new JButton("Open");
+		openConfirmation.setEnabled(false);
+		openConfirmation.addActionListener(e -> {
+			log.info("recent event "+recents.getSelectedValue() + " opened");
+			try {
+				sendEventAndClose(FileHandler.load(FileHandler.SAVE_DIR
+						+ Event.saveFileName(recents.getSelectedValue())));
+			} catch (ClassNotFoundException | IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		recents.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				openConfirmation.setEnabled(true);
+			}
+		});
+		lowerRight.add(openConfirmation);
+		rightPanel.add(lowerRight, BorderLayout.SOUTH);
 	}
+	
+	// -------------------------------------------------------------------------------------------------------
+	
+	
+	protected void sendEventAndClose(Event e) {
+		sendEvent(e);
+		//close
+	}
+	
+	/**
+	 * close the props screen. should only be called from the props pane itself.
+	 */
+	protected void cancelProps() {
+		log.info("props cancelled");
+		parentFrame.getContentPane().remove(0);
+		configFrame();
+	}
+	
+	/** 
+	 * sends an event (e) to its master, as called from itself or its props pane.
+	 */
+	protected void sendEvent(Event e) {
+		if (master != null)
+			master.openEventFromWelcome(e);
+	}
+	
+	private void constructProps() {
+		PropertiesPane props = new PropertiesPane(this, null);
+		props.revalidate();
+		revalidate();
+	}
+
 }
