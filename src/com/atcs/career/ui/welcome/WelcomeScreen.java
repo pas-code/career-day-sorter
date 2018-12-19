@@ -39,9 +39,10 @@ public class WelcomeScreen extends JPanel {
 	private static final BasicLogger log = BasicLogger.getLogger(WelcomeScreen.class.getName());
 	
 	private JPanel topPanel, leftPanel, rightPanel;
-	private Font openSans;
 
+	private Font openSans;
 	private JButton newButton, openButton;
+	private Event selected;
 
 	private JLabel title;
 	protected JFrame parentFrame;
@@ -192,6 +193,10 @@ public class WelcomeScreen extends JPanel {
 	
 	private String getEventName(String filePath) {
 		return Event.extractEventName(filePath.substring(filePath.lastIndexOf(File.separatorChar) + 1));
+	}
+	
+	public Event getEvent() {
+		return selected;
 	}
 
 	private JPanel topPanelConfig() {

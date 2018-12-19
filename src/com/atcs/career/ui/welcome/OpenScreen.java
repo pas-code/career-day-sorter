@@ -90,5 +90,4 @@ public class OpenScreen {
 			return false;
 		}
 	}
-
 }

@@ -75,8 +75,11 @@ public class FileHandler {
       }
    }
    
-   public static Event load(String filepath) throws IOException, ClassNotFoundException{
-	   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filepath));
+   public static Event load(String filePath) throws IOException, ClassNotFoundException{
+   	if (filePath == null || filePath == "") {
+   		return null;
+   	}
+	   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
 	   Event e = (Event) ois.readObject();
 	   System.out.println("Event read.");
 	   ois.close();

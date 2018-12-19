@@ -11,6 +11,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -27,6 +28,9 @@ import javax.swing.SwingConstants;
 import com.atcs.career.data.Event;
 import com.atcs.career.io.importexport.CSVReader;
 
+//Jarrett Bierman
+//11/18/18
+//Properties
 public class PropertiesPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 700;
@@ -45,7 +49,6 @@ public class PropertiesPane extends JPanel {
 	private Event event;
 
 	private WelcomeScreen welc;
-
 	private JSpinner periodCount;
 
 	private final String BUTTON_DEFAULT_TEXT = "Choose File";
@@ -83,8 +86,7 @@ public class PropertiesPane extends JPanel {
 		revalidate();
 	}
 
-	// -----------------------------------CONFIG
-	// GUI--------------------------------------------
+	// -----------------------------------CONFIG GUI--------------------------------------------
 
 	private JFrame createFrame() {
 		return new JFrame("Set Event Data");
@@ -97,7 +99,7 @@ public class PropertiesPane extends JPanel {
 		}
 		container.getContentPane().add(this);
 		container.pack();
-		// container.setResizable(true);
+		// container.setResizable(true)
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
@@ -108,11 +110,10 @@ public class PropertiesPane extends JPanel {
 		container.setVisible(true);
 	}
 
-	private void createLabels() {
+	public void createLabels() {
 		sessionLabel = new JLabel("Session File <Required> (.csv)");
-		allStudentLabel = new JLabel(
-				"Master File of all students <Required> (.csv)");
-		studentLabel = new JLabel("Google Form Result Student File (.csv)");
+		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
+		studentLabel = new JLabel("Student Requests File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
 		periodLabel = new JLabel("Number of Periods");
 	}
@@ -151,20 +152,19 @@ public class PropertiesPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				studentFile = selectFile(studentButton);
 				event.setRequestFile(studentFile.getName());
-
 			}
 		});
 
 		classroomButton = new JButton(event.getRoomFile() == null
 				? BUTTON_DEFAULT_TEXT
 				: event.getRoomFile());
+
 		classroomButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				classroomFile = selectFile(classroomButton);
 				event.setRequestFile(classroomFile.getName());
-
 			}
 		});
 
@@ -217,11 +217,10 @@ public class PropertiesPane extends JPanel {
 		periodCount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
 		periodCount.setFont(new Font("Ariel", Font.PLAIN, 30));
 		periodCount.setBorder(BorderFactory.createEmptyBorder(0, 170, 0, 50));
-		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField()
-				.setEditable(false);
+		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField().setEditable(false);
 	}
 
-	private void addGridStuff() {
+	public void addGridStuff() {
 		gridPanel.add(sessionLabel);
 		gridPanel.add(sessionButton);
 		gridPanel.add(allStudentLabel);
@@ -236,27 +235,18 @@ public class PropertiesPane extends JPanel {
 
 	public File selectFile(JButton b) {
 		String location = CSVReader.getFileLocation(".csv");
-		if (location == null) return null;
+		if (location == null) 
+			return null;
 		int index = 0;
 		for (int i = 0; i < location.length(); i++) {
-			if (location.charAt(i) == File.separatorChar) index = i;
+			if (location.charAt(i) == File.separatorChar) 
+			   index = i;
 		}
 		String name = location.substring(index + 1);
 		b.setText(name);
 		return new File(location);
 	}
 
-	public boolean readyToSubmit()// edit this
-	{
-		return !(title.getText().isEmpty() || periodCount.getValue() == null
-				|| title.getText().equals(textPrompt) || sessionFile == null
-				|| allStudentFile == null);
-	}
-
-	/**
-	 * This overrides the JPanel's getPreferredSize() method It tells the JPanel
-	 * to be a certain width and height
-	 */
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
@@ -268,6 +258,11 @@ public class PropertiesPane extends JPanel {
 			welc.cancelProps();
 	}
 	
+	public boolean readyToSubmit() { //edit this
+	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
+	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
+	}
+
 	/**
 	 * The main method runs your entire program It has the method
 	 * createAndShowGUI() and runs it. This makes your whole program work.

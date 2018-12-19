@@ -53,20 +53,23 @@ public class CSVReader {
 
 	}
 	
-	/**
-	 * returns a string location of a file to open, as selected by the user.
-	 * @param acceptableSuffix the preferred file suffix (.txt, .csv) as a string
-	 */
-	public static String getFileLocation(String acceptableSuffix) {
+	public static String getFileLocation(String acceptableSuffix, String startDirectory) {
 		JFrame parent = new JFrame();
 		FileDialog fd = new FileDialog(parent, "Choose a file", FileDialog.LOAD);
-		fd.setDirectory(System.getProperty("user.home"));
+		fd.setDirectory(startDirectory);
 		fd.setFile("*."+acceptableSuffix);
 		fd.setFilenameFilter((dir, name) -> name.endsWith(acceptableSuffix));
 		fd.setVisible(true);
 		String ret = (fd.getFile() == null) ? null : fd.getDirectory() + fd.getFile();
 		parent.dispose();
-		System.out.println(ret);
 		return ret;
+	}
+	
+	/**
+	 * returns a string location of a file to open, as selected by the user.
+	 * @param acceptableSuffix the preferred file suffix (.txt, .csv) as a string
+	 */
+	public static String getFileLocation(String acceptableSuffix) {
+		return getFileLocation(acceptableSuffix, System.getProperty("user.home"));
 	}
 }
