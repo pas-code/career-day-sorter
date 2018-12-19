@@ -148,7 +148,7 @@ public class CareerDayGUI extends JPanel {
 	 */
 	public static void main(String[] args) {
 
-		CareerDayGUI program = new CareerDayGUI(new Event());
+		CareerDayGUI program = new CareerDayGUI(Event.testEvent());
 		program.makeWindow();
 	}
 	

@@ -24,14 +24,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 
 import com.atcs.career.data.Event;
-import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 
 public abstract class MoreInfo {
 
-	public static abstract class SideInfoPanel extends JPanel {
+	public static abstract class InfoPanel extends JPanel {
 	   public static final int PREF_W = 400;
 	   public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
@@ -48,19 +47,7 @@ public abstract class MoreInfo {
 		
 	}
 
-	public static SideInfoPanel newSidePanel(GuiListable gl, Event event)
-	{
-	    String type = gl.getType();
-	    if(type.equals("Session"))
-	        return new SessionPanel(event, (Session) gl);
-	    else if(type.equals("Student"))
-	        return new StudentPanel(event, (Student) gl);
-	    else if(type.equals("Room"))
-	        return new RoomPanel(event, (Room) gl);
-        return null;
-	}
-	
-	public static class RoomPanel extends SideInfoPanel {
+	public static class RoomPanel extends InfoPanel {
 		/**
 		 * 
 		 */
@@ -123,8 +110,8 @@ public abstract class MoreInfo {
 			      JList<String> listNames = new JList<String>(studentNames);
 			      listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			      scrollPane = new JScrollPane(listNames);
-//			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + "  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
-//			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
+			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + "  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
+			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
 			      
 			      this.add(north, BorderLayout.NORTH);
@@ -139,9 +126,10 @@ public abstract class MoreInfo {
 
 	}
 
-	public static class StudentPanel extends SideInfoPanel {
+	public static class StudentPanel extends InfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Student instance variables (scrollPane already created with Room)
+		//DELETE
 		
 		
 		private JTextField studentfName, studentlName, studentEmail;
@@ -197,22 +185,6 @@ public abstract class MoreInfo {
 
 				@Override
 				public void focusLost(FocusEvent e) {
-					student.setEmail(studentEmail.getText());					
-				}
-				
-			});
-
-			studentEmail = new JTextField(student.getEmail());
-			studentEmail.addFocusListener(new FocusListener(){
-
-				@Override
-				public void focusGained(FocusEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
 					student.setEmail(studentEmail.getText());
 					
 				}
@@ -252,7 +224,7 @@ public abstract class MoreInfo {
 		
 	}
 
-	public static class SessionPanel extends SideInfoPanel {
+	public static class SessionPanel extends InfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Session instance variables
 		private JButton editStudent, addStudent, removeStudent;
@@ -293,7 +265,6 @@ public abstract class MoreInfo {
 				@Override
 				public void focusLost(FocusEvent e) {
 					
-				    
 					session.getRoom().setRoomNumber(classroomNumber.getText());
 					
 					
@@ -314,7 +285,6 @@ public abstract class MoreInfo {
 
 				}
 			});
-
 			periodNum = 1;
 
 			generalSetup();
@@ -331,13 +301,13 @@ public abstract class MoreInfo {
 			ArrayList<String> studentNames = new ArrayList<String>();
 			for (int i = 0; i < sNames.length; i++)
 				studentNames.add(sNames[i]);
-			String[] studentStandard = studentNames.toArray(new String[studentNames.size()]);
+			String[] standard = studentNames.toArray(new String[studentNames.size()]);
 			String studentNamesList[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
 					"J"};
-
-			JList<String> listStudents = new JList<String>(studentStandard);
+			JList<String> listStudents = new JList<String>(standard);
+			JList list = new JList(studentNames.toArray());
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			JScrollPane scrollPane = new JScrollPane(listStudents);
+			JScrollPane scrollPane = new JScrollPane(list);
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
@@ -369,12 +339,11 @@ public abstract class MoreInfo {
 			removeStudent.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
 					System.out.println("test");
-					if (listStudents.getSelectedIndex()!=-1)
+					if (list.getSelectedIndex()!=-1)
 					{
 						System.out.println(studentNames);
-						studentNames.remove(listStudents.getSelectedIndex());
+						studentNames.remove(list.getSelectedIndex());
 						System.out.println(studentNames);
 						scrollPane.revalidate();
 						scrollPane.repaint();
@@ -394,7 +363,7 @@ public abstract class MoreInfo {
 	}
 
 
-	public static class EventPanel extends SideInfoPanel {
+	public static class EventPanel extends InfoPanel {
 
 		private static final long serialVersionUID = 1L;
 
@@ -404,7 +373,7 @@ public abstract class MoreInfo {
 		}
 	}
 	
-	private static void show(SideInfoPanel p) {
+	private static void show(InfoPanel p) {
 		JFrame f = new JFrame("test info panel");
 		f.getContentPane().add(p);
 		f.pack();
