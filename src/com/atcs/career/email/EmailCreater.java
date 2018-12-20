@@ -4,5 +4,6 @@
 package com.atcs.career.email;
 
 public class EmailCreater {
-	public static String formatMessageTemplate(String body, )
+	
+	
 }
