@@ -28,16 +28,23 @@ public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
-	private byte selectedPeriod;
+	private byte selectedPeriod = 0;
+	private byte numberOfPeriods;
 	private JPanel east, west;
 	private JLabel title;
-	private JTextArea info;
+//	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
 //	private InfoPanel selectedInfoPanel
+	
+	public CareerDayGUI(Event event, byte numberOfPeriods) {
+        this.event = event;
+        this.numberOfPeriods = numberOfPeriods;
+        gui();
+    }
 	
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -68,14 +75,15 @@ public class CareerDayGUI extends JPanel {
 		// east panel
 		east = new JPanel();
 		east.setPreferredSize(new Dimension(200, 0));
-		info = new JTextArea("A Dude\nA Student\nAnother Student");
-		info.setFont(smallFont);
-		east.add(info);
+//		info = new JTextArea("A Dude\nA Student\nAnother Student");
+//		info.setFont(smallFont);
+//		east.add(info);
 		this.add(east, BorderLayout.EAST);
 		// west panel
 		west = new JPanel(new GridLayout(0, 1));
+		west.setPreferredSize(new Dimension(100,0));
 		periods = new ArrayList<JButton>();
-		for (int i = 1; i <= event.getAmountOfSessions(); i++) {
+		for (int i = 1; i < numberOfPeriods; i++) {
 			JButton period = new JButton("Period " + i);
 			period.setFont(smallFont);
 			periods.add(period);
@@ -151,7 +159,7 @@ public class CareerDayGUI extends JPanel {
 
 	public static void main(String[] args) {
 
-		CareerDayGUI program = new CareerDayGUI(Event.testEvent());
+		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
 		program.makeWindow();
 	}
 	
