@@ -42,11 +42,10 @@ public class Event implements Serializable {
 		ArrayList<Student> master = new ArrayList<Student>();
 		Algorithms.myBigFatGreekWethod(e.students, master, e.rooms, e.sessions);
 		
-		System.out.println(Algorithms.getSortingAccuracyAverage(e.students));
 		
-		for(int i = 0; i < e.sessions.size(); i++){
-		   System.out.println(e.sessions.toString());
-		}		
+//		for(int i = 0; i < e.sessions.size(); i++){
+//		   System.out.println(e.sessions.toString());
+//		}		
 		
 	}
 

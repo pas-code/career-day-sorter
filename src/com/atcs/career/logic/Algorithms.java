@@ -2,6 +2,11 @@
 //Program Description:
 //Nov 21, 2018
 
+/*TODO
+ * -Assignments aren't happening based on requests
+ * -People are getting assigned to the same session multiple times
+ */
+
 package com.atcs.career.logic;
 
 import java.util.ArrayList;
@@ -26,14 +31,25 @@ public class Algorithms{
       assignRoomsToSessions(students, rooms, sessions);
       rankStudents(students, master);
       assignStudentsToSessions(students, sessions);
+      
+      System.out.println("Accuracy:");
+      System.out.println(getSortingAccuracyAverage(students));
    }
    
    public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
-      double totalCont = 0;
-      for(int i = 0; i < students.size(); i++){
-         totalCont += students.get(i).getStudentPriority().getContentness();
-      }
-      return totalCont/students.size();
+      //Getting accuracy...
+//      double totalCont = 0;
+//      for(int i = 0; i < students.size(); i++){
+//         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness());
+//         totalCont += students.get(i).getStudentPriority().getContentness();
+//      }
+//      return totalCont/students.size();
+      for(int i = 0; i < students.get(0).getRequests().size(); i ++)
+         System.out.println(students.get(0).getRequests().get(i));
+      System.out.println("Assigned:");
+      for(int i = 0; i < students.get(0).getAssignments().size(); i ++)
+         System.out.println(students.get(0).getAssignments().get(i));
+      return 0;
    }
    
    
@@ -43,23 +59,38 @@ public class Algorithms{
       Collections.sort(rooms);
       
       HashMap<String, Session> sessionHash = new HashMap<String, Session>();
-      for(Session s: sessions){
-         sessionHash.put(s.getSpeaker(), s);
-      }
- 
-      for(Student stud: students){
-         ArrayList<Session> requests = stud.getRequests();
-         int requestsSize = requests.size();
-         for(int i = 0; i < requestsSize; i++) {
-            sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
-         }
+    
+      for(int i=0; i<sessions.size(); i++){
+         if(sessions.get(i).getSpeaker().charAt(0) == '"') //TEMP FIX FIX IT INFO
+            sessionHash.put(sessions.get(i).getSpeaker().substring(1), sessions.get(i));
+         else //^^^
+            sessionHash.put(sessions.get(i).getSpeaker(), sessions.get(i));
       }
       
-      sessions = (ArrayList<Session>) sessionHash.values();
+//      for(int i=0; i< sessionHash.size(); i++){      //for testing
+//         System.out.println("testing: "+i);
+//         System.out.println(sessionHash.get(sessions.get(i).getSpeaker()).getSpeaker());
+//      }
+        
+      for(Student stud: students){
+         ArrayList<Session> requests = stud.getRequests();
+         System.out.println(stud.toString());
+         int requestsSize = requests.size();
+         for(int i = 0; i < requestsSize; i++) {
+            if(requests.get(i) == null)
+               System.out.println("this guy bad");
+            System.out.println(requests.get(i).getSpeaker());
+            sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
+         }
+         System.out.println("Next Student \n");
+      }
+      
+//      sessions = (ArrayList<Session>) sessionHash.values();
+      sessions.addAll(sessionHash.values());
       Collections.sort(sessions);
       
       for(int i = 0; i < sessions.size(); i++){
-         if(rooms.size() < i) { //COME BACK WITH ERROR MANAGER STUFF
+         if(rooms.size() > i) { //COME BACK WITH ERROR MANAGER STUFF
             sessions.get(i).setRoom(rooms.get(i));
          }
       }
@@ -149,15 +180,15 @@ public class Algorithms{
          if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity() &&
            !currentStud.getAssignments().contains(desiredSession)){
             desiredSession.getStudents().get(period).add(currentStud);
-            currentStud.getAssignments().add(period - 1, desiredSession); //Changed from set --> add
+            currentStud.getAssignments().add(period, desiredSession); //Changed from set --> add //took out period - 1
             changeStudentContentness(currentStud); //Deals with contentness
             return;
          }
       }
       
       //They couldn't get in any session they chose this period
-      currentStud.getAssignments().add(period - 1, new Session()); //Changed from set --> add
-      toBeRandomlyAssigned.get(period - 1).add(currentStud);
+      currentStud.getAssignments().add(period, new Session()); //Changed from set --> add //took out period - 1
+      toBeRandomlyAssigned.get(period).add(currentStud); //took out period - 1
       
       
       changeStudentContentness(currentStud); //Deals with contentness
@@ -167,7 +198,7 @@ public class Algorithms{
       int minCapacity = 10;
       for(int i = 0; i < sessions.size(); i++) {
          for(int j=0; j < sessions.get(i).getStudents().size(); j++){
-            if(sessions.get(i).getStudents().get(i).size() < minCapacity)
+            if(sessions.get(i).getStudents().get(j).size() < minCapacity) //changed second i to j
                return false;
          }        
       }
@@ -181,7 +212,7 @@ public class Algorithms{
             Session session = getLeastPopulatedSessionPerPeriod(sessions, i);
             Student stud = toBeRandomlyAssigned.get(i).remove(j);
             session.getStudents().get(i).add(stud);
-            stud.getAssignments().set(j, session);
+            stud.getAssignments().set(i, session);
          }
       }
    }
