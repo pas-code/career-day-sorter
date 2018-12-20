@@ -15,6 +15,7 @@ import java.awt.event.FocusListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -99,7 +100,7 @@ public abstract class MoreInfo {
 			      
 			      this.setLayout(new BorderLayout());
 			      
-			      JPanel center = new JPanel(new BorderLayout());
+			      JPanel center = new JPanel(new GridLayout(0,3));
 			      JPanel north = new JPanel(new GridLayout(0,1));
 
 			      this.add(center, BorderLayout.CENTER);
@@ -112,12 +113,17 @@ public abstract class MoreInfo {
 			      
 //			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
 //			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
-			      String sessionInfo = "Title";
-			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
+			      JLabel sessionTitle = new JLabel(room.getResidentSessions()[periodNum-1].getTitle());
+			      JLabel sessionSpeaker = new JLabel(room.getResidentSessions()[periodNum-1].getSpeaker());
+			      center.add(sessionTitle);
+			      center.add(sessionSpeaker);
+//			      String sessionInfo = "Title";
+//			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
 			      
 			      this.add(north, BorderLayout.NORTH);
 			      north.add(roomNumber);
+			      
 			   }
 
 		@Override
@@ -377,7 +383,8 @@ public abstract class MoreInfo {
 	
 	public static void main(String[] args) {
 		Event e = new Event();
-		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
+//		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
+		MoreInfo.StudentPanel s = new MoreInfo.StudentPanel(e, e.getSessions().get(0).getStudents().get(0).get(0));
 		show(s);
 	}
 }
