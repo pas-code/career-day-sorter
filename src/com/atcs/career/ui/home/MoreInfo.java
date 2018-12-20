@@ -14,9 +14,11 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -257,9 +259,14 @@ public abstract class MoreInfo {
 		// Session instance variables
 		private JButton editStudent, addStudent, removeStudent;
 		private JTextField speakerName, classroomNumber;
+		private Event event;
+		private Session session;
+		private JList listStudents;
+		DefaultListModel<String> model;
 
 		public SessionPanel(Event event, Session session) {
-			
+			this.event = event;
+			this.session = session;
 			addStudent = new JButton("Add Student");
 			editStudent = new JButton("Edit Student");
 			removeStudent = new JButton("Remove Student");
@@ -301,17 +308,21 @@ public abstract class MoreInfo {
 				
 			});
 			
-			
-			
-			
-
+		
 			
 			addStudent.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// joption
+					Student s;
+					JTextField last = new JTextField("Last Name"), first = new JTextField("First Name"), email = new JTextField("email@email");
+					JTextField[] fields = {last, first, email};
+					JOptionPane.showConfirmDialog(null, fields, "Enter Last Name, First Name, Email", JOptionPane.OK_CANCEL_OPTION);
+					s = new Student(last.getText(), first.getText(), email.getText(), new ArrayList<Session>(), 9999999);
+//					System.out.println(s);
+					session.getStudents().get(0).add(s);
+					addStudentToList(s);
 					
-
+					//add this new student to the list of students of this event LATER once we figure it out
 				}
 			});
 
@@ -326,18 +337,15 @@ public abstract class MoreInfo {
 			JPanel south = new JPanel(new BorderLayout());
 
 			add(center, BorderLayout.CENTER);
-			String sNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-			"J"}; //FOR TESTING ONLY
-			ArrayList<String> studentNames = new ArrayList<String>();
-			for (int i = 0; i < sNames.length; i++)
-				studentNames.add(sNames[i]);
-			String[] studentStandard = studentNames.toArray(new String[studentNames.size()]);
-			String studentNamesList[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-					"J"};
-
-			JList<String> listStudents = new JList<String>(studentStandard);
+			
+			model = new DefaultListModel<String>();
+			
+			
+			
+			listStudents = new JList<String>(model);
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
+			populateList(0);
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
@@ -373,9 +381,9 @@ public abstract class MoreInfo {
 					System.out.println("test");
 					if (listStudents.getSelectedIndex()!=-1)
 					{
-						System.out.println(studentNames);
-						studentNames.remove(listStudents.getSelectedIndex());
-						System.out.println(studentNames);
+//						System.out.println(studentNames);
+//						studentNames.remove(listStudents.getSelectedIndex());
+//						System.out.println(studentNames);
 						scrollPane.revalidate();
 						scrollPane.repaint();
 						//standard = studentNames.toArray(new String[studentNames.size()]);
@@ -385,6 +393,20 @@ public abstract class MoreInfo {
 
 			
 		}
+		
+		public void populateList(int period)
+		{
+//		   model = new DefaultListModel<String>();
+           for(Student s : session.getStudents().get(period))
+              model.addElement(s.getFullName());
+           listStudents.revalidate();
+		}
+		
+		public void addStudentToList(Student s)
+		{
+		   model.addElement(s.getFullName());
+		}
+		
 
 		@Override
 		public void changePeriod(int newPeriod) {
@@ -414,7 +436,7 @@ public abstract class MoreInfo {
 	}
 	
 	public static void main(String[] args) {
-		Event e = new Event();
+		Event e = Event.testEvent();
 		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
 		show(s);
 	}

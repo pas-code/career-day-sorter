@@ -71,6 +71,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	public void setStudents(ArrayList<ArrayList<Student>> students) {
 		this.students = students;
 	}
+	public void setStudents(ArrayList<Student> students, int period){
+	   this.students.set(period, students);
+	}
 
 	public int[] getGradesAvailable() {
 		return gradesAvailable;

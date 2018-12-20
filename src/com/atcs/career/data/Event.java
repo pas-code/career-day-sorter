@@ -58,7 +58,7 @@ public class Event implements Serializable {
 	
 	public static Event testEvent()
    {
-		Event ret = new Event();
+	   Event ret = new Event();
        ArrayList<Session> sessions = ret.sessions;
        sessions.add(new Session("Business", "Donald Trump"));
        sessions.add(new Session("Investment", "Warren Buffet"));
@@ -69,21 +69,22 @@ public class Event implements Serializable {
        sessions.add(new Session("Intelligence", "James Comey"));
        sessions.add(new Session("Software Development", "Johnny Ive"));
        
-       ArrayList<Student> students = ret.students;
-       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
-       
-       students.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
-       students.add(new Student("Eric", "Wang", "ppeter20@pascack.org",sessions, 0));
-       students.add(new Student("Jarret", "Bierman", "ppeter20@pascack.org",sessions, 0));
-       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
-       students.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       ArrayList<ArrayList<Student>> students = new ArrayList<ArrayList<Student>>();
+       ArrayList<Student> perOne = new ArrayList<Student>();
+       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));      
+       perOne.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
+       perOne.add(new Student("Eric", "Wang", "ppeter20@pascack.org",sessions, 0));
+       perOne.add(new Student("Jarret", "Bierman", "ppeter20@pascack.org",sessions, 0));
+       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
+       students.add(perOne);
+       sessions.get(0).setStudents(students);
        
        ArrayList<Room> rooms = ret.rooms;
        for(int i = 121; i< 140; i++)
-       rooms.add(new Room(i + "", 30));
-       
-       
+       rooms.add(new Room(i + "", 30));      
        ret.eventName = "TEST";
+       sessions.get(0).setStudents(students.get(0), 0);
        return ret;
        
    }
