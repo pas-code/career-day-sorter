@@ -97,9 +97,7 @@ public class Event implements Serializable {
        rooms = new ArrayList<Room>();
        for(int i = 121; i< 140; i++)
        rooms.add(new Room(i + "", 30));
-       
-       
-       
+
        }
        
        eventName = "TEST";

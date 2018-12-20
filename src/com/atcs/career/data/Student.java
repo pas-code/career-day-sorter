@@ -24,6 +24,15 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		System.out.println(s);
 	}
 
+	/**
+	 * 
+	 * @param lName
+	 * @param fName
+	 * @param email
+	 * @param requests
+	 * @param timeEntered
+	 * @param submitted
+	 */
 	public Student(String lName, String fName, String email,
 			ArrayList<Session> requests, int timeEntered, boolean submitted) {
 		this.lName = lName;
@@ -37,6 +46,15 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		isSwitchable = true;
 		this.submitted = submitted;
 	}
+
+	/**
+	 * Student Constructor used for ArrayList of Students who submitted
+	 * @param lName
+	 * @param fName
+	 * @param email
+	 * @param requests
+	 * @param timeEntered
+	 */
 	public Student(String lName, String fName, String email,
 	      ArrayList<Session> requests, int timeEntered) {
 	   this.lName = lName;
@@ -50,6 +68,12 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	   this.submitted = true;
 	}
 
+	/**
+	 * Student Constructor used for master ArrayList of Students
+	 * @param lName
+	 * @param fName
+	 * @param email
+	 */
    public Student(String lName, String fName, String email) {
       this.lName = lName;
       this.fName = fName;
