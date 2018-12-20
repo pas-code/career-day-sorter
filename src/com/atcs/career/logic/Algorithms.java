@@ -2,11 +2,6 @@
 //Program Description:
 //Nov 21, 2018
 
-/*TODO
- * -Assignments aren't happening based on requests
- * -People are getting assigned to the same session multiple times
- */
-
 package com.atcs.career.logic;
 
 import java.util.ArrayList;
