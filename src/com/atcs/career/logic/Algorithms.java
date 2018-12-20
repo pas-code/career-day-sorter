@@ -40,10 +40,6 @@ public class Algorithms{
       assignStudentsToSessions(students, sessions);
       System.out.println("Method 3 Done");
       
-      for(int i = 0; i < students.size(); i++){
-         System.out.println(students.get(i).getStudentPriority().getContentness());
-      }
-      
       System.out.println("Accuracy:");
       System.out.println(getSortingAccuracyAverage(students));
    }
