@@ -28,12 +28,28 @@ public class Algorithms{
    
    //BIG METHOD THAT DOES EVERYTHING
    public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
+      System.out.println("Method 1 Starting");
       assignRoomsToSessions(students, rooms, sessions);
-      rankStudents(students, master);
-      assignStudentsToSessions(students, sessions);
+      System.out.println("Method 1 Done");
       
-      System.out.println("Accuracy:");
-      System.out.println(getSortingAccuracyAverage(students));
+//      for(int i = 0; i < sessions.size(); i++){
+//         System.out.println(sessions.get(i).getSpeaker() + sessions.get(i).getRoom());
+//      }
+      
+      System.out.println("Method 2 Starting");
+      rankStudents(students, master);
+      System.out.println("Method 2 Done");
+      
+      System.out.println("Method 3 Starting");
+      assignStudentsToSessions(students, sessions);
+      System.out.println("Method 3 Done");
+      
+      for(int i = 0; i < students.size(); i++){
+         System.out.println(students.get(i).getStudentPriority().getContentness());
+      }
+      
+//      System.out.println("Accuracy:");
+//      System.out.println(getSortingAccuracyAverage(students));
    }
    
    public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
@@ -77,23 +93,28 @@ public class Algorithms{
          System.out.println(stud.toString());
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
-            if(requests.get(i) == null)
-               System.out.println("this guy bad");
-            System.out.println(requests.get(i).getSpeaker());
             sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
          }
          System.out.println("Next Student \n");
       }
       
 //      sessions = (ArrayList<Session>) sessionHash.values();
+      sessions.clear();
       sessions.addAll(sessionHash.values());
       Collections.sort(sessions);
       
-      for(int i = 0; i < sessions.size(); i++){
+      for(int i = sessions.size() - 1; i >= 0; i--){
          if(rooms.size() > i) { //COME BACK WITH ERROR MANAGER STUFF
-            sessions.get(i).setRoom(rooms.get(i));
+            sessions.get(i).setRoom(rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)));
          }
       }
+      
+      //FOR TESTING
+//      for(int i = 0; i < rooms.size(); i++){
+//         System.out.println(rooms.get(i).toString());
+//         System.out.println(sessions.get(i).getSpeaker());
+//      }
+          
    }
    
    //ALGORITHM 2
@@ -122,6 +143,12 @@ public class Algorithms{
          }
       }
       Collections.sort(students);
+      
+      //FOR TESTING
+//      for(int i = 0; i < students.size(); i++){
+//         System.out.println(students.get(i));
+//      }
+      
    }
    
    //ALGORITHM 3
@@ -135,43 +162,43 @@ public class Algorithms{
          Collections.sort(students);  //reranks students
       } 
       
-      assignRandomsAtEnd(sessions);
-      
-      while(!allSessionAreFilledToMin(sessions)){
-         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
-         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
-         
-         boolean successfullyChangedSomeone = false;
-         for(int i = students.size() - 1; i >= 0; i--){
-            if(students.get(i).getPeriodOfLeastDesired() == getLeastPopulatedSessionIndex(sessions, 3) && students.get(i).isSwitchable()){
-               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
-               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-               students.get(i).setSwitchable(false);
-               successfullyChangedSomeone = true;
-            }
-            break;
-         }
-         
-         if(!successfullyChangedSomeone){
-            for(int i = students.size() - 1; i >= 0; i--){
-               if(students.get(i).isSwitchable()){
-                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-                  sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
-                  minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-                  students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-                  students.get(i).setSwitchable(false);
-               }
-            }
-         }
-      }
-      
-      for(int i = 0; i < students.size(); i++){
-         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
-            changeStudentContentness(students.get(i));
-         }
-      }
+//      assignRandomsAtEnd(sessions);
+//      
+//      while(!allSessionAreFilledToMin(sessions)){
+//         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
+//         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
+//         
+//         boolean successfullyChangedSomeone = false;
+//         for(int i = students.size() - 1; i >= 0; i--){
+//            if(students.get(i).getPeriodOfLeastDesired() == getLeastPopulatedSessionIndex(sessions, 3) && students.get(i).isSwitchable()){
+//               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+//               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
+//               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+//               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
+//               students.get(i).setSwitchable(false);
+//               successfullyChangedSomeone = true;
+//            }
+//            break;
+//         }
+//         
+//         if(!successfullyChangedSomeone){
+//            for(int i = students.size() - 1; i >= 0; i--){
+//               if(students.get(i).isSwitchable()){
+//                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+//                  sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
+//                  minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+//                  students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
+//                  students.get(i).setSwitchable(false);
+//               }
+//            }
+//         }
+//      }
+//      
+//      for(int i = 0; i < students.size(); i++){
+//         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
+//            changeStudentContentness(students.get(i));
+//         }
+//      }
    }
       
    public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
