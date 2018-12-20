@@ -47,8 +47,8 @@ public class Algorithms{
    public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
       double totalCont = 0;
       for(int i = 0; i < students.size(); i++){
-         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness());
-         totalCont += students.get(i).getStudentPriority().getContentness();
+         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness()/50);
+         totalCont += ((students.get(i).getStudentPriority().getContentness())/50); //50 is the contentness weight we gave
       }
       return totalCont/students.size();
    }
