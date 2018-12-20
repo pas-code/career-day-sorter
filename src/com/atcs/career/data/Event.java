@@ -82,7 +82,13 @@ public class Event implements Serializable {
        
        ArrayList<Room> rooms = ret.rooms;
        for(int i = 121; i< 140; i++)
+<<<<<<< HEAD
        rooms.add(new Room(i + "", 30));      
+=======
+      	 rooms.add(new Room(i + "", 30));
+       
+       
+>>>>>>> origin/ui-jarrett
        ret.eventName = "TEST";
        sessions.get(0).setStudents(students.get(0), 0);
        return ret;
