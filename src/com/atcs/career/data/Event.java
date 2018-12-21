@@ -58,6 +58,7 @@ public class Event implements Serializable {
 		 masterStudents = IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
+		 System.out.println("AFTER THIS");
 		 amountOfSessions = sessions.size();
 		 
 		 startYear = students.get(0).getTimeEntered()/1000;
