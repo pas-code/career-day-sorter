@@ -11,11 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -101,7 +103,7 @@ public abstract class MoreInfo {
 			      
 			      this.setLayout(new BorderLayout());
 			      
-			      JPanel center = new JPanel(new BorderLayout());
+			      JPanel center = new JPanel(new GridLayout(0,3));
 			      JPanel north = new JPanel(new GridLayout(0,1));
 
 			      this.add(center, BorderLayout.CENTER);
@@ -114,12 +116,17 @@ public abstract class MoreInfo {
 			      
 //			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
 //			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
-			      String sessionInfo = "Title";
-			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
+			      JLabel sessionTitle = new JLabel(room.getResidentSessions()[periodNum-1].getTitle());
+			      JLabel sessionSpeaker = new JLabel(room.getResidentSessions()[periodNum-1].getSpeaker());
+			      center.add(sessionTitle);
+			      center.add(sessionSpeaker);
+//			      String sessionInfo = "Title";
+//			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
 			      
 			      this.add(north, BorderLayout.NORTH);
 			      north.add(roomNumber);
+			      
 			   }
 
 		@Override
@@ -314,18 +321,10 @@ public abstract class MoreInfo {
 			JPanel south = new JPanel(new BorderLayout());
 
 			add(center, BorderLayout.CENTER);
-<<<<<<< HEAD
-			
+		
 			model = new DefaultListModel<String>();
 			
-			
-			
 			listStudents = new JList<String>(model);
-=======
-			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-					"J"};
-			JList<String> listStudents = new JList<String>(studentNames);
->>>>>>> origin/ui-jarrett
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
 			populateList(0);
@@ -360,7 +359,6 @@ public abstract class MoreInfo {
 			removeStudent.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
 
 					System.out.println("test");
 					if (listStudents.getSelectedIndex()!=-1)
@@ -372,11 +370,6 @@ public abstract class MoreInfo {
 						scrollPane.repaint();
 						//standard = studentNames.toArray(new String[studentNames.size()]);
 					}
-=======
-					
-					listStudents.remove(listStudents.getSelectedIndex());
-					
->>>>>>> origin/ui-jarrett
 				}
 			});
 
@@ -427,6 +420,7 @@ public abstract class MoreInfo {
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
 		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
+
 		show(s);
 	}
 }
