@@ -49,7 +49,7 @@ public class FileHandler {
    }
    
    public static void createFiles() throws IOException {
-      new File(HOME_DIR).mkdir();
+      new File(HOME_DIR).mkdirs();
       new File(SAVE_DIR).mkdir();
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
