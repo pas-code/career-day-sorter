@@ -370,14 +370,12 @@ public abstract class MoreInfo {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					System.out.println("test");
 					if (listStudents.getSelectedIndex()!=-1)
 					{
-//						System.out.println(studentNames);
-//						studentNames.remove(listStudents.getSelectedIndex());
-//						System.out.println(studentNames);
-						scrollPane.revalidate();
-						scrollPane.repaint();
+					   model.removeElement(listStudents.getSelectedValue());
+					   listStudents.revalidate();
+//						scrollPane.revalidate();
+//						scrollPane.repaint();
 						//standard = studentNames.toArray(new String[studentNames.size()]);
 					}
 				}
@@ -388,7 +386,6 @@ public abstract class MoreInfo {
 		
 		public void populateList(int period)
 		{
-//		   model = new DefaultListModel<String>();
            for(Student s : session.getStudents().get(period))
               model.addElement(s.getFullName());
            listStudents.revalidate();
@@ -437,8 +434,7 @@ public abstract class MoreInfo {
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
 		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
-
-//		show(s);
+		show(s);
 	}
 }
 	/*
