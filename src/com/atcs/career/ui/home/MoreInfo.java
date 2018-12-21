@@ -122,12 +122,14 @@ public abstract class MoreInfo {
 //			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
 //			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
 
+			      /*
 			      int residentSessionPeriod = infoPanel.getPeriod()-1;
 			      JLabel sessionTitle = new JLabel(room.getResidentSessions()[residentSessionPeriod].getTitle());
 			      JLabel sessionSpeaker = new JLabel(room.getResidentSessions()[residentSessionPeriod].getSpeaker());
 
 			      center.add(sessionTitle);
 			      center.add(sessionSpeaker);
+			      */
 			      
 //			      String sessionInfo = "Title";
 //			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
