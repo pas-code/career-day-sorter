@@ -26,7 +26,7 @@ public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
-	private byte selectedPeriod = 0;
+	private byte selectedPeriod = 1;
 	private byte numberOfPeriods;
 	private JPanel east, west;
 	private JLabel title;
@@ -115,7 +115,7 @@ public class CareerDayGUI extends JPanel {
 		for (int i = 0; i < eventData.size(); i++) {
 			System.out
 					.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east);
+			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east, this);
 			sessionPanelHolder.add(infoPanel);
 //			infoPanel.getMoreInfoPanel()
 		}
@@ -155,7 +155,23 @@ public class CareerDayGUI extends JPanel {
 //	}
 	
 
-	public static void main(String[] args) {
+	/**
+     * @return the selectedPeriod
+     */
+    public byte getSelectedPeriod()
+    {
+        return selectedPeriod;
+    }
+
+    /**
+     * @param selectedPeriod the selectedPeriod to set
+     */
+    public void setSelectedPeriod(byte selectedPeriod)
+    {
+        this.selectedPeriod = selectedPeriod;
+    }
+
+    public static void main(String[] args) {
 
 		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
 		program.makeWindow();
