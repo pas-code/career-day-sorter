@@ -49,13 +49,6 @@ public abstract class MoreInfo {
 			setFocusable(true);
 			this.setBackground(Color.WHITE);
 		}
-		
-
-      public SideInfoPanel(InfoPanel infoPanel)
-      {
-          this.infoPanel = infoPanel;
-      }
-
 
       protected void refreshInfoPanel()
       {
