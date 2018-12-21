@@ -31,9 +31,7 @@ public class MenuCircleButton extends JPanel
     
     public MenuCircleButton(String text, Color background, Color border)
     {
-        super();
         this.text = text;
-//        this.text2 = text2;
         this.background = background;
         this.border = border;
         
@@ -63,17 +61,11 @@ public class MenuCircleButton extends JPanel
         g2.setRenderingHints(hints);
         w = getWidth();
         h = getHeight();
-        System.out.println(label1.getWidth());
-//        label1.setBorder(BorderFactory.createEmptyBorder(w/2-label1.getWidth()/2,w/2-label1.getWidth()/2, h/2-label1.getWidth()/2, h/2-label1.getWidth()/2));
         int gap = 25;
-//        int awh = 10;
         g2.setColor(background);
         g2.fillOval(gap, gap, Integer.min(w, h)-gap*2, Integer.min(w, h)-gap*2);
         g2.setColor(border);
         g2.setFont(openSans);
-//        g2.drawString(text, 40, 65);
-//        g2.drawString(text2, 40, 95);
-//        g2.drawString(text, 1, 1);
     }
     
     public void mousePress()

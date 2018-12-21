@@ -19,6 +19,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	private int[] gradesAvailable;
 	private int popularity;
 	private int numOfPeriods;
+	private byte TYPE_NUM  = 0;
 
 	public Session(String title, String speaker,
 			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
@@ -69,6 +70,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 
 	public void setStudents(ArrayList<ArrayList<Student>> students) {
 		this.students = students;
+	}
+	public void setStudents(ArrayList<Student> students, int period){
+	   this.students.set(period, students);
 	}
 
 	public int[] getGradesAvailable() {
@@ -128,6 +132,12 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	@Override
 	public String getType() {
 		return "Session";
+	}
+	
+	@Override
+	public byte getTypeNum()
+	{
+	    return TYPE_NUM;
 	}
 
 }

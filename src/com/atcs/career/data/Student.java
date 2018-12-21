@@ -17,6 +17,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private boolean isSwitchable;
 	private boolean submitted;
 
+	private byte TYPE_NUM  = 1;
+
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
 				null, 100, true);
@@ -256,6 +258,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	public String getType() {
 		return "Student";
 	}
+<<<<<<< HEAD
 
    public boolean isSwitchable()
    {
@@ -266,4 +269,12 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
    {
       this.isSwitchable = isSwitchable;
    }
+=======
+	
+	@Override
+	public byte getTypeNum()
+	{
+	    return TYPE_NUM;
+	}
+>>>>>>> ui-merge
 }

@@ -4,9 +4,13 @@
 
 package com.atcs.career.data;
 
-public class Priority
+import java.io.Serializable;
+
+public class Priority implements Serializable
 {
-   /*Priority is made up of three factors:
+   
+	private static final long serialVersionUID = 8183973489015932252L;
+	/*Priority is made up of three factors:
     * -Time
     * -Group
     * -Contentness
