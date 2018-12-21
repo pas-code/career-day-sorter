@@ -32,7 +32,7 @@ public class FileHandler {
    	try {
 			createFiles();
 			if (MainClass.isApp)
-			ResourceAccess.transfer("java", new File(JAVA_EXEC), 0);
+				ResourceAccess.transfer("java", new File(JAVA_EXEC), 0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -53,6 +53,7 @@ public class FileHandler {
       new File(SAVE_DIR).mkdir();
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
+      log.config("created files.");
       
 //      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/").mkdir();
       if (MainClass.isApp) 
@@ -74,8 +75,11 @@ public class FileHandler {
       }
    }
    
-   public static Event load(String filepath) throws IOException, ClassNotFoundException{
-	   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filepath));
+   public static Event load(String filePath) throws IOException, ClassNotFoundException{
+   	if (filePath == null || filePath == "") {
+   		return null;
+   	}
+	   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
 	   Event e = (Event) ois.readObject();
 	   System.out.println("Event read.");
 	   ois.close();

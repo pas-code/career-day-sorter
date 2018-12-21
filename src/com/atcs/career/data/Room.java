@@ -11,7 +11,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 	private String roomNumber;
 	private int maxCapacity;
 	private Session[] residentSessions;
-	
+	private byte TYPE_NUM  = 2;
 
    public Room(String roomNumber, int maxCapacity){
       super();
@@ -68,5 +68,11 @@ public String getInfo(int i)
 public String getType()
 {
     return "Room";
+}
+
+@Override
+public byte getTypeNum()
+{
+    return TYPE_NUM;
 }
 }
