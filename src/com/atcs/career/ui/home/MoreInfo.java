@@ -39,11 +39,24 @@ public abstract class MoreInfo {
 		
 		protected Event event;
 		protected int periodNum;
+		protected InfoPanel infoPanel;
 
 		public void generalSetup() {
 			setFocusable(true);
 			this.setBackground(Color.WHITE);
 		}
+		
+
+      public SideInfoPanel(InfoPanel infoPanel)
+      {
+          this.infoPanel = infoPanel;
+      }
+
+
+      protected void refreshInfoPanel()
+      {
+          infoPanel.refresh();
+      }
 
 		public abstract void changePeriod(int newPeriod);
 		
@@ -60,8 +73,9 @@ public abstract class MoreInfo {
 		private JScrollPane scrollPane;
 		private Room room;
 		
-		 public RoomPanel(Event event, Room room) 
+		 public RoomPanel(Event event, Room room, InfoPanel parentInfo) 
 		   {     
+			 super(parentInfo);
 			   generalSetup();
 			      
 			   this.event = event;
@@ -149,9 +163,9 @@ public abstract class MoreInfo {
 			
 		}
 		
-		public StudentPanel(Event event, Student student)
+		public StudentPanel(Event event, Student student, InfoPanel parentInfo)
 		{
-			
+			super(parentInfo);
 			studentfName = new JTextField(student.getfName());
 			studentfName.addFocusListener(new FocusListener(){
 
@@ -244,7 +258,8 @@ public abstract class MoreInfo {
 		private JList listStudents;
 		DefaultListModel<String> model;
 
-		public SessionPanel(Event event, Session session) {
+		public SessionPanel(Event event, Session session, InfoPanel parentInfo) {
+			super(parentInfo);
 			this.event = event;
 			this.session = session;
 			addStudent = new JButton("Add Student");
@@ -396,7 +411,7 @@ public abstract class MoreInfo {
 		}
 	}
 
-
+	/* TODO come back to this
 	public static class EventPanel extends SideInfoPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -406,6 +421,7 @@ public abstract class MoreInfo {
 			
 		}
 	}
+	*/
 	
 	private static void show(SideInfoPanel p) {
 		JFrame f = new JFrame("test info panel");
@@ -418,7 +434,7 @@ public abstract class MoreInfo {
 	
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
-		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
+		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
 
 		show(s);
 	}
@@ -480,7 +496,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    
                 }
 
                 @Override
@@ -529,7 +545,7 @@ public abstract class MoreInfo
         }
         // @Override
         // public void changePeriod(int newPeriod) {
-        // // TODO Auto-generated method stub
+        // // 
         //
         // }
     }
@@ -556,7 +572,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -572,7 +588,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -588,7 +604,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -638,7 +654,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -655,7 +671,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -717,7 +733,7 @@ public abstract class MoreInfo
         }
         // @Override
         // public void changePeriod(int newPeriod) {
-        // // TODO Auto-generated method stub
+        // // 
         //
         // }
         // }
@@ -727,7 +743,7 @@ public abstract class MoreInfo
             public EventPanel(InfoPanel infoPanel)
             {
                 super(infoPanel);
-                // TODO Auto-generated constructor stub
+                // 
             }
 
             private static final long serialVersionUID = 1L;
