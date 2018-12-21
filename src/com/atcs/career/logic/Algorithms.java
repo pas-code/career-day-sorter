@@ -145,43 +145,46 @@ public class Algorithms{
       assignRandomsAtEnd(sessions);
       
       //COMMENT BELOW HERE TO STOP BACKFILL
-//      while(!allSessionAreFilledToMin(sessions)){ //hmmmmmm
-//         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
-//         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
-//         
-//         boolean successfullyChangedSomeone = false;
-//         for(int i = students.size() - 1; i >= 0; i--){
-//            if(students.get(i).getPeriodOfLeastDesired() == getLeastPopulatedSessionIndex(sessions, 3) && students.get(i).isSwitchable()){
-//               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-//               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
-//               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-//               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-//               students.get(i).setSwitchable(false);
-//               successfullyChangedSomeone = true;
-//            }
-//            break;
-//         }
-//         
-//         if(!successfullyChangedSomeone){
-//            for(int i = students.size() - 1; i >= 0; i--){
-//               if(students.get(i).isSwitchable()){
-//                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-//                  if(sessions.indexOf(oldSession) != -1) {
-//                     sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
-//                     minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-//                     students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-//                     students.get(i).setSwitchable(false);
-//                  }
-//               }
-//            }
-//         }
-//      }
-//      
-//      for(int i = 0; i < students.size(); i++){
-//         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
-//            changeStudentContentness(students.get(i));
-//         }
-//      }
+      while(!allSessionAreFilledToMin(sessions)){
+         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
+         System.out.println("IT THINKS THE PERIOD IS: " + period);
+         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
+         System.out.println("IT THINKS THE SESSION IS: " + minSession + " AMOUNT OF PEOPLE: " + minSession.getStudents().get(period).size());
+         
+         boolean successfullyChangedSomeone = false;
+         for(int i = students.size() - 1; i >= 0; i--){
+            if(students.get(i).getAssignments().get(students.get(i).getPeriodOfLeastDesired()).equals(sessions.get(getLeastPopulatedSessionIndex(sessions, 3))) && students.get(i).isSwitchable()){
+               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
+               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
+               students.get(i).setSwitchable(false);
+               successfullyChangedSomeone = true;
+               System.out.println("Success");
+            }
+            break;
+         }
+         
+         if(!successfullyChangedSomeone){
+            for(int i = students.size() - 1; i >= 0; i--){
+               if(students.get(i).isSwitchable()){
+                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
+                  if(sessions.indexOf(oldSession) != -1) {
+                     sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
+                     minSession.getStudents().get(period).add(students.get(i)); //Add to new session
+                     students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
+                     students.get(i).setSwitchable(false);
+                     System.out.println("Success but later");
+                  }
+               }
+            }
+         }
+      }
+      for(int i = 0; i < students.size(); i++){
+         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
+            changeStudentContentness(students.get(i));
+         }
+      }
       //COMMENT ABOVE HERE TO STOP BACKFILL
    }
       
@@ -222,8 +225,10 @@ public class Algorithms{
       int minCapacity = 10;
       for(int i = 0; i < sessions.size(); i++) {
          for(int j=0; j < sessions.get(i).getStudents().size(); j++){
-            if(sessions.get(i).getStudents().get(j).size() < minCapacity) //changed second i to j
+            if(sessions.get(i).getStudents().get(j).size() < minCapacity) { //changed second i to j
+               System.out.println("SESSION NOT FILLED: " + sessions.get(i) + " PERIOD " + j);
                return false;
+            }
          }        
       }
       return true;
