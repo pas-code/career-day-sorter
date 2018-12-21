@@ -36,9 +36,9 @@ public abstract class MoreInfo {
 	   public static final int PREF_W = 400;
 	   public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
-		private InfoPanel infoPanel;
 		protected Event event;
-//		protected int periodNum;
+		protected int periodNum;
+		protected InfoPanel infoPanel;
 
 		public SideInfoPanel(InfoPanel infoPanel)
 		{
@@ -49,11 +49,18 @@ public abstract class MoreInfo {
 			setFocusable(true);
 			this.setBackground(Color.WHITE);
 		}
+		
 
-		protected void refreshInfoPanel()
-        {
-            infoPanel.refresh();
-        }
+      public SideInfoPanel(InfoPanel infoPanel)
+      {
+          this.infoPanel = infoPanel;
+      }
+
+
+      protected void refreshInfoPanel()
+      {
+          infoPanel.refresh();
+      }
 		
 	}
 
@@ -408,7 +415,7 @@ public abstract class MoreInfo {
 //		}
 	}
 
-
+	/* TODO come back to this
 	public static class EventPanel extends SideInfoPanel {
 
 		public EventPanel(InfoPanel infoPanel)
@@ -424,6 +431,7 @@ public abstract class MoreInfo {
 //			
 //		}
 	}
+	*/
 	
 	private static void show(SideInfoPanel p) {
 		JFrame f = new JFrame("test info panel");
@@ -436,7 +444,7 @@ public abstract class MoreInfo {
 	
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
-//		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0));
+		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
 
 //		show(s);
 	}
@@ -498,7 +506,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    
                 }
 
                 @Override
@@ -547,7 +555,7 @@ public abstract class MoreInfo
         }
         // @Override
         // public void changePeriod(int newPeriod) {
-        // // TODO Auto-generated method stub
+        // // 
         //
         // }
     }
@@ -574,7 +582,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -590,7 +598,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -606,7 +614,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -656,7 +664,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -673,7 +681,7 @@ public abstract class MoreInfo
                 @Override
                 public void focusGained(FocusEvent e)
                 {
-                    // TODO Auto-generated method stub
+                    // 
                 }
 
                 @Override
@@ -735,7 +743,7 @@ public abstract class MoreInfo
         }
         // @Override
         // public void changePeriod(int newPeriod) {
-        // // TODO Auto-generated method stub
+        // // 
         //
         // }
         // }
@@ -745,7 +753,7 @@ public abstract class MoreInfo
             public EventPanel(InfoPanel infoPanel)
             {
                 super(infoPanel);
-                // TODO Auto-generated constructor stub
+                // 
             }
 
             private static final long serialVersionUID = 1L;

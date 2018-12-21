@@ -68,6 +68,7 @@ public class InfoPanel extends JPanel implements MouseListener
     public void initMoreInfo()
     {
         int type = gl.getTypeNum();
+        // just use instanceOf?
         if (type == 0)
             moreInfo = new MoreInfo.SessionPanel(event, (Session) gl, this);
         else if (type == 1)
