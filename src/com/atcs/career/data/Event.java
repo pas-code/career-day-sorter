@@ -102,18 +102,22 @@ public class Event implements Serializable {
        students.add(perOne);
        students.add(perOne);
        sessions.get(0).setStudents(students);
-       
+       ret.setStudents(perOne);
        ArrayList<Room> rooms = ret.rooms;
        for(int i = 121; i< 140; i++)
       	 rooms.add(new Room(i + "", 30));
+       
 
        ret.eventName = "TEST";
        
        ret.students = students.get(0);
        sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
+
        return ret;
        
    }
+	
+	
 
 	public void selectStudentFile() {
 		students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));

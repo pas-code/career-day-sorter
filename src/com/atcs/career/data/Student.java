@@ -268,10 +268,11 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
    {
       this.isSwitchable = isSwitchable;
    }
-	
+
 	@Override
 	public byte getTypeNum()
 	{
 	    return TYPE_NUM;
 	}
+
 }

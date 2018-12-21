@@ -48,15 +48,21 @@ public class InfoPanel extends JPanel implements MouseListener
         initializePanels();
     }
 
-    public InfoPanel(GuiListable gl, JPanel moreInfoHolder)
+    public InfoPanel(GuiListable gl, JPanel moreInfoHolder, CareerDayGUI home)
     {
         this.gl = gl;
         title = gl.getTitle();
         info1 = gl.getInfo(0);
         info2 = gl.getInfo(1);
         this.moreInfoHolder = moreInfoHolder;
+        this.home = home;
         initializePanels();
         initMoreInfo();
+    }
+    
+    public byte getPeriod()
+    {
+        return home.getSelectedPeriod();
     }
 
     public void initMoreInfo()
