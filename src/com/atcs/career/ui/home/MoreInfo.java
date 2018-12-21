@@ -16,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,7 +37,6 @@ public abstract class MoreInfo {
 		private static final long serialVersionUID = 1L;
 		
 		protected Event event;
-		protected int periodNum;
 		protected InfoPanel infoPanel;
 
 		public void generalSetup() {
@@ -80,9 +78,7 @@ public abstract class MoreInfo {
 			      
 			   this.event = event;
 			   this.room = room;
-			     
-			   periodNum = 1;
-			   
+			     			   
 			   roomNumber = new JTextField(room.getRoomNumber());
 			   roomNumber.addFocusListener(new FocusListener(){
 
@@ -129,10 +125,12 @@ public abstract class MoreInfo {
 			      
 //			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
 //			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
+			      /*
 			      JLabel sessionTitle = new JLabel(room.getResidentSessions()[periodNum-1].getTitle());
 			      JLabel sessionSpeaker = new JLabel(room.getResidentSessions()[periodNum-1].getSpeaker());
 			      center.add(sessionTitle);
 			      center.add(sessionSpeaker);
+			      */
 //			      String sessionInfo = "Title";
 //			      scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
 			      center.add(scrollPane);
@@ -234,7 +232,7 @@ public abstract class MoreInfo {
 			JList<String> listNames = new JList<String>(studentNames);
 			listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listNames);
-			String title = student.getAssignment(periodNum).getTitle(); // TODO what?
+			String title = student.getAssignment(infoPanel.period).getTitle(); // TODO what?
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
 					new Font("Arial", Font.PLAIN, 20), Color.BLACK));

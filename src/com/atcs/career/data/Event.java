@@ -98,6 +98,9 @@ public class Event implements Serializable {
        perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
        perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
        students.add(perOne);
+       students.add(perOne);
+       students.add(perOne);
+       students.add(perOne);
        sessions.get(0).setStudents(students);
        
        ArrayList<Room> rooms = ret.rooms;
@@ -106,8 +109,8 @@ public class Event implements Serializable {
 
        ret.eventName = "TEST";
        
-       
-       // sessions.get(0).setStudents(students.get(0), 0); what?? -tom
+       ret.students = students.get(0);
+       sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
        return ret;
        
    }

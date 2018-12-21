@@ -95,6 +95,7 @@ public class CareerDayGUI extends JPanel {
 
 	public void tabConfig() {
 		tabs = new JTabbedPane();
+		
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());
 		addTab(event.getStudents());
@@ -113,8 +114,7 @@ public class CareerDayGUI extends JPanel {
 		ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 		
 		for (int i = 0; i < eventData.size(); i++) {
-			System.out
-					.println("Added " + ((GuiListable) eventData.get(i)).getType());
+			System.out.println("Added " + ((GuiListable) eventData.get(i)).getType());
 			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east);
 			sessionPanelHolder.add(infoPanel);
 //			infoPanel.getMoreInfoPanel()
@@ -123,6 +123,7 @@ public class CareerDayGUI extends JPanel {
 		JScrollPane sessionScroll = new JScrollPane(ScrollBackPanel);
 		sessionScroll.getVerticalScrollBar().setUnitIncrement(10);
 		sessionScroll.getVerticalScrollBar().setValue(1);
+		System.out.println(eventData);
 		tabs.addTab(((GuiListable) eventData.get(0)).getType(), sessionScroll);
 	}
 

@@ -37,7 +37,7 @@ public class InfoPanel extends JPanel implements MouseListener
     private GuiListable gl;
     private Event event;
     // private boolean isSelected;
-    // private CareerDayGUI home;
+     private CareerDayGUI home;
 
     public InfoPanel(String title, String info1, String info2, Event e)
     {
