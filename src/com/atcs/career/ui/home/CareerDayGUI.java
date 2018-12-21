@@ -28,18 +28,24 @@ public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
-	private byte selectedPeriod;
+	private byte selectedPeriod = 0;
+	private byte numberOfPeriods;
 	private JPanel east, west;
 	private JLabel title;
-	private JTextArea info;
+//	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
+//	private InfoPanel selectedInfoPanel
 	
-//	private InfoPanel selectedInfoPanel;
-
+	public CareerDayGUI(Event event, byte numberOfPeriods) {
+        this.event = event;
+        this.numberOfPeriods = numberOfPeriods;
+        gui();
+    }
+	
 	public CareerDayGUI(Event event) {
 		this.event = event;
 		gui();
@@ -56,6 +62,11 @@ public class CareerDayGUI extends JPanel {
 //		makeWindow();
 	}
 
+//	private void refresh()
+//	{
+//	    
+//	}
+	
 	private void layoutConfig() {
 		// title
 		title = new JLabel("Event Scheduler", SwingConstants.CENTER);
@@ -64,14 +75,15 @@ public class CareerDayGUI extends JPanel {
 		// east panel
 		east = new JPanel();
 		east.setPreferredSize(new Dimension(200, 0));
-		info = new JTextArea("A Dude\nA Student\nAnother Student");
-		info.setFont(smallFont);
-		east.add(info);
+//		info = new JTextArea("A Dude\nA Student\nAnother Student");
+//		info.setFont(smallFont);
+//		east.add(info);
 		this.add(east, BorderLayout.EAST);
 		// west panel
 		west = new JPanel(new GridLayout(0, 1));
+		west.setPreferredSize(new Dimension(100,0));
 		periods = new ArrayList<JButton>();
-		for (int i = 1; i <= event.getAmountOfSessions(); i++) {
+		for (int i = 1; i < numberOfPeriods; i++) {
 			JButton period = new JButton("Period " + i);
 			period.setFont(smallFont);
 			periods.add(period);
@@ -83,7 +95,7 @@ public class CareerDayGUI extends JPanel {
 		this.add(west, BorderLayout.WEST);
 	}
 
-	private void tabConfig() {
+	public void tabConfig() {
 		tabs = new JTabbedPane();
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());
@@ -101,12 +113,13 @@ public class CareerDayGUI extends JPanel {
 		JPanel sessionPanelHolder = new JPanel();
 		sessionPanelHolder.setLayout(new GridLayout(0, 1));
 		ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-
+		
 		for (int i = 0; i < eventData.size(); i++) {
 			System.out
 					.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			sessionPanelHolder.add(new InfoPanel((GuiListable) eventData.get(i), east));
-
+			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east);
+			sessionPanelHolder.add(infoPanel);
+//			infoPanel.getMoreInfoPanel()
 		}
 
 		JScrollPane sessionScroll = new JScrollPane(ScrollBackPanel);
@@ -143,13 +156,10 @@ public class CareerDayGUI extends JPanel {
 //	    selectedInfoPanel = ip;
 //	}
 	
-	/**
-	 * The main method runs your entire program It has the method
-	 * createAndShowGUI() and runs it. This makes your whole program work.
-	 */
+
 	public static void main(String[] args) {
 
-		CareerDayGUI program = new CareerDayGUI(Event.testEvent());
+		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
 		program.makeWindow();
 	}
 	
