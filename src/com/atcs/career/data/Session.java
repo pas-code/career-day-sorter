@@ -26,7 +26,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 			int popularity) {
 		super();
 		this.title = title;
-		this.speaker = speaker;
+		this.speaker = speaker.replace("\"", "");
 		this.students = students;
 		this.gradesAvailable = gradesAvailable;
 		this.popularity = popularity;
@@ -34,7 +34,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 
 	public Session(String title, String speaker, int numOfPeriods) {
 		this.title = title;
-		this.speaker = speaker;
+		this.speaker = speaker.replace("\"", "");
 		this.numOfPeriods = numOfPeriods;
 		this.students = new ArrayList<ArrayList<Student>>();
 		for (int i = 0; i < numOfPeriods; i++) {
@@ -44,7 +44,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		this.popularity = 0;
 	}
 	public Session(String title, String speaker) {
-		this(title, speaker, 3);
+		this(title, speaker.replace("\"", ""), 3);
 	}
 
 	public Session() {
