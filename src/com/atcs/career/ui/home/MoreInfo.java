@@ -246,7 +246,7 @@ public abstract class MoreInfo {
 	public static class SessionPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Session instance variables
-		private JButton editStudent, addStudent, removeStudent;
+		private JButton addStudent, removeStudent;
 		private JTextField speakerName, classroomNumber;
 		private Event event;
 		private Session session;
@@ -259,7 +259,6 @@ public abstract class MoreInfo {
             this.event = event;
 			this.session = session;
 			addStudent = new JButton("Add Student");
-			editStudent = new JButton("Edit Student");
 			removeStudent = new JButton("Remove Student");
 			
 			speakerName = new JTextField(session.getSpeaker());
@@ -349,20 +348,11 @@ public abstract class MoreInfo {
 			north.setLayout(new GridLayout(3,0));
 			north.add(speakerName);
 			north.add(classroomNumber);
-			
-			editStudent.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-				}
-			});
-			
-			
+	
 
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
 			south.setLayout(new GridLayout(5, 1));
-			south.add(editStudent);
 			south.add(addStudent);
 			south.add(removeStudent);
 			
