@@ -30,6 +30,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		this.students = students;
 		this.gradesAvailable = gradesAvailable;
 		this.popularity = popularity;
+		if(this.speaker.charAt(0) == '"') {
+		   this.speaker = this.speaker.substring(1);
+		}
 	}
 
 	public Session(String title, String speaker, int numOfPeriods) {
@@ -42,6 +45,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		}
 		this.gradesAvailable = new int[]{9, 10, 11, 12};
 		this.popularity = 0;
+		if(this.speaker.charAt(0) == '"') {
+         this.speaker = this.speaker.substring(1);
+      }
 	}
 	public Session(String title, String speaker) {
 		this(title, speaker, 3);

@@ -68,6 +68,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	   this.timeEntered = timeEntered;
 	   this.assignments = new ArrayList<Session>();
 	   this.submitted = true;
+	   isSwitchable = true;
 	}
 
 	/**
@@ -85,6 +86,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
       priority = getStudentPriority();
       this.timeEntered = 0;
       submitted = false;
+      isSwitchable = true;
    }
    
 

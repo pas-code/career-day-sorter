@@ -38,8 +38,11 @@ public class Algorithms{
       System.out.println("Classes under Cap:");
       for(int i = 0; i < sessions.size(); i++) {
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) {
-            if(sessions.get(i).getStudents().get(j).size() < 10)
-               System.out.println(sessions.get(i).getSpeaker() + " PERIOD " + j);
+            if(sessions.get(i).getStudents().get(j).size() < 10) {
+               System.out.println(sessions.get(i).getSpeaker() + " PERIOD " + j + " HAS " + sessions.get(i).getStudents().get(j).size());
+               for(int k = 0; k < sessions.get(i).getStudents().get(j).size(); k++)
+                  System.out.println(sessions.get(i).getStudents().get(j).get(k));
+            }
          }
       }
       
@@ -50,7 +53,7 @@ public class Algorithms{
    public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
       double totalCont = 0;
       for(int i = 0; i < students.size(); i++){
-         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness()/50);
+//         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness()/50);
          totalCont += ((students.get(i).getStudentPriority().getContentness())/50); //50 is the contentness weight we gave
       }
       return totalCont/students.size();
@@ -153,44 +156,25 @@ public class Algorithms{
       assignRandomsAtEnd(sessions);
       
       //COMMENT BELOW HERE TO STOP BACKFILL
-      while(!allSessionAreFilledToMin(sessions)){
-         int period = getLeastPopulatedSessionIndex(sessions, 3); //CHANGE
-         System.out.println("IT THINKS THE PERIOD IS: " + period);
-         Session minSession = getLeastPopulatedSessionPerPeriod(sessions, period);
-         System.out.println("IT THINKS THE SESSION IS: " + minSession + " AMOUNT OF PEOPLE: " + minSession.getStudents().get(period).size());
-         
-         boolean successfullyChangedSomeone = false;
-         for(int i = students.size() - 1; i >= 0; i--){
-            if(students.get(i).getAssignments().get(students.get(i).getPeriodOfLeastDesired()).equals(sessions.get(getLeastPopulatedSessionIndex(sessions, 3))) && students.get(i).isSwitchable()){
-               Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-               sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out of their old session
-               minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-               students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-               students.get(i).setSwitchable(false);
-               successfullyChangedSomeone = true;
-               System.out.println("Success");
-            }
-            break;
-         }
-         
-         if(!successfullyChangedSomeone){
-            for(int i = students.size() - 1; i >= 0; i--){
-               if(students.get(i).isSwitchable()){
-                  Session oldSession = students.get(i).getRequests().remove(period); //Take Away Their Old Session
-                  if(sessions.indexOf(oldSession) != -1) {
-                     sessions.get(sessions.indexOf(oldSession)).getStudents().get(period).remove(students.get(i)); //Take them out
-                     minSession.getStudents().get(period).add(students.get(i)); //Add to new session
-                     students.get(i).getAssignments().set(period, minSession); //Tell them they're in the new session (CHANGED from request to assignments)
-                     students.get(i).setSwitchable(false);
-                     System.out.println("Success but later");
+      int minCap = 10;
+      
+      for(int i = 0; i < sessions.size(); i++) { //For each session...
+         for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
+            if(sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesnt have enough during that period...
+               do {
+                  for(int k = students.size() - 1; k >= 0; k--) { //Look at every student.
+                     Student currentStud = students.get(k);
+                     if(currentStud.isSwitchable()) { //If they haven't alread been moved during the backfill...
+                        if(sessions.indexOf(currentStud.getAssignment(j)) != -1) //This is just because of the issue with quotes before speaker name. shouldnt be an issue otherwise
+                           sessions.get(sessions.indexOf(currentStud.getAssignment(j))).getStudents().get(j).remove(currentStud); //Take them out of their old session at that period
+                        sessions.get(i).getStudents().get(j).add(currentStud); //Add them to this student
+                        currentStud.getAssignments().set(j, sessions.get(i)); //Update this in their assignment array
+                        currentStud.setSwitchable(false); //Don't let this student be switched anymore
+                        break;
+                     }
                   }
-               }
+               }while(sessions.get(i).getStudents().get(j).size() <= minCap); //If they're still under the cap, do it again
             }
-         }
-      }
-      for(int i = 0; i < students.size(); i++){
-         if(!students.get(i).isSwitchable() && students.get(i).getRequests().size() > 0){
-            changeStudentContentness(students.get(i));
          }
       }
       //COMMENT ABOVE HERE TO STOP BACKFILL
@@ -254,27 +238,12 @@ public class Algorithms{
    
    private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
       Session min = sessions.get(0);
-      for(int i = 0; i < sessions.size(); i++){
+      for(int i = 1; i < sessions.size(); i++){
          if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()){
             min = sessions.get(i);
          }
       }
       return min;
-   }
-   
-   private static int getLeastPopulatedSessionIndex(ArrayList<Session> sessions, int numberOfPeriods){
-      ArrayList<Session> leastPopulatedSessions = new ArrayList<Session>();
-      for(int i = 0; i < numberOfPeriods; i++){
-         leastPopulatedSessions.add(getLeastPopulatedSessionPerPeriod(sessions, i));  
-      }
-      
-      Session min = leastPopulatedSessions.get(0);
-      for(int i = 0; i < leastPopulatedSessions.size(); i++){
-         if(leastPopulatedSessions.get(i).getStudents().get(i).size() < min.getStudents().get(leastPopulatedSessions.indexOf(min)).size()){
-            min = leastPopulatedSessions.get(i);
-         }
-      }
-      return leastPopulatedSessions.indexOf(min);
    }
    
    public static void changeStudentContentness(Student currentStud){
