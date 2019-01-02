@@ -35,6 +35,14 @@ public class Algorithms{
       assignStudentsToSessions(students, sessions);
       System.out.println("Method 3 Done");
       
+      System.out.println("Classes under Cap:");
+      for(int i = 0; i < sessions.size(); i++) {
+         for(int j = 0; j < sessions.get(i).getStudents().size(); j++) {
+            if(sessions.get(i).getStudents().get(j).size() < 10)
+               System.out.println(sessions.get(i).getSpeaker() + " PERIOD " + j);
+         }
+      }
+      
       System.out.println("Accuracy:");
       System.out.println(getSortingAccuracyAverage(students));
    }
@@ -223,13 +231,11 @@ public class Algorithms{
    
    public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
       int minCapacity = 10;
-      for(int i = 0; i < sessions.size(); i++) {
-         for(int j=0; j < sessions.get(i).getStudents().size(); j++){
-            if(sessions.get(i).getStudents().get(j).size() < minCapacity) { //changed second i to j
-               System.out.println("SESSION NOT FILLED: " + sessions.get(i) + " PERIOD " + j);
-               return false;
-            }
-         }        
+      for(int i = 0; i < 3; i++) {
+         if(getLeastPopulatedSessionPerPeriod(sessions, i).getStudents().get(i).size() < minCapacity) {
+            System.out.println(getLeastPopulatedSessionPerPeriod(sessions, i) + " PERIOD " + i);
+            return false;
+         }
       }
       return true;
    }

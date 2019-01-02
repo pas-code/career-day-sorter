@@ -35,8 +35,8 @@ public class Event implements Serializable {
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		Event e = testEvent();
-//		Event e = new Event();
+//		Event e = testEvent();
+		Event e = new Event("LogicTest");
 		System.out.println("WHAT");
 		FileHandler.save(e);
 //		e = FileHandler.load(CSVReader.getFileLocation(".event"));
