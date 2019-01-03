@@ -21,7 +21,7 @@ public class Algorithms{
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
-   //BIG METHOD THAT DOES EVERYTHING
+   //BIG METHOD THAT DOES EVERYTHING. Calls all other methods
    public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
       System.out.println("Method 1 Starting");
       assignRoomsToSessions(students, rooms, sessions);
@@ -60,7 +60,7 @@ public class Algorithms{
    }
    
    
-   //ALGORITHM 1
+   //ALGORITHM 1. Assigns rooms to sessions by sorting popularity of the sessions/speaker.
    public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
       Collections.sort(rooms);
@@ -107,7 +107,7 @@ public class Algorithms{
           
    }
    
-   //ALGORITHM 2
+   //ALGORITHM 2. Gives students their priority in order for them to be rank so student assignment can be done correctly
    public static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
     //Creates Array Lists for Random Assignment
       for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
@@ -141,7 +141,7 @@ public class Algorithms{
       
    }
    
-   //ALGORITHM 3
+   //ALGORITHM 3. With students sorted, we assign them to sessions–trying to give them their highest choices first. We assign by period by period.
    public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
       int numOfPeriods = 3;
       for(int j = 0; j < numOfPeriods; j++) { //For each period
@@ -180,6 +180,7 @@ public class Algorithms{
       //COMMENT ABOVE HERE TO STOP BACKFILL
    }
       
+   //Assigns one students bases on their choices and period
    public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
       System.out.println(currentStud);
       
@@ -213,6 +214,7 @@ public class Algorithms{
       changeStudentContentness(currentStud); //Deals with contentness
    }
    
+   //Checks to make sure all sessions meet minimum capacity (that we define)
    public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
       int minCapacity = 10;
       for(int i = 0; i < 3; i++) {
@@ -224,7 +226,7 @@ public class Algorithms{
       return true;
    }
    
-   
+   //Takes people who are "randos" (didn't sign up) and assigns to the least populated sessions
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
@@ -236,6 +238,7 @@ public class Algorithms{
       }
    }
    
+   //When gives period and all sessions, reutnrs the leas populated session from that period
    private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
@@ -246,6 +249,7 @@ public class Algorithms{
       return min;
    }
    
+   //Changes the student's contentedness (or contentness) based on what requests they have gotten
    public static void changeStudentContentness(Student currentStud){
       int selectionsAlreadyMade = currentStud.getAssignments().size();
       
@@ -261,6 +265,7 @@ public class Algorithms{
       currentStud.getStudentPriority().setContentness(numerator/denominator);
    }
    
+   //Gives the index of the session requested in the sessions ArrayList
    public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
       for(int i = 0; i < sessions.size(); i++){
          if (sessions.get(i).getSpeaker().equals(requestedSession.getSpeaker()))
