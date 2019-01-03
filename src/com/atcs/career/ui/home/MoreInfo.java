@@ -153,17 +153,21 @@ public abstract class MoreInfo {
 		// Student instance variables (scrollPane already created with Room)
 		//DELETE
 		private JButton editStudentName, editStudentEmail;
-		
+		private JList listOfSessions;
 		private JTextField studentfName, studentlName, studentEmail;
+		private DefaultListModel<String> model;
+		private Event event;
+		private Student student;
+		private InfoPanel infoPanel;
 		
-//		@Override
-//		public void changePeriod(int newPeriod) {
-//			
-//		}
+		
 		
 		public StudentPanel(Event event, Student student, InfoPanel infoPanel) 
         {     
             super(infoPanel);
+            this.event = event;
+            this.student = student;
+            this.infoPanel = infoPanel;
 			studentfName = new JTextField(student.getfName());
 			studentfName.addFocusListener(new FocusListener(){
 
@@ -218,29 +222,42 @@ public abstract class MoreInfo {
 			
 			setLayout(new BorderLayout());
 			
-			JPanel north = new JPanel(new GridLayout(2, 1));
+			JPanel north = new JPanel(new GridLayout(3, 0));
 			JPanel center = new JPanel(new BorderLayout());
 			
+			add(north, BorderLayout.NORTH);
 			north.add(studentfName);
 			north.add(studentlName);
 			north.add(studentEmail);
 			
-			
 			add(center, BorderLayout.CENTER);
-			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-					"J"};
-			JList<String> listNames = new JList<String>(studentNames);
-			listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			JScrollPane scrollPane = new JScrollPane(listNames);
+			
+			model = new DefaultListModel<String>();
+			listOfSessions = new JList(model);
+			listOfSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			JScrollPane scrollPane = new JScrollPane(listOfSessions);
 
-			String title = student.getAssignment(infoPanel.getPeriod()).getTitle(); // TODO what?
+//			String title = student.getAssignment(infoPanel.getPeriod()).getTitle(); // TODO what?
+			String title = "Soup Facts";
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
 					new Font("Arial", Font.PLAIN, 20), Color.BLACK));
 
 			center.add(scrollPane);
+			
+			populateList();
 				
 		}
+		
+		public void populateList()
+		{
+		   for (Session s : student.getAssignments())
+		   {
+		      model.addElement(s.getTitle());
+		      listOfSessions.revalidate();
+		   }
+		}
+		
 	}
 
 	public static class SessionPanel extends SideInfoPanel {
@@ -314,11 +331,6 @@ public abstract class MoreInfo {
 					//add this new student to the list of students of this event LATER once we figure it out
 				}
 			});
-
-			
-			
-
-
 
 
 			generalSetup();
@@ -423,7 +435,8 @@ public abstract class MoreInfo {
 	
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
-		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
+//		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
+		MoreInfo.StudentPanel s = new MoreInfo.StudentPanel(e, e.getStudents().get(0), null);
 		show(s);
 	}
 }
