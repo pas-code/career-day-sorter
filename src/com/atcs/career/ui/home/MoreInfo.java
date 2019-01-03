@@ -66,6 +66,9 @@ public abstract class MoreInfo {
 		private JTextField roomNumber;
 		private JScrollPane scrollPane;
 		private Room room;
+		private JList listSessions;
+		DefaultListModel<String> model;
+		private InfoPanel infoPanel;
 		
 		 public RoomPanel(Event event, Room room, InfoPanel infoPanel) 
 		   {     
@@ -98,14 +101,23 @@ public abstract class MoreInfo {
 			      
 			      JPanel center = new JPanel(new GridLayout(0,3));
 			      JPanel north = new JPanel(new GridLayout(0,1));
-
+			      this.add(north, BorderLayout.NORTH);
 			      this.add(center, BorderLayout.CENTER);
 			      
-			      
-			      String studentNames[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-			      JList<String> listNames = new JList<String>(studentNames);
-			      listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			      scrollPane = new JScrollPane(listNames);
+			      model = new DefaultListModel<String>();
+					
+				  listSessions = new JList<String>(model);
+				  listSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				  JScrollPane scrollPane = new JScrollPane(listSessions);
+				  populateList();
+				  String title = room.getTitle();
+				  setBorder(BorderFactory.createTitledBorder(null, title,
+				  		TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
+						new Font("Arial", Font.PLAIN, 20), Color.BLACK));
+//			      String studentNames[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+//			      JList<String> listNames = new JList<String>(studentNames);
+//			      listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//			      scrollPane = new JScrollPane(listNames);
 			      
 //			      String sessionInfo = "<html>" + room.getResidentSessions()[periodNum] + 
 //			      		"  <br><center> <font size=\"7\"> "+ room.getRoomNumber() + "</font></center></html>";
@@ -127,6 +139,13 @@ public abstract class MoreInfo {
 			      north.add(roomNumber);
 			      
 			   }
+		 
+		 public void populateList(){
+			 
+			 for (int i = 0; i < room.getResidentSessions().length; i++)
+				 model.addElement(room.getResidentSessions()[i].getTitle());
+	           listSessions.revalidate();
+		 }
 
 //		@Override
 //		public void changePeriod(int newPeriod) {
@@ -411,7 +430,8 @@ public abstract class MoreInfo {
 	
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
-		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
+//		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
+		MoreInfo.RoomPanel s = new MoreInfo.RoomPanel(e, e.getRooms().get(0), null);
 		show(s);
 	}
 }
