@@ -92,18 +92,6 @@ public abstract class MoreInfo {
 				   
 			   });
 			      
-//			      editRoomNumber = new JButton("Edit Room Number");
-//			      editRoomNumber.addActionListener(new ActionListener(){
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						
-//						String roomNumber = JOptionPane.showInputDialog("Please input the new room number: ");
-//						room.setRoomNumber(roomNumber);
-//						String sessionInfo = "<html>" + event.getSessions().get(0).getTitle() + "  <br><center> <font size=\"7\"> "+ roomNumber + "</font></center></html>";
-//						scrollPane.setBorder(BorderFactory.createTitledBorder(null, sessionInfo, TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Arial", Font.PLAIN, 30), Color.BLACK));
-//						
-//					}    	  
-//			      });
 
 			      
 			      this.setLayout(new BorderLayout());
@@ -437,8 +425,7 @@ public abstract class MoreInfo {
 	public static void main(String[] args) {
 		Event e = Event.testEvent();
 		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e, e.getSessions().get(0), null);
-
-//		show(s);
+		show(s);
 	}
 }
 	/*
