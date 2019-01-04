@@ -21,18 +21,7 @@ import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
-
-/*
- * TODO 
- * sort button
- * sort students
- * search students
- * save button
- * session names??
- * ui between different panels
- */
-
-
+//Default JPanel Class (Copy and Paste)
 public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
@@ -41,11 +30,13 @@ public class CareerDayGUI extends JPanel {
 	private byte numberOfPeriods;
 	private JPanel east, west;
 	private JLabel title;
+//	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
+//	private InfoPanel selectedInfoPanel
 	
 	public CareerDayGUI(Event event, byte numberOfPeriods) {
         this.event = event;
@@ -55,7 +46,6 @@ public class CareerDayGUI extends JPanel {
 	
 	public CareerDayGUI(Event event) {
 		this.event = event;
-		this.numberOfPeriods = event.getNumberOfPeriods();
 		gui();
 	}
 
@@ -170,15 +160,23 @@ public class CareerDayGUI extends JPanel {
 	/**
      * @return the selectedPeriod
      */
-    public byte getSelectedPeriod() {
+    public byte getSelectedPeriod()
+    {
         return selectedPeriod;
     }
 
     /**
      * @param selectedPeriod the selectedPeriod to set
      */
-    public void setSelectedPeriod(byte selectedPeriod) {
+    public void setSelectedPeriod(byte selectedPeriod)
+    {
         this.selectedPeriod = selectedPeriod;
     }
+
+    public static void main(String[] args) {
+        
+		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
+		program.makeWindow();
+	}
 	
 }
