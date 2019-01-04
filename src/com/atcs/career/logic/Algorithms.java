@@ -15,8 +15,8 @@ import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 
 public class Algorithms{
-    /*Each sub ArrayList corresponds to a period
-    * Students who didn't submit a request will be placed into every sub array
+    /*Each sub ArrayList (in sessions) corresponds to a period
+    * Students who didn't submit a request will be placed into every sub array of "toBeRandomlyAssigned"
     * Students who couldn't get a top 5 choice placed into specific sub array for that period
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
