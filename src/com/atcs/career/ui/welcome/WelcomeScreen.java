@@ -276,7 +276,7 @@ public class WelcomeScreen extends JPanel {
 	 */
 	protected void sendEvent(Event e) {
 		if (master != null)
-			master.openEventFromWelcome(e);
+			master.openEvent(e);
 	}
 	
 	private void constructProps() {

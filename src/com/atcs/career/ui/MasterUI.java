@@ -23,11 +23,15 @@ public class MasterUI {
 		new WelcomeScreen(welcomeFrame, this);
 	}
 	
-	public void openEventFromWelcome(Event e) {
+	public void openEvent(Event e) {
 		if (e == null)
 			System.exit(0);
 		this.masterEvent = e;
+		
+		
+		//just for now, so you can actually save
 		FileHandler.save(e);
+		
 		System.out.println(masterEvent.infoString());
 		
 		openMain();	
