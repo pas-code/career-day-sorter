@@ -21,7 +21,18 @@ import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
-//Default JPanel Class (Copy and Paste)
+
+/*
+ * TODO 
+ * sort button
+ * sort students
+ * search students
+ * save button
+ * session names??
+ * ui between different panels
+ */
+
+
 public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
@@ -159,32 +170,15 @@ public class CareerDayGUI extends JPanel {
 	/**
      * @return the selectedPeriod
      */
-    public byte getSelectedPeriod()
-    {
+    public byte getSelectedPeriod() {
         return selectedPeriod;
     }
 
     /**
      * @param selectedPeriod the selectedPeriod to set
      */
-    public void setSelectedPeriod(byte selectedPeriod)
-    {
+    public void setSelectedPeriod(byte selectedPeriod) {
         this.selectedPeriod = selectedPeriod;
     }
-
-    public static void main(String[] args) {
-
-		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
-		program.makeWindow();
-	}
-    
-    /*
-     * TODO 
-     * sort button
-     * sort students
-     * search students
-     * save button
-     * session names??
-     */
 	
 }
