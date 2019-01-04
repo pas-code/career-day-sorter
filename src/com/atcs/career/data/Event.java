@@ -119,6 +119,8 @@ public class Event implements Serializable {
 	public static Event readTestEvent() { 
 		Event ret = new Event();
 		ret.changeName("nameChanged");
+		
+		return ret;
 	}
 	
 
@@ -235,7 +237,7 @@ public class Event implements Serializable {
 	}
 	
 	public boolean nameChanged() {
-		return !oldName.equals(eventName);
+		return oldName != null && !oldName.equals(eventName);
 	}
 	
 	public static String saveFileName(String eventName) {

@@ -177,5 +177,14 @@ public class CareerDayGUI extends JPanel {
 		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
 		program.makeWindow();
 	}
+    
+    /*
+     * TODO 
+     * sort button
+     * sort students
+     * search students
+     * save button
+     * session names??
+     */
 	
 }

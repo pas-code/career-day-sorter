@@ -4,9 +4,9 @@
 package com.atcs.career.ui;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.welcome.WelcomeScreen;
 
@@ -27,6 +27,7 @@ public class MasterUI {
 		if (e == null)
 			System.exit(0);
 		this.masterEvent = e;
+		FileHandler.save(e);
 		System.out.println(masterEvent.infoString());
 		
 		openMain();	
