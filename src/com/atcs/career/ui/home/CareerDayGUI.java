@@ -30,13 +30,11 @@ public class CareerDayGUI extends JPanel {
 	private byte numberOfPeriods;
 	private JPanel east, west;
 	private JLabel title;
-//	private JTextArea info;
 	private ArrayList<JButton> periods;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
 	private Event event;
-//	private InfoPanel selectedInfoPanel
 	
 	public CareerDayGUI(Event event, byte numberOfPeriods) {
         this.event = event;
@@ -46,6 +44,7 @@ public class CareerDayGUI extends JPanel {
 	
 	public CareerDayGUI(Event event) {
 		this.event = event;
+		this.numberOfPeriods = event.getNumberOfPeriods();
 		gui();
 	}
 

@@ -24,6 +24,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.importexport.CSVReader;
 
 //Jarrett Bierman
@@ -40,7 +41,7 @@ public class PropertiesPane extends JPanel {
 			allStudentLabel;
 	private JButton sessionButton, studentButton, classroomButton,
 			allStudentButton;
-	private File sessionFile, studentFile, classroomFile, allStudentFile;
+	private String sessionFile, studentFile, classroomFile, allStudentFile;
 	private JButton submit, cancel;
 	private JTextField title;
 	private final String textPrompt = "Enter Project Name Here";
@@ -125,7 +126,7 @@ public class PropertiesPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				sessionFile = selectFile(sessionButton);
-				event.setRequestFile(sessionFile.getName());
+				event.setRequestFile(sessionFile);
 			}
 		});
 
@@ -136,7 +137,7 @@ public class PropertiesPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				allStudentFile = selectFile(allStudentButton);
-				event.setRequestFile(allStudentFile.getName());
+				event.setRequestFile(allStudentFile);
 
 			}
 		});
@@ -149,7 +150,7 @@ public class PropertiesPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				studentFile = selectFile(studentButton);
-				event.setRequestFile(studentFile.getName());
+				event.setRequestFile(studentFile);
 			}
 		});
 
@@ -162,7 +163,7 @@ public class PropertiesPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				classroomFile = selectFile(classroomButton);
-				event.setRequestFile(classroomFile.getName());
+				event.setRequestFile(classroomFile);
 			}
 		});
 
@@ -178,6 +179,8 @@ public class PropertiesPane extends JPanel {
 					System.out.println(studentFile);
 					System.out.println(classroomFile);
 					System.out.println("Periods: " + (int) periodCount.getValue());
+					if (welc != null)
+						welc.sendEventAndClose(createEvent());
 				} else
 					JOptionPane.showMessageDialog(null,
 							"You did not select all of the needed files. Please select all options.");
@@ -188,7 +191,27 @@ public class PropertiesPane extends JPanel {
 			cancel();
 		});
 	}
+	
+	private Event createEvent() {
+		Event ret = new Event();
+		ret.changeName(title.getText());
+		if (checkNullPassed(sessionFile))
+			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
+		if (checkNullPassed(allStudentFile))
+			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile));
+		if (checkNullPassed(studentFile))
+			ret.setStudents(IOUtilities.loadStudentArray(studentFile));
+		if (checkNullPassed(classroomFile))
+			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
+		
+		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
+		return ret;
+	}
 
+	private boolean checkNullPassed(String path) {
+		return path != null && path != "" && new File(path).exists();
+	}
+	
 	private void createFieldAndSpinner() {
 		title = new JTextField(textPrompt);
 		title.setForeground(Color.GRAY);
@@ -231,7 +254,7 @@ public class PropertiesPane extends JPanel {
 		gridPanel.add(periodCount);
 	}
 
-	public File selectFile(JButton b) {
+	public String selectFile(JButton b) {
 		String location = CSVReader.getFileLocation(".csv");
 		if (location == null) 
 			return null;
@@ -242,7 +265,7 @@ public class PropertiesPane extends JPanel {
 		}
 		String name = location.substring(index + 1);
 		b.setText(name);
-		return new File(location);
+		return location;
 	}
 
 	public Dimension getPreferredSize() {
@@ -261,11 +284,4 @@ public class PropertiesPane extends JPanel {
 	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
-	/**
-	 * The main method runs your entire program It has the method
-	 * createAndShowGUI() and runs it. This makes your whole program work.
-	 */
-	public static void main(String[] args) {
-		new PropertiesPane(null, null);
-	}
 }

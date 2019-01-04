@@ -6,7 +6,6 @@ package com.atcs.career.data;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
@@ -27,11 +26,12 @@ public class Event implements Serializable {
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
+	private byte numberOfPeriods;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
 	//HOLD ALGORITHM DATA IN OBJECT
-	private Priority weighting;
+	// nvm, algorithm data is staying as static
 
 	// TESTING
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
@@ -76,8 +76,7 @@ public class Event implements Serializable {
 		sessions = new ArrayList<Session>();
 	}
 	
-	public static Event testEvent()
-   {
+	public static Event testEvent() {
 	   Event ret = new Event();
        ArrayList<Session> sessions = ret.sessions;
        sessions.add(new Session("Business", "Donald Trump"));
@@ -113,10 +112,14 @@ public class Event implements Serializable {
        ret.students = students.get(0);
        sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
 
-       return ret;
-       
+       return ret; 
    }
 	
+	
+	public static Event readTestEvent() { 
+		Event ret = new Event();
+		ret.changeName("nameChanged");
+	}
 	
 
 	public void selectStudentFile() {
@@ -239,12 +242,24 @@ public class Event implements Serializable {
 		return eventName + FileHandler.SUFFIX;
 	}
 	
+	public byte getNumberOfPeriods() {
+		return numberOfPeriods;
+	}
+
+	public void setNumberOfPeriods(byte numberOfPeriods) {
+		this.numberOfPeriods = numberOfPeriods;
+	}
+
 	public static String extractEventName(String saveFileName) {
 		return saveFileName.substring(0, saveFileName.indexOf(FileHandler.SUFFIX));
 	}
 	
 	public String toString() {
 		return getEventName();
+	}
+	
+	public String infoString() {
+		return getEventName()  + "\n" + masterStudents + "\n" + students + "\n" + rooms + "\n" + sessions; 
 	}
 	
 }
