@@ -124,8 +124,7 @@ public class CareerDayGUI extends JPanel {
 		ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
 		
 		for (int i = 0; i < eventData.size(); i++) {
-			System.out
-					.println("Added " + ((GuiListable) eventData.get(i)).getType());
+//			System.out.println("Added " + ((GuiListable) eventData.get(i)).getType());
 			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east, this);
 			sessionPanelHolder.add(infoPanel);
 //			infoPanel.getMoreInfoPanel()

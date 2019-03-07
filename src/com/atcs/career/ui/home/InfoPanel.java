@@ -80,7 +80,7 @@ public class InfoPanel extends JPanel implements MouseListener
             System.out.println("Did not initialize panels");
             return;
         }
-        System.out.println("Initialized More info panels");
+//        System.out.println("Initialized More info panels");
     }
 
     public void select()
