@@ -44,6 +44,10 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
       return maxCapacity;
    }
    
+   public void setMaxCapacity(int cap) {
+   	maxCapacity = cap;
+   }
+   
    public String toString(){
       return "Room: " + "[Room Number: " + roomNumber +"] [Capacity: " + maxCapacity +"]" ; 
    }

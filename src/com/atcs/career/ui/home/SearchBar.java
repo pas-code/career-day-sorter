@@ -21,16 +21,30 @@ import javax.swing.ListModel;
 
 public class SearchBar<T extends Searchable> extends JPanel implements ActionListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
+	/**
+	 * target list
+	 */
 	private JList<T> list;
+	/**
+	 * all data from the list, no matter what query is searched
+	 */
 	private ArrayList<Searchable> allData;
 	private boolean hasGhostText;
+	/**
+	 * field for queries
+	 */
 	private JTextField field;
+	
+	/**
+	 * clear button
+	 */
 	private JButton clear;
 	
 	public SearchBar() {
 		super(new BorderLayout());
 		field = new JTextField();
 		add(field);
+		
 		clear = new JButton("clear");
 		add(clear, BorderLayout.EAST);
 		clear.addActionListener(new ActionListener() {
@@ -53,6 +67,9 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		setAllData();
 	}
 	
+	/**
+	 * before any searching is done, makes sure all data is held in the allData ArrayList
+	 */
 	private void setAllData() {
 		allData.removeAll(allData);
 		ListModel<T> model = list.getModel();
@@ -71,6 +88,10 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * given an array of values for the list to show, changes the list data to display only these items 
+	 * @param values the values to be shown on the list
+	 */
 	private void setListData(ArrayList<Searchable> values) {
 		if (values.isEmpty())
 			list.setListData((T[]) new Searchable[0]);
@@ -79,8 +100,8 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	
 	private void close() {
 		// set the data back to what it was
-//		if (allData != null)
 		setListData(allData);
+		// delete query
 		field.setText("");
 	}
 	
@@ -88,6 +109,11 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		setList(list, false);
 	}
 	
+	/**
+	 * 
+	 * @param list the master JList of values to search.
+	 * @param firstSet if this is the first set (only to be used if the default constructor was used)
+	 */
 	public void setList(JList<T> list, boolean firstSet) {
 		if (!firstSet)
 			close();
@@ -128,7 +154,6 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 			field.setText("Search...");
 			hasGhostText = true;
 		}
-		
 	}
 	
 	private void removeGhostText() {
@@ -136,6 +161,4 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		field.setText("");
 		field.setForeground(Color.BLACK);
 	}
-	
-	
 }

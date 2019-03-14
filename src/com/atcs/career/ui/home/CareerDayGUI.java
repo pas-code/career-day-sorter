@@ -42,14 +42,13 @@ public class CareerDayGUI extends JPanel {
 	public static final int PREF_H = 700;
 	private byte selectedPeriod = 1;
 	private byte numberOfPeriods;
-//	private JPanel east, west;
-//	private JLabel title;
-//	private ArrayList<JButton> periods;
+	private GuiListable listed;
 	private ArrayList<JList<GuiListable>> lists;
 	private JPanel centerPanel;
 	private SearchBar<GuiListable> centerSearch;
 	private JTabbedPane tabs;
 	private Font bigFont;
+	private JPanel eastPanel;
 	private Font smallFont;
 	private Event event;
 	
@@ -88,9 +87,9 @@ public class CareerDayGUI extends JPanel {
 		this.add(title, BorderLayout.NORTH);
 		
 		// east panel
-		JPanel east = new JPanel();
-		east.setPreferredSize(new Dimension(200, 0));
-		this.add(east, BorderLayout.EAST);
+		eastPanel = new JPanel();
+		eastPanel.setPreferredSize(new Dimension(200, 0));
+		this.add(eastPanel, BorderLayout.EAST);
 		
 		// center panel
 		centerPanel = new JPanel(new BorderLayout());
@@ -141,7 +140,7 @@ public class CareerDayGUI extends JPanel {
 		scrollBackPanel.setBackground(Color.white);
 
 		JList<GuiListable> infoList = new JList<GuiListable>(eventData.toArray(new GuiListable[eventData.size()]));
-		infoList.setCellRenderer(new ListableRenderer());
+		infoList.setCellRenderer(new ListableRenderer(this));
 		lists.add(infoList);
 		
 		scrollBackPanel.add(infoList, BorderLayout.NORTH);
@@ -172,6 +171,13 @@ public class CareerDayGUI extends JPanel {
 
 	public Event getEvent() {
 		return event;
+	}
+	
+	public void setMoreInfo(GuiListable g) {
+		if (g.equals(listed))
+			return;
+		eastPanel.removeAll();
+		eastPanel.add(MoreInfo.getInfoPanel(g, this));
 	}
 
 //	public void setSelectedInfoPanel(InfoPanel ip)
