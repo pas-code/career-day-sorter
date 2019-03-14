@@ -275,4 +275,9 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	    return TYPE_NUM;
 	}
 
+	@Override
+	public String getIdentifier() {
+		return getFullName();
+	}
+
 }

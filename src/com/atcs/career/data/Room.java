@@ -75,4 +75,9 @@ public byte getTypeNum()
 {
     return TYPE_NUM;
 }
+
+@Override
+public String getIdentifier() {
+	return roomNumber;
+}
 }

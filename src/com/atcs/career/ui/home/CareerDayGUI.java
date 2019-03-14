@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
@@ -39,9 +42,12 @@ public class CareerDayGUI extends JPanel {
 	public static final int PREF_H = 700;
 	private byte selectedPeriod = 1;
 	private byte numberOfPeriods;
-	private JPanel east, west;
-	private JLabel title;
-	private ArrayList<JButton> periods;
+//	private JPanel east, west;
+//	private JLabel title;
+//	private ArrayList<JButton> periods;
+	private ArrayList<JList<GuiListable>> lists;
+	private JPanel centerPanel;
+	private SearchBar<GuiListable> centerSearch;
 	private JTabbedPane tabs;
 	private Font bigFont;
 	private Font smallFont;
@@ -77,20 +83,25 @@ public class CareerDayGUI extends JPanel {
 	
 	private void layoutConfig() {
 		// title
-		title = new JLabel("Event Scheduler", SwingConstants.CENTER);
+		JLabel title = new JLabel("Event Scheduler", SwingConstants.CENTER);
 		title.setFont(bigFont);
 		this.add(title, BorderLayout.NORTH);
+		
 		// east panel
-		east = new JPanel();
+		JPanel east = new JPanel();
 		east.setPreferredSize(new Dimension(200, 0));
-//		info = new JTextArea("A Dude\nA Student\nAnother Student");
-//		info.setFont(smallFont);
-//		east.add(info);
 		this.add(east, BorderLayout.EAST);
+		
+		// center panel
+		centerPanel = new JPanel(new BorderLayout());
+		centerSearch = new SearchBar<GuiListable>();
+		centerPanel.add(centerSearch, BorderLayout.NORTH);
+		this.add(centerPanel, BorderLayout.CENTER);
+		
 		// west panel
-		west = new JPanel(new GridLayout(0, 1));
+		JPanel west = new JPanel(new GridLayout(0, 1));
 		west.setPreferredSize(new Dimension(100,0));
-		periods = new ArrayList<JButton>();
+		ArrayList<JButton> periods = new ArrayList<JButton>();
 		for (int i = 1; i < numberOfPeriods; i++) {
 			JButton period = new JButton("Period " + i);
 			period.setFont(smallFont);
@@ -105,32 +116,37 @@ public class CareerDayGUI extends JPanel {
 
 	public void tabConfig() {
 		tabs = new JTabbedPane();
-		
+		lists = new ArrayList<JList<GuiListable>>();
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());
 		addTab(event.getStudents());
 		addTab(event.getRooms());
-		this.add(tabs, BorderLayout.CENTER);
+		
+		centerSearch.setList(lists.get(0), true);
+		
+		tabs.addChangeListener(new ChangeListener() {
+	        public void stateChanged(ChangeEvent e) {
+	            System.out.println("Tab: " + tabs.getSelectedIndex());
+	            centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+	        }
+	    });
+		centerPanel.add(tabs, BorderLayout.CENTER);
 	}
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
 	private void addTab(ArrayList<?> eventData) {
 		// sessions panel
-		JPanel ScrollBackPanel = new JPanel();
-		ScrollBackPanel.setLayout(new BorderLayout());
-		ScrollBackPanel.setBackground(Color.white);
-		JPanel sessionPanelHolder = new JPanel();
-		sessionPanelHolder.setLayout(new GridLayout(0, 1));
-		ScrollBackPanel.add(sessionPanelHolder, BorderLayout.NORTH);
-		
-		for (int i = 0; i < eventData.size(); i++) {
-//			System.out.println("Added " + ((GuiListable) eventData.get(i)).getType());
-			InfoPanel infoPanel = new InfoPanel((GuiListable) eventData.get(i), east, this);
-			sessionPanelHolder.add(infoPanel);
-//			infoPanel.getMoreInfoPanel()
-		}
+		JPanel scrollBackPanel = new JPanel();
+		scrollBackPanel.setLayout(new BorderLayout());
+		scrollBackPanel.setBackground(Color.white);
 
-		JScrollPane sessionScroll = new JScrollPane(ScrollBackPanel);
+		JList<GuiListable> infoList = new JList<GuiListable>(eventData.toArray(new GuiListable[eventData.size()]));
+		infoList.setCellRenderer(new ListableRenderer());
+		lists.add(infoList);
+		
+		scrollBackPanel.add(infoList, BorderLayout.NORTH);
+
+		JScrollPane sessionScroll = new JScrollPane(scrollBackPanel);
 		sessionScroll.getVerticalScrollBar().setUnitIncrement(10);
 		sessionScroll.getVerticalScrollBar().setValue(1);
 		System.out.println(eventData);

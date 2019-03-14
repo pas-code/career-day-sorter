@@ -12,7 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -23,7 +25,12 @@ import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
 
-public class InfoPanel extends JPanel implements MouseListener
+/**
+ * @deprecated
+ * @author Thomas Varano
+ *
+ */
+public class InfoPanel extends JPanel implements MouseListener, ListCellRenderer<GuiListable>
 {
     private JPanel titlePanel;
     private JPanel infoPanel;
@@ -236,4 +243,11 @@ public class InfoPanel extends JPanel implements MouseListener
     public void mouseExited(MouseEvent e)
     {
     }
+
+	@Override
+	public Component getListCellRendererComponent(
+			JList<? extends GuiListable> list, GuiListable value, int index,
+			boolean isSelected, boolean cellHasFocus) {
+		return this;
+	}
 }

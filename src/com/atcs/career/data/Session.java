@@ -140,4 +140,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	    return TYPE_NUM;
 	}
 
+	@Override
+	public String getIdentifier() {
+		return title + speaker;
+	}
+
 }

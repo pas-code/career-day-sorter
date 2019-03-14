@@ -29,6 +29,11 @@ import com.atcs.career.data.Student;
 // then create subclasses for each type. (room, event, session, etc)
 // syntax MoreInfo.Room()
 
+/**
+ * @deprecated
+ * @author Thomas Varano
+ *
+ */
 public class MoreInfoGeneral extends JPanel 
 {
    private static final long serialVersionUID = 1L;

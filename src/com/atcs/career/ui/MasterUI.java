@@ -43,6 +43,7 @@ public class MasterUI {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("java.version"));
 		new MasterUI().openWelcome();
 	}
 }
