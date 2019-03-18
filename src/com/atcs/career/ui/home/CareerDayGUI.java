@@ -124,9 +124,11 @@ public class CareerDayGUI extends JPanel {
 		west.setPreferredSize(new Dimension(100,0));
 		for (int i = 0; i < numberOfPeriods; i++) {
 			JButton period = new JButton("Period " + i + 1);
+			// it didn't work without this. leave it
+			int perInd = i;
 			period.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 changePeriod(i);
+					 changePeriod(perInd);
 				}
 			});
 			period.getInsets().set(50, 50, 50, 50);
