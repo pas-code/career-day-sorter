@@ -21,6 +21,10 @@ public class Algorithms{
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
+   public static void sort(Event e) {
+   	myBigFatGreekWethod(e.getStudents(), e.getMasterStudents(), e.getRooms(), e.getSessions());
+   }
+   
    //BIG METHOD THAT DOES EVERYTHING
    public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
       System.out.println("Method 1 Starting");
@@ -231,12 +235,18 @@ public class Algorithms{
    
    
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
+   	System.out.println("begin backfill");
+   	System.out.println(toBeRandomlyAssigned);
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
-            Session session = getLeastPopulatedSessionPerPeriod(sessions, i);
+            Session sessionToAssign = getLeastPopulatedSessionPerPeriod(sessions, i);
             Student stud = toBeRandomlyAssigned.get(i).remove(j);
-            session.getStudents().get(i).add(stud);
-            stud.getAssignments().set(i, session);
+            System.out.println("assigning "+stud.getAssignments());
+            sessionToAssign.getStudents().get(i).add(stud);
+            if (stud.getAssignments().size() <= i)
+            	stud.getAssignments().add(sessionToAssign);
+            else
+            	stud.getAssignments().set(i, sessionToAssign);
          }
       }
    }

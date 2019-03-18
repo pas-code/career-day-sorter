@@ -17,8 +17,6 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private boolean isSwitchable;
 	private boolean submitted;
 
-	private byte TYPE_NUM  = 1;
-
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
 				null, 100, true);
@@ -51,46 +49,27 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	/**
 	 * Student Constructor used for ArrayList of Students who submitted
+	 * 
 	 * @param lName
 	 * @param fName
 	 * @param email
 	 * @param requests
 	 * @param timeEntered
 	 */
-	public Student(String lName, String fName, String email,
-	      ArrayList<Session> requests, int timeEntered) {
-	   this.lName = lName;
-	   this.fName = fName;
-	   this.email = email;
-	   this.requests = requests;
-	   grade = getGradeFromEmail();
-	   priority = getStudentPriority();
-	   this.timeEntered = timeEntered;
-	   this.assignments = new ArrayList<Session>();
-	   this.submitted = true;
+	public Student(String lName, String fName, String email, ArrayList<Session> requests, int timeEntered) {
+		this(lName, fName, email, requests, timeEntered, true);
 	}
 
 	/**
 	 * Student Constructor used for master ArrayList of Students
+	 * 
 	 * @param lName
 	 * @param fName
 	 * @param email
 	 */
-   public Student(String lName, String fName, String email) {
-      this.lName = lName;
-      this.fName = fName;
-      this.email = email;
-      this.requests = new ArrayList<Session>();
-      grade = getGradeFromEmail();
-      priority = getStudentPriority();
-      this.timeEntered = 0;
-      submitted = false;
-   }
-   
-
-   public boolean equals(Student s){
-      return email.equals(s.getEmail());
-   }
+	public Student(String lName, String fName, String email) {
+		this(lName, fName, email, new ArrayList<Session>(), 0, false);
+	}
 
 	/**
 	 * Returns 0 if an invalid email is used
@@ -127,17 +106,17 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		return 0;
 	}
 
-	public int getPeriodOfLeastDesired(){
-	   int leastDesiredPeriodIndex = 0;
-	   for(int i = 1; i < assignments.size(); i++){
-	      if(requests.indexOf(assignments.get(i)) == -1)
-	         return i;
-	      if(requests.indexOf(assignments.get(i)) > requests.indexOf(assignments.get(leastDesiredPeriodIndex)))
-	         leastDesiredPeriodIndex = i;
-	   }
-	   return leastDesiredPeriodIndex;
+	public int getPeriodOfLeastDesired() {
+		int leastDesiredPeriodIndex = 0;
+		for (int i = 1; i < assignments.size(); i++) {
+			if (requests.indexOf(assignments.get(i)) == -1) return i;
+			if (requests.indexOf(assignments.get(i)) > requests
+					.indexOf(assignments.get(leastDesiredPeriodIndex)))
+				leastDesiredPeriodIndex = i;
+		}
+		return leastDesiredPeriodIndex;
 	}
-	
+
 	public String getlName() {
 		return lName;
 	}
@@ -205,18 +184,23 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	public void setStudentPriority(Priority newPriority) {
 		this.priority = newPriority;
 	}
-	
+
 	@Override
-   public boolean equals(Object obj) {
-      Student otherStudent = (Student) obj;
-      return this.getFullName().equals(otherStudent.getFullName()) && this.getGrade() == otherStudent.getGrade();
-   }
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Student))
+			return false;
+		Student otherStudent = (Student) obj;
+		return this.getFullName().equals(otherStudent.getFullName())
+				&& this.getGrade() == otherStudent.getGrade();
+	}
 
 	@Override
 	public String toString() {
-		return "Student: [" + fName + " " + lName + "] [email: " + email
+		return getFullName();
+		/* return "Student: [" + fName + " " + lName + "] [email: " + email
 				+ "] [grade: " + grade + "] [timeEntered: " + timeEntered
 				+ "] [priority: " + priority + "]";
+				*/
 	}
 
 	@Override
@@ -259,20 +243,12 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		return "Student";
 	}
 
-   public boolean isSwitchable()
-   {
-      return isSwitchable;
-   }
+	public boolean isSwitchable() {
+		return isSwitchable;
+	}
 
-   public void setSwitchable(boolean isSwitchable)
-   {
-      this.isSwitchable = isSwitchable;
-   }
-
-	@Override
-	public byte getTypeNum()
-	{
-	    return TYPE_NUM;
+	public void setSwitchable(boolean isSwitchable) {
+		this.isSwitchable = isSwitchable;
 	}
 
 	@Override

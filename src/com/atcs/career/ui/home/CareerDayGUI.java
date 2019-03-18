@@ -5,12 +5,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -20,6 +23,7 @@ import javax.swing.event.ChangeListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
+import com.atcs.career.logic.Algorithms;
 import com.atcs.career.resources.FontManager;
 
 //Jarrett Bierman & Edward Fominykh
@@ -52,11 +56,11 @@ public class CareerDayGUI extends JPanel {
 	private Font smallFont;
 	private Event event;
 	
-	public CareerDayGUI(Event event, byte numberOfPeriods) {
-        this.event = event;
-        this.numberOfPeriods = numberOfPeriods;
-        gui();
-    }
+//	public CareerDayGUI(Event event, byte numberOfPeriods) {
+//        this.event = event;
+//        this.numberOfPeriods = numberOfPeriods;
+//        gui();
+//    }
 	
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -69,26 +73,44 @@ public class CareerDayGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		bigFont = FontManager.finalFont(40f);
 		smallFont = FontManager.finalFont(15f);
-		new ArrayList<SessionInfoUtil>();
 		layoutConfig();
 		tabConfig();
-//		makeWindow();
 	}
 
-//	private void refresh()
-//	{
-//	    
-//	}
+	private void refresh() {
+	    
+	}
+	
+	private void sort() {
+		// make sure they definitiely want to do it.
+		boolean confirmation = JOptionPane.showConfirmDialog(null, 
+				"Running the sorting algorithm will remove all previous assignments."
+				+ "\nAre you sure you want to continue?", "Confirm Sort", JOptionPane.YES_NO_OPTION, 
+				JOptionPane.WARNING_MESSAGE, null) == 0;
+		if (confirmation)
+			Algorithms.sort(event);
+		System.out.println("completed sort");
+	}
+	
 	
 	private void layoutConfig() {
 		// title
+		JPanel north = new JPanel(new BorderLayout());
 		JLabel title = new JLabel("Event Scheduler", SwingConstants.CENTER);
 		title.setFont(bigFont);
-		this.add(title, BorderLayout.NORTH);
+		north.add(title, BorderLayout.CENTER);
+		JButton sort = new JButton("Run Algorithm");
+		sort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sort();
+			}
+		});
+		north.add(sort, BorderLayout.EAST);
+		this.add(north, BorderLayout.NORTH);
 		
 		// east panel
 		eastPanel = new JPanel();
-		eastPanel.setPreferredSize(new Dimension(200, 0));
+//		eastPanel.setPreferredSize(new Dimension(230, 0));
 		this.add(eastPanel, BorderLayout.EAST);
 		
 		// center panel
@@ -100,15 +122,16 @@ public class CareerDayGUI extends JPanel {
 		// west panel
 		JPanel west = new JPanel(new GridLayout(0, 1));
 		west.setPreferredSize(new Dimension(100,0));
-		ArrayList<JButton> periods = new ArrayList<JButton>();
-		for (int i = 1; i < numberOfPeriods; i++) {
-			JButton period = new JButton("Period " + i);
+		for (int i = 0; i < numberOfPeriods; i++) {
+			JButton period = new JButton("Period " + i + 1);
+			period.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					 changePeriod(i);
+				}
+			});
+			period.getInsets().set(50, 50, 50, 50);
 			period.setFont(smallFont);
-			periods.add(period);
-		}
-		for (int i = 0; i < periods.size(); i++) {
-			periods.get(i).getInsets().set(50, 50, 50, 50);
-			west.add(periods.get(i));
+			west.add(period);
 		}
 		this.add(west, BorderLayout.WEST);
 	}
@@ -174,20 +197,18 @@ public class CareerDayGUI extends JPanel {
 	}
 	
 	public void setMoreInfo(GuiListable g) {
-		if (g.equals(listed))
+		if (listed != null && g.equals(listed))
 			return;
 		eastPanel.removeAll();
 		eastPanel.add(MoreInfo.getInfoPanel(g, this));
+		listed = g;
+		eastPanel.revalidate();
 	}
 
-//	public void setSelectedInfoPanel(InfoPanel ip)
-//	{
-//	    selectedInfoPanel.setSelected(false);
-//	    ip.setSelected(true);
-//	    selectedInfoPanel = ip;
-//	}
+	public void changePeriod(int periodIndex) {
+		System.out.println("change period to "+periodIndex);
+	}
 	
-
 	/**
      * @return the selectedPeriod
      */

@@ -27,8 +27,6 @@ import com.atcs.career.resources.FontManager;
 
 /**
  * @deprecated
- * @author Thomas Varano
- *
  */
 public class InfoPanel extends JPanel implements MouseListener, ListCellRenderer<GuiListable>
 {
