@@ -4,23 +4,24 @@ package com.atcs.career.ui.home;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -55,9 +56,7 @@ public abstract class MoreInfo {
 		public static final int PREF_W = 230;
 		public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
-		private CareerDayGUI master;
-		// protected Event event;
-		// protected InfoPanel infoPanel;
+		protected CareerDayGUI master;
 
 		public SideInfoPanel(CareerDayGUI master) {
 			this.master = master;
@@ -78,7 +77,7 @@ public abstract class MoreInfo {
 			return master;
 		}
 		
-		protected abstract void refresh();
+		public abstract void refresh();
 		
 		public void setPeriod(byte period) {
 			refresh();
@@ -158,7 +157,7 @@ public abstract class MoreInfo {
 			this.add(north, BorderLayout.NORTH);
 		}
 
-		protected void refresh() {
+		public void refresh() {
 			System.out.println("refresh");
 			sessionName.setText(room.getResidentSessions() == null || room.getResidentSessions().length == 0 ? 
 					"No Resident Session" : room.getResidentSessions()[getPeriod()].getIdentifier());
@@ -182,8 +181,10 @@ public abstract class MoreInfo {
 	 */
 	
 	public static class StudentPanel extends SideInfoPanel {
+		private static final long serialVersionUID = 1L;
 		private Student student;
-		private JList<String> memberSessions;
+		private JList<Session> memberSessions;
+		private JPanel requestPanel;
 		public StudentPanel(Student s, CareerDayGUI master) {
 			super(master);
 			setLayout(new BorderLayout());
@@ -225,17 +226,21 @@ public abstract class MoreInfo {
 				}
 			}));
 			add(north, BorderLayout.NORTH);
+						
+			requestPanel = new JPanel(new GridLayout(0, 1));
+			requestPanel.setBorder(BorderFactory.createTitledBorder("Requests"));
+			System.out.println("STUDENT HAS REQ: "+student.getRequests());
+			for (int i = 0; i < student.getRequests().size(); i++)
+				requestPanel.add(createRequestSlot(i + 1, student.getRequests().get(i)));
+			add(requestPanel);
+			
 			
 			JPanel south = new JPanel(new GridLayout(0, 1));
 			south.setBorder(BorderFactory.createTitledBorder("Assigned Sessions"));
-//			JButton add
-			JButton add = new JButton("Add Session");
-			JButton remove = new JButton("Remove");
-			south.add(add);
-			south.add(remove);
-			remove.setEnabled(false);
+			JButton addAssignment = new JButton("Add Session");
+			JButton removeAssignment = new JButton("Remove");
 			
-			memberSessions = new JList<String>();
+			memberSessions = new JList<Session>();
 			memberSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			memberSessions.addListSelectionListener(new ListSelectionListener() {
 				@Override
@@ -244,8 +249,104 @@ public abstract class MoreInfo {
 				}
 			});
 //			student.
-			add(memberSessions);
+			south.add(memberSessions);
+			south.add(addAssignment);
+			south.add(removeAssignment);
+			removeAssignment.setEnabled(false);
 			add(south, BorderLayout.SOUTH);
+			refresh();
+		}
+		
+		private JPanel createRequestSlot(int choice, Session request) {
+			JPanel ret = new JPanel(new BorderLayout());
+			ret.add(new JLabel(choice + ":"), BorderLayout.WEST);
+			JTextField title = sessionSearchField();
+			title.setText(request == null ? "" : request.getTitle());
+			ret.add(title);
+			JButton remove = new JButton("Remove");
+			remove.addActionListener(e -> {
+				removeRequest(ret);
+				if (request != null)
+					student.getRequests().remove(request);
+			});
+			ret.add(remove, BorderLayout.EAST);
+			return ret;
+		}
+		
+		private void removeRequest(JPanel requestSlot) {
+			int amountSlots = 0;
+			for (Component c : requestPanel.getComponents())
+				if (c instanceof JPanel)
+					amountSlots++;
+				else 
+					break;
+			System.out.println("count="+requestPanel.getComponentCount());
+			boolean alreadyUnder = amountSlots < Student.MAX_REQUESTS;
+			requestPanel.remove(requestSlot);
+			for (int i = 0; i < amountSlots - 1; i++)
+				((JLabel) ((JPanel)requestPanel.getComponent(i)).getComponent(0)).setText((i + 1) + ": ");
+			if (!alreadyUnder) {
+				JButton addButton = new JButton("Add Request");
+				addButton.addActionListener(e -> {
+					addRequest(addButton);
+				});
+				requestPanel.add(addButton);
+			}
+			requestPanel.revalidate();
+		}
+		
+		private void addRequest(JButton target) {
+			requestPanel.add(createRequestSlot(requestPanel.getComponentCount(), null),
+					requestPanel.getComponentCount() - 1);
+			if (requestPanel.getComponents().length - 1 >= Student.MAX_REQUESTS) 
+				requestPanel.remove(target);
+			requestPanel.revalidate();
+		}
+		
+		private JTextField sessionSearchField() {
+			JTextField searchBar = new JTextField();
+			searchBar.addActionListener(e -> {
+				// check if the session is valid. if not, tell them
+				for (Session s : master.getEvent().getSessions())
+					if (s.getTitle().equals(searchBar.getText())) {
+						submitNewRequest(s);
+						return;
+					}
+				//notify not found and reset text?
+			});
+			//auto-complete
+			searchBar.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {}
+				@Override
+				public void keyPressed(KeyEvent e) {}
+				@Override
+				public void keyReleased(KeyEvent e) {
+					final int maxAmtResults = 5;
+					ArrayList<Session> resultData = new ArrayList<Session>();
+					for (Session s : master.getEvent().getSessions()) 
+						if (s.getIdentifier().toLowerCase().contains(searchBar.getText().toLowerCase()))
+							resultData.add(s);
+					if (resultData.isEmpty()) return;
+					JPopupMenu results = new JPopupMenu();
+					for (int i = 0; i < Math.min(maxAmtResults, resultData.size()); i++) {
+						JMenuItem addition = new JMenuItem(resultData.get(i).getTitle());
+						final int index = i;
+						addition.addActionListener(e1 -> {
+							searchBar.setText(resultData.get(index).getTitle());
+							submitNewRequest(resultData.get(index));
+						});
+						results.add(addition);
+					}
+					results.show(searchBar, 0, searchBar.getHeight() - 3);
+					searchBar.requestFocus();
+				}
+			});
+			return searchBar;
+		}
+		
+		private void submitNewRequest(Session s) {
+			
 		}
 		
 		private JPanel createInfoField(String title, Object data, ActionListener action) {
@@ -258,92 +359,9 @@ public abstract class MoreInfo {
 		}
 		
 		
-		protected void refresh() {
+		public void refresh() {
 			System.out.println("refresh");
-		}
-	}
-	
-	
-	public static class StudentPanel1 extends SideInfoPanel {
-		private static final long serialVersionUID = 1L;
-		// Student instance variables (scrollPane already created with Room)
-		// DELETE
-		private JButton editStudentName, editStudentEmail;
-
-		private JTextField studentfName, studentlName, studentEmail;
-
-		public StudentPanel1(Student student, CareerDayGUI master) {
-			super(master);
-			studentfName = new JTextField(student.getfName());
-			studentfName.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(FocusEvent e) {
-
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					student.setfName(studentfName.getText());
-				}
-
-			});
-			studentlName = new JTextField(student.getlName());
-			studentlName.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(FocusEvent e) {
-
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					student.setlName(studentlName.getText());
-
-				}
-
-			});
-			studentEmail = new JTextField(student.getEmail());
-			studentEmail.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					student.setEmail(studentEmail.getText());
-
-				}
-
-			});
-
-			setLayout(new BorderLayout());
-
-			JPanel north = new JPanel(new GridLayout(2, 1));
-			JPanel center = new JPanel(new BorderLayout());
-
-			north.add(studentfName);
-			north.add(studentlName);
-			north.add(studentEmail);
-
-			add(center, BorderLayout.CENTER);
-			String studentNames[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-					"J"};
-			JList<String> listNames = new JList<String>(studentNames);
-			listNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			JScrollPane scrollPane = new JScrollPane(listNames);
-
-			setBorder(BorderFactory.createTitledBorder(null, "TITLE",
-					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
-					new Font("Arial", Font.PLAIN, 20), Color.BLACK));
-
-			center.add(scrollPane);
-
-		}
-		
-		protected void refresh() {
-			System.out.println("REFresh");
+			memberSessions.setListData(student.getAssignments().toArray(new Session[student.getAssignments().size()]));
 		}
 	}
 
@@ -353,8 +371,7 @@ public abstract class MoreInfo {
 		private JButton editStudent, addStudent, removeStudent;
 		private JTextField speakerName, classroomNumber;
 		private Session session;
-		private JList listStudents;
-		DefaultListModel<String> model;
+		private JList<Student> listStudents;
 
 		public SessionPanel(Session session, CareerDayGUI master) {
 			super(master);
@@ -364,61 +381,10 @@ public abstract class MoreInfo {
 			removeStudent = new JButton("Remove Student");
 
 			speakerName = new JTextField(session.getSpeaker());
-			speakerName.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(FocusEvent e) {
-
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					session.setSpeaker(speakerName.getText());
-					System.out.println("speaker name saved");
-				}
-
-			});
 
 			classroomNumber = new JTextField("255");// session.getRoom().getRoomNumber());
-			classroomNumber.addFocusListener(new FocusListener() {
 
-				@Override
-				public void focusGained(FocusEvent e) {
-
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-
-					session.getRoom().setRoomNumber(classroomNumber.getText());
-
-				}
-
-			});
-
-			addStudent.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Student s;
-					JTextField last = new JTextField("Last Name"),
-							first = new JTextField("First Name"),
-							email = new JTextField("email@email");
-					JTextField[] fields = {last, first, email};
-					JOptionPane.showConfirmDialog(null, fields,
-							"Enter Last Name, First Name, Email",
-							JOptionPane.OK_CANCEL_OPTION);
-					s = new Student(last.getText(), first.getText(), email.getText(),
-							new ArrayList<Session>(), 9999999);
-					// System.out.println(s);
-					session.getStudents().get(0).add(s);
-					addStudentToList(s);
-
-					// add this new student to the list of students of this event
-					// LATER once we figure it out
-				}
-			});
-
-			generalSetup();
+			
 
 			setLayout(new BorderLayout());
 
@@ -428,12 +394,11 @@ public abstract class MoreInfo {
 
 			add(center, BorderLayout.CENTER);
 
-			model = new DefaultListModel<String>();
 
-			listStudents = new JList<String>(model);
+			listStudents = new JList<Student>();
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
-			populateList(0);
+			populateList(getPeriod());
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
 					TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
@@ -481,17 +446,15 @@ public abstract class MoreInfo {
 
 		public void populateList(int period) {
 			// model = new DefaultListModel<String>();
-			for (Student s : session.getStudents().get(period))
-				model.addElement(s.getFullName());
+			listStudents.setListData(
+					session.getStudents().get(period).toArray(new Student[session.getStudents().get(period).size()]));
 			listStudents.revalidate();
 		}
 
-		public void addStudentToList(Student s) {
-			model.addElement(s.getFullName());
-		}
-
-		protected void refresh() {
+		public void refresh() {
 			System.out.println("refresh");
+			System.out.println("getting period "+getPeriod());
+			populateList(getPeriod());
 		}
 	}
 

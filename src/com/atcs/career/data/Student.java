@@ -10,6 +10,7 @@ import java.util.Calendar;
 public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	private static final long serialVersionUID = 2820547053629559120L;
+	public static int MAX_REQUESTS = 5;
 	private String lName, fName, email;
 	private ArrayList<Session> requests, assignments;
 	private int grade, timeEntered;

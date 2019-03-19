@@ -3,14 +3,13 @@
 
 package com.atcs.career.data;
 
-import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.logic.Algorithms;
 
 public class Event implements Serializable {
 
@@ -26,33 +25,11 @@ public class Event implements Serializable {
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
+	private LocalDate dateLastModified;
 	private byte numberOfPeriods;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
-	//HOLD ALGORITHM DATA IN OBJECT
-	// nvm, algorithm data is staying as static
-
-	// TESTING
-	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		Event e = testEvent();
-//		Event e = new Event();
-		System.out.println("WHAT");
-		FileHandler.save(e);
-//		e = FileHandler.load(CSVReader.getFileLocation(".event"));
-//		System.out.println(e.getStudents());
-//		System.out.println(e.getRooms());
-//		System.out.println(e.getSessions());
-		
-		
-		ArrayList<Student> master = new ArrayList<Student>();
-		Algorithms.myBigFatGreekWethod(e.students, master, e.rooms, e.sessions);
-		
-		
-//		for(int i = 0; i < e.sessions.size(); i++){
-//		   System.out.println(e.sessions.toString());
-//		}		
-	}
 
 	/**
 	 * Creates a new Event from scratch
@@ -137,6 +114,11 @@ public class Event implements Serializable {
 	public void selectSessionFile() {
 		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		amountOfSessions = sessions.size();
+	}
+	
+	public void save() {
+		dateLastModified = LocalDate.now();
+		FileHandler.save(this);
 	}
 
 	public int getAmountOfSessions() {
@@ -254,6 +236,14 @@ public class Event implements Serializable {
 
 	public static String extractEventName(String saveFileName) {
 		return saveFileName.substring(0, saveFileName.indexOf(FileHandler.SUFFIX));
+	}
+	
+	public LocalDate getLastModified() {
+		return dateLastModified;
+	}
+	
+	public void setLastModified(LocalDate date) {
+		this.dateLastModified = date;
 	}
 	
 	public String toString() {

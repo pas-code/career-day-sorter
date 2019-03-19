@@ -235,8 +235,6 @@ public class Algorithms{
    
    
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
-   	System.out.println("begin backfill");
-   	System.out.println(toBeRandomlyAssigned);
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
             Session sessionToAssign = getLeastPopulatedSessionPerPeriod(sessions, i);

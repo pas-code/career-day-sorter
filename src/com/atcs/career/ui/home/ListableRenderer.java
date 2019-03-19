@@ -18,6 +18,7 @@ import javax.swing.border.Border;
 import com.atcs.career.data.GuiListable;
 
 public class ListableRenderer extends JPanel implements ListCellRenderer<GuiListable>, FocusListener {
+	private static final long serialVersionUID = 1L;
 	private CareerDayGUI master;
 	
 	public ListableRenderer(CareerDayGUI master) {
@@ -32,7 +33,6 @@ public class ListableRenderer extends JPanel implements ListCellRenderer<GuiList
 		this.add(new JLabel("Students: " + g.getInfo(1)));
 		if (isSelected)
 			master.setMoreInfo(g);
-//		this.setBackground(isSelected ? Color.RED : Color.WHITE);
 	}
 	
 	@Override

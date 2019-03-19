@@ -13,8 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -23,16 +25,16 @@ import javax.swing.event.ChangeListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
+import com.atcs.career.data.Student;
 import com.atcs.career.logic.Algorithms;
 import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
 
 /*
  * TODO 
- * sort button
- * sort students
  * search students
  * save button
  * session names??
@@ -47,20 +49,16 @@ public class CareerDayGUI extends JPanel {
 	private byte selectedPeriod = 1;
 	private byte numberOfPeriods;
 	private GuiListable listed;
+	private SideInfoPanel infoPanel;
 	private ArrayList<JList<GuiListable>> lists;
-	private JPanel centerPanel;
 	private SearchBar<GuiListable> centerSearch;
 	private JTabbedPane tabs;
-	private Font bigFont;
 	private JPanel eastPanel;
-	private Font smallFont;
-	private Event event;
 	
-//	public CareerDayGUI(Event event, byte numberOfPeriods) {
-//        this.event = event;
-//        this.numberOfPeriods = numberOfPeriods;
-//        gui();
-//    }
+	private Font bigFont;
+	private Font smallFont;
+	
+	private Event event;
 	
 	public CareerDayGUI(Event event) {
 		this.event = event;
@@ -73,23 +71,32 @@ public class CareerDayGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		bigFont = FontManager.finalFont(40f);
 		smallFont = FontManager.finalFont(15f);
-		layoutConfig();
 		tabConfig();
+		layoutConfig();
 	}
 
 	private void refresh() {
-	    
+	    //TODO refresh
+		tabs.removeAll();
+		tabConfig();
+		centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+		revalidate();
 	}
 	
 	private void sort() {
-		// make sure they definitiely want to do it.
+		// make sure they definitely want to do it.
 		boolean confirmation = JOptionPane.showConfirmDialog(null, 
 				"Running the sorting algorithm will remove all previous assignments."
 				+ "\nAre you sure you want to continue?", "Confirm Sort", JOptionPane.YES_NO_OPTION, 
 				JOptionPane.WARNING_MESSAGE, null) == 0;
 		if (confirmation)
 			Algorithms.sort(event);
-		System.out.println("completed sort");
+		
+		System.out.println("completed sort\n\n");
+		System.out.println(event.getSessions().get(0).getStudents().get(0));
+		System.out.println(event.getSessions().get(0).getStudents().get(1));
+		System.out.println(event.getSessions().get(0).getStudents().get(2));
+		
 	}
 	
 	
@@ -106,6 +113,45 @@ public class CareerDayGUI extends JPanel {
 			}
 		});
 		north.add(sort, BorderLayout.EAST);
+		
+		JButton addElem = new JButton("+");
+		addElem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("add elem");
+				JPopupMenu popupMenu = new JPopupMenu();
+
+				JMenuItem item = new JMenuItem("Add Session");
+				item.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						event.getSessions().add(ElementCreator.createSession());
+						refresh();
+					}
+				});
+				popupMenu.add(item);
+
+				item = new JMenuItem("Add Student");
+				item.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Student add = ElementCreator.createStudent();
+						event.getMasterStudents().add(add);
+						event.getStudents().add(add);
+						System.out.println(event.getMasterStudents().indexOf(add));
+					}
+				});
+				popupMenu.add(item);
+				
+				item = new JMenuItem("Add Room");
+				item.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						event.getRooms().add(ElementCreator.createRoom());
+						refresh();
+					}
+				});
+				popupMenu.add(item);
+				popupMenu.show(addElem, addElem.getWidth() - 25, addElem.getHeight() - 5);
+			}
+		});
+		north.add(addElem, BorderLayout.WEST);
 		this.add(north, BorderLayout.NORTH);
 		
 		// east panel
@@ -114,8 +160,16 @@ public class CareerDayGUI extends JPanel {
 		this.add(eastPanel, BorderLayout.EAST);
 		
 		// center panel
-		centerPanel = new JPanel(new BorderLayout());
+		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerSearch = new SearchBar<GuiListable>();
+		centerSearch.setList(lists.get(0), true);
+		
+		tabs.addChangeListener(new ChangeListener() {
+	        public void stateChanged(ChangeEvent e) {
+	            System.out.println("Tab: " + tabs.getSelectedIndex());
+	            centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+	        }
+	    });
 		centerPanel.add(centerSearch, BorderLayout.NORTH);
 		this.add(centerPanel, BorderLayout.CENTER);
 		
@@ -123,12 +177,12 @@ public class CareerDayGUI extends JPanel {
 		JPanel west = new JPanel(new GridLayout(0, 1));
 		west.setPreferredSize(new Dimension(100,0));
 		for (int i = 0; i < numberOfPeriods; i++) {
-			JButton period = new JButton("Period " + i + 1);
+			JButton period = new JButton("Period " + (i + 1));
 			// it didn't work without this. leave it
 			int perInd = i;
 			period.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 changePeriod(perInd);
+					 changePeriod((byte)perInd);
 				}
 			});
 			period.getInsets().set(50, 50, 50, 50);
@@ -136,6 +190,7 @@ public class CareerDayGUI extends JPanel {
 			west.add(period);
 		}
 		this.add(west, BorderLayout.WEST);
+		centerPanel.add(tabs, BorderLayout.CENTER);
 	}
 
 	public void tabConfig() {
@@ -145,16 +200,6 @@ public class CareerDayGUI extends JPanel {
 		addTab(event.getSessions());
 		addTab(event.getStudents());
 		addTab(event.getRooms());
-		
-		centerSearch.setList(lists.get(0), true);
-		
-		tabs.addChangeListener(new ChangeListener() {
-	        public void stateChanged(ChangeEvent e) {
-	            System.out.println("Tab: " + tabs.getSelectedIndex());
-	            centerSearch.setList(lists.get(tabs.getSelectedIndex()));
-	        }
-	    });
-		centerPanel.add(tabs, BorderLayout.CENTER);
 	}
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
@@ -202,13 +247,17 @@ public class CareerDayGUI extends JPanel {
 		if (listed != null && g.equals(listed))
 			return;
 		eastPanel.removeAll();
-		eastPanel.add(MoreInfo.getInfoPanel(g, this));
+		MoreInfo.SideInfoPanel info = MoreInfo.getInfoPanel(g, this);
+		eastPanel.add(info);
+		infoPanel = info;
 		listed = g;
 		eastPanel.revalidate();
 	}
 
-	public void changePeriod(int periodIndex) {
+	public void changePeriod(byte periodIndex) {
 		System.out.println("change period to "+periodIndex);
+		this.selectedPeriod = periodIndex;
+		if (infoPanel != null) infoPanel.refresh();
 	}
 	
 	/**

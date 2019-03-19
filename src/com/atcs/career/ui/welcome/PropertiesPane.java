@@ -12,6 +12,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.time.LocalDate;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -205,6 +207,7 @@ public class PropertiesPane extends JPanel {
 			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
 		
 		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
+		ret.setLastModified(LocalDate.now());
 		return ret;
 	}
 
