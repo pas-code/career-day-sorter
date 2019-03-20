@@ -6,10 +6,13 @@ package com.atcs.career.ui;
 import javax.swing.JFrame;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.io.file.FileHandler;
+import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.welcome.WelcomeScreen;
 
 public class MasterUI {
 	private Event masterEvent;
+	private CareerDayGUI mainGui;
 	
 	public MasterUI() {
 	}
@@ -24,10 +27,15 @@ public class MasterUI {
 		if (e == null)
 			System.exit(0);
 		this.masterEvent = e;
+		FileHandler.save(e);
+		System.out.println(masterEvent.infoString());
+		
+		openMain();	
 	}
 	
 	public void openMain() {
-		
+		mainGui = new CareerDayGUI(masterEvent);
+		mainGui.makeWindow();
 	}
 	
 	public void setEvent(Event e) {
@@ -35,6 +43,7 @@ public class MasterUI {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("java.version"));
 		new MasterUI().openWelcome();
 	}
 }

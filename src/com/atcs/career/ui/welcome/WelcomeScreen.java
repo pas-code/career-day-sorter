@@ -254,7 +254,12 @@ public class WelcomeScreen extends JPanel {
 	
 	protected void sendEventAndClose(Event e) {
 		sendEvent(e);
-		//close
+		close();
+	}
+	
+	protected void close() {
+		// the welcome screen will always be in its own frame, so when closing, the parent frame can dispose
+		parentFrame.dispose();
 	}
 	
 	/**

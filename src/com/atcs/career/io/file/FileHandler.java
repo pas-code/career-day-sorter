@@ -63,13 +63,18 @@ public class FileHandler {
    
    public static void save(Event e){
    	try {
+   		// save new file
          String location = SAVE_DIR + e.getEventName() + SUFFIX;
          System.out.println("Create "+location);
          new File(location).createNewFile();
          ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location));
          os.writeObject(e);
          os.close();
-      
+         
+         // delete old file
+         if (e.nameChanged() && e.getOldName() != null)
+         	new File(SAVE_DIR + e.getOldName() + SUFFIX).delete();
+
       } catch(IOException i){
          i.printStackTrace();
       }

@@ -3,15 +3,13 @@
 
 package com.atcs.career.data;
 
-import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.logic.Algorithms;
 
 public class Event implements Serializable {
 
@@ -27,32 +25,10 @@ public class Event implements Serializable {
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
+	private LocalDate dateLastModified;
+	private byte numberOfPeriods;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
-	
-	//HOLD ALGORITHM DATA IN OBJECT
-	private Priority weighting;
-
-	// TESTING
-	public static void main(String[] args) throws ClassNotFoundException, IOException {
-//		Event e = testEvent();
-		Event e = new Event("LogicTest");
-		System.out.println("WHAT");
-		FileHandler.save(e);
-//		e = FileHandler.load(CSVReader.getFileLocation(".event"));
-//		System.out.println(e.getStudents());
-//		System.out.println(e.getRooms());
-//		System.out.println(e.getSessions());
-		
-		
-		ArrayList<Student> master = new ArrayList<Student>();
-		Algorithms.myBigFatGreekWethod(e.students, master, e.rooms, e.sessions);
-		
-		
-//		for(int i = 0; i < e.sessions.size(); i++){
-//		   System.out.println(e.sessions.toString());
-//		}		
-	}
 
 	/**
 	 * Creates a new Event from scratch
@@ -76,8 +52,7 @@ public class Event implements Serializable {
 		sessions = new ArrayList<Session>();
 	}
 	
-	public static Event testEvent()
-   {
+	public static Event testEvent() {
 	   Event ret = new Event();
        ArrayList<Session> sessions = ret.sessions;
        sessions.add(new Session("Business", "Donald Trump"));
@@ -113,10 +88,16 @@ public class Event implements Serializable {
        ret.students = students.get(0);
        sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
 
-       return ret;
-       
+       return ret; 
    }
 	
+	
+	public static Event readTestEvent() { 
+		Event ret = new Event();
+		ret.changeName("nameChanged");
+		
+		return ret;
+	}
 	
 
 	public void selectStudentFile() {
@@ -132,6 +113,11 @@ public class Event implements Serializable {
 	public void selectSessionFile() {
 		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		amountOfSessions = sessions.size();
+	}
+	
+	public void save() {
+		dateLastModified = LocalDate.now();
+		FileHandler.save(this);
 	}
 
 	public int getAmountOfSessions() {
@@ -232,19 +218,39 @@ public class Event implements Serializable {
 	}
 	
 	public boolean nameChanged() {
-		return !oldName.equals(eventName);
+		return oldName != null && !oldName.equals(eventName);
 	}
 	
 	public static String saveFileName(String eventName) {
 		return eventName + FileHandler.SUFFIX;
 	}
 	
+	public byte getNumberOfPeriods() {
+		return numberOfPeriods;
+	}
+
+	public void setNumberOfPeriods(byte numberOfPeriods) {
+		this.numberOfPeriods = numberOfPeriods;
+	}
+
 	public static String extractEventName(String saveFileName) {
 		return saveFileName.substring(0, saveFileName.indexOf(FileHandler.SUFFIX));
 	}
 	
+	public LocalDate getLastModified() {
+		return dateLastModified;
+	}
+	
+	public void setLastModified(LocalDate date) {
+		this.dateLastModified = date;
+	}
+	
 	public String toString() {
 		return getEventName();
+	}
+	
+	public String infoString() {
+		return getEventName()  + "\n" + masterStudents + "\n" + students + "\n" + rooms + "\n" + sessions; 
 	}
 	
 }
