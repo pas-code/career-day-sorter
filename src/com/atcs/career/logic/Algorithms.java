@@ -164,7 +164,7 @@ public class Algorithms{
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
-            if(sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesnt have enough during that period...
+            if(sessions.get(i).getAvailableThisPeriod()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesnt have enough during that period...
                do {
                   for(int k = students.size() - 1; k >= 0; k--) { //Look at every student.
                      Student currentStud = students.get(k);
@@ -196,7 +196,7 @@ public class Algorithms{
          if(sessionIndex >= 0) desiredSession = sessions.get(sessionIndex);
          
          System.out.println("FOUND SESSION: " + desiredSession);
-         if(desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity() &&
+         if(desiredSession.getAvailableThisPeriod()[period] && desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity() &&
            !currentStud.getAssignments().contains(desiredSession)){
             System.out.println("SUCCESS!");
             desiredSession.getStudents().get(period).add(currentStud);
@@ -250,7 +250,7 @@ public class Algorithms{
    private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
-         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()){
+         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size() && sessions.get(i).getAvailableThisPeriod()[period]){
             min = sessions.get(i);
          }
       }
