@@ -25,6 +25,8 @@ import javax.swing.event.ChangeListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
+import com.atcs.career.data.Room;
+import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.logic.Algorithms;
 import com.atcs.career.resources.FontManager;
@@ -71,14 +73,17 @@ public class CareerDayGUI extends JPanel {
 		this.setLayout(new BorderLayout());
 		bigFont = FontManager.finalFont(40f);
 		smallFont = FontManager.finalFont(15f);
+		tabs = new JTabbedPane();
 		tabConfig();
 		layoutConfig();
 	}
 
 	private void refresh() {
-	    //TODO refresh
+	    //TODO make refresh more efficient
+		int previouslySelectedIndex = tabs.getSelectedIndex();
 		tabs.removeAll();
 		tabConfig();
+		tabs.setSelectedIndex(previouslySelectedIndex);
 		centerSearch.setList(lists.get(tabs.getSelectedIndex()));
 		revalidate();
 	}
@@ -123,7 +128,9 @@ public class CareerDayGUI extends JPanel {
 				JMenuItem item = new JMenuItem("Add Session");
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						event.getSessions().add(ElementCreator.createSession());
+						Session s;
+						if ((s = ElementCreator.createSession()) == null) return;
+						event.getSessions().add(s);
 						refresh();
 					}
 				});
@@ -133,9 +140,11 @@ public class CareerDayGUI extends JPanel {
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Student add = ElementCreator.createStudent();
+						if (add == null) return;
 						event.getMasterStudents().add(add);
 						event.getStudents().add(add);
 						System.out.println(event.getMasterStudents().indexOf(add));
+						refresh();
 					}
 				});
 				popupMenu.add(item);
@@ -143,7 +152,9 @@ public class CareerDayGUI extends JPanel {
 				item = new JMenuItem("Add Room");
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						event.getRooms().add(ElementCreator.createRoom());
+						Room r;
+						if ((r = ElementCreator.createRoom()) == null) return;
+						event.getRooms().add(r);
 						refresh();
 					}
 				});
@@ -195,7 +206,6 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public void tabConfig() {
-		tabs = new JTabbedPane();
 		lists = new ArrayList<JList<GuiListable>>();
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());

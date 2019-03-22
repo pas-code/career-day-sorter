@@ -23,9 +23,12 @@ public class ElementCreator {
 		message.add(createInfoField("Title", fields));
 		message.add(createInfoField("Speaker", fields));
 
-		JOptionPane.showMessageDialog(null, message, "Create Session", JOptionPane.PLAIN_MESSAGE);
+//		JOptionPane.showMessageDialog(null, message, "Create Session", JOptionPane.PLAIN_MESSAGE);
 		
-		return new Session(fields.get(0).getText(), fields.get(1).getText());
+		if (JOptionPane.showConfirmDialog(null, message, "Create Session",
+				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 
+			return new Session(fields.get(0).getText(), fields.get(1).getText());
+		return null;
 	}
 	
 	public static Student createStudent() {
@@ -36,8 +39,10 @@ public class ElementCreator {
 		message.add(createInfoField("Email", fields));
 		message.add(new JLabel("Change requests in the main editor"));
 		
-		JOptionPane.showMessageDialog(null, message, "Create Student", JOptionPane.PLAIN_MESSAGE);
-		return new Student(fields.get(0).getText(), fields.get(1).getText(), fields.get(2).getText());
+		if (JOptionPane.showConfirmDialog(null, message, "Create Student",
+				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 
+			return new Student(fields.get(0).getText(), fields.get(1).getText(), fields.get(2).getText());
+		return null;
 	}
 	
 	public static Room createRoom() {
@@ -45,12 +50,17 @@ public class ElementCreator {
 		ArrayList<JTextField> fields = new ArrayList<JTextField>();
 		message.add(createInfoField("Room Name", fields));
 		message.add(createInfoField("Capacity", fields));
-		try {
-			return new Room(fields.get(0).getText(), Integer.parseInt(fields.get(1).getText()));
-		} catch (NumberFormatException e) {
-			showException(e);
-			return null;
+//		JOptionPane.showMessageDialog(null, message, "Create Room", JOptionPane.PLAIN_MESSAGE);
+		if (JOptionPane.showConfirmDialog(null, message, "Create Room",
+				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+			try {
+				return new Room(fields.get(0).getText(),Integer.parseInt(fields.get(1).getText()));
+			} catch (NumberFormatException e) {
+				showException(e);
+				// return null;
+			}
 		}
+		return null;
 		
 	}
 	
