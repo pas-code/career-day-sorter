@@ -54,7 +54,7 @@ public class Algorithms{
    }
    
    //BIG METHOD THAT DOES EVERYTHING
-   public static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
+   private static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
       System.out.println("Method 1 Starting");
       assignRoomsToSessions(students, rooms, sessions);
       System.out.println("Method 1 Done");
@@ -71,7 +71,7 @@ public class Algorithms{
       System.out.println(getSortingAccuracyAverage(students));
    }
    
-   public static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
+   private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
       double totalCont = 0;
       for(int i = 0; i < students.size(); i++){
          System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness()/50);
@@ -82,7 +82,7 @@ public class Algorithms{
    
    
    //ALGORITHM 1
-   public static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
+   private static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
       Collections.sort(rooms);
       
@@ -130,7 +130,7 @@ public class Algorithms{
    }
    
    //ALGORITHM 2
-   public static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
+   private static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
     //Creates Array Lists for Random Assignment
       for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
          toBeRandomlyAssigned.add(new ArrayList<Student>());
@@ -164,7 +164,7 @@ public class Algorithms{
    }
    
    //ALGORITHM 3
-   public static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
+   private static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
       int numOfPeriods = 3;
       for(int j = 0; j < numOfPeriods; j++) { //For each period
          for(int i = 0; i < students.size(); i++) { //Go through every student
@@ -218,7 +218,7 @@ public class Algorithms{
       //COMMENT ABOVE HERE TO STOP BACKFILL
    }
       
-   public static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
+   private static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
       System.out.println(currentStud);
       
       for(int k = 0; k < currentStud.getRequests().size(); k++){ //Check every request the student makes
@@ -251,7 +251,7 @@ public class Algorithms{
       changeStudentContentness(currentStud); //Deals with contentness
    }
    
-   public static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
+   private static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
       int minCapacity = 10;
       for(int i = 0; i < sessions.size(); i++) {
          for(int j=0; j < sessions.get(i).getStudents().size(); j++){
@@ -263,7 +263,7 @@ public class Algorithms{
    }
    
    
-   public static void assignRandomsAtEnd(ArrayList<Session> sessions){
+   private static void assignRandomsAtEnd(ArrayList<Session> sessions){
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
             Session sessionToAssign = getLeastPopulatedSessionPerPeriod(sessions, i);
@@ -303,7 +303,7 @@ public class Algorithms{
       return leastPopulatedSessions.indexOf(min);
    }
    
-   public static void changeStudentContentness(Student currentStud){
+   private static void changeStudentContentness(Student currentStud){
       int selectionsAlreadyMade = currentStud.getAssignments().size();
       
       double numerator = 0;
@@ -318,7 +318,7 @@ public class Algorithms{
       currentStud.getStudentPriority().setContentness(numerator/denominator);
    }
    
-   public static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
+   private static int findIndexOfSession(Session requestedSession, ArrayList<Session> sessions){
       for(int i = 0; i < sessions.size(); i++){
          if (sessions.get(i).getSpeaker().equals(requestedSession.getSpeaker()))
             return i;
@@ -327,7 +327,7 @@ public class Algorithms{
    }
    
    
-   public static void clearAssignments(ArrayList<Student> studentRequestList, ArrayList<Room> rooms, ArrayList<Session> sessions, int numPeriods) {
+   private static void clearAssignments(ArrayList<Student> studentRequestList, ArrayList<Room> rooms, ArrayList<Session> sessions, int numPeriods) {
    	for (Student s : studentRequestList)
    		s.setAssignments(new ArrayList<Session>());
    	for (Room r : rooms) 
