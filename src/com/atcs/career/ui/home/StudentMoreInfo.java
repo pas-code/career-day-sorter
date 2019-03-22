@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
+@Deprecated
 public class StudentMoreInfo extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {
    private static final long serialVersionUID = 1L;

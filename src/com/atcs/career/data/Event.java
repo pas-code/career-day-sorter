@@ -27,6 +27,7 @@ public class Event implements Serializable {
 	private String eventName, oldName;
 	private LocalDate dateLastModified;
 	private byte numberOfPeriods;
+	private boolean sorted;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
@@ -232,6 +233,14 @@ public class Event implements Serializable {
 
 	public void setNumberOfPeriods(byte numberOfPeriods) {
 		this.numberOfPeriods = numberOfPeriods;
+	}
+
+	public boolean isSorted() {
+		return sorted;
+	}
+
+	public void setSorted(boolean sorted) {
+		this.sorted = sorted;
 	}
 
 	public static String extractEventName(String saveFileName) {

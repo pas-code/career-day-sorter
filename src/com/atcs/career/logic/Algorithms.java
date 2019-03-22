@@ -22,7 +22,12 @@ public class Algorithms{
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
    public static void sort(Event e) {
+   	if (e.isSorted()) {
+   		clearAssignments(e.getStudents(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
+   		e.setSorted(false);
+   	}
    	myBigFatGreekWethod(e.getStudents(), e.getMasterStudents(), e.getRooms(), e.getSessions());
+   	e.setSorted(true);
    }
    
    //BIG METHOD THAT DOES EVERYTHING
@@ -89,6 +94,7 @@ public class Algorithms{
       for(int i = sessions.size() - 1; i >= 0; i--){
          if(rooms.size() > i) { //COME BACK WITH ERROR MANAGER STUFF
             sessions.get(i).setRoom(rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)));
+            rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)).setResidentSessions(new Session[] {sessions.get(i)});
          }
       }
       
@@ -295,5 +301,21 @@ public class Algorithms{
             return i;
       }
       return -1;     
+   }
+   
+   
+   public static void clearAssignments(ArrayList<Student> studentRequestList, ArrayList<Room> rooms, ArrayList<Session> sessions, int numPeriods) {
+   	for (Student s : studentRequestList)
+   		s.setAssignments(new ArrayList<Session>());
+   	for (Room r : rooms) 
+   		r.setResidentSessions(new Session[0]);
+   	for (Session s : sessions) {
+   		s.setStudents(new ArrayList<ArrayList<Student>>());
+   		s.setRoom(null);
+   		for (int i = 0; i < numPeriods; i++) 
+   			s.getStudents().add(new ArrayList<Student>());
+   	}
+   	toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
+   	
    }
 }

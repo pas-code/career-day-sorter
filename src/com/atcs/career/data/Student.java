@@ -191,8 +191,9 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		if (!(obj instanceof Student))
 			return false;
 		Student otherStudent = (Student) obj;
-		return this.getFullName().equals(otherStudent.getFullName())
-				&& this.getGrade() == otherStudent.getGrade();
+//		return this.getFullName().equals(otherStudent.getFullName())
+//				&& this.getGrade() == otherStudent.getGrade();
+		return this.getEmail().equals(otherStudent.getEmail());
 	}
 
 	@Override
@@ -210,6 +211,10 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 				- o.getStudentPriority().getPriority());
 	}
 
+	public int compareToName(Student o) {
+		return getFullName().compareTo(o.getFullName());
+	}
+	
 	@Override
 	public String getTitle() {
 		return fName + " " + lName;

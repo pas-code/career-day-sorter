@@ -46,7 +46,7 @@ public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
-	private byte selectedPeriod = 1;
+	private byte selectedPeriod = 0;
 	private byte numberOfPeriods;
 	private GuiListable listed;
 	private SideInfoPanel infoPanel;
@@ -167,7 +167,8 @@ public class CareerDayGUI extends JPanel {
 		tabs.addChangeListener(new ChangeListener() {
 	        public void stateChanged(ChangeEvent e) {
 	            System.out.println("Tab: " + tabs.getSelectedIndex());
-	            centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+	            if (tabs.getSelectedIndex() != -1)
+	            	centerSearch.setList(lists.get(tabs.getSelectedIndex()));
 	        }
 	    });
 		centerPanel.add(centerSearch, BorderLayout.NORTH);
@@ -198,7 +199,7 @@ public class CareerDayGUI extends JPanel {
 		lists = new ArrayList<JList<GuiListable>>();
 		tabs.setFont(smallFont);
 		addTab(event.getSessions());
-		addTab(event.getStudents());
+		addTab(event.getMasterStudents());
 		addTab(event.getRooms());
 	}
 

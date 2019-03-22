@@ -6,6 +6,8 @@ package com.atcs.career.io;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 import com.atcs.career.data.Room;
@@ -59,7 +61,6 @@ public class IOUtilities
          String speaker = lines.get(i)[0].substring(0, lines.get(i)[0].indexOf(" - "));
          String title = lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3);
          sessions.add(new Session(title, speaker));
-         System.out.println(sessions.get(i));
       }
       return sessions;
    }
@@ -89,7 +90,6 @@ public class IOUtilities
          
          //Adds Student object to the ArrayList to be returned
          students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true));
-         System.out.println(students.get(i-1));
       }
       return students;
    }
@@ -109,8 +109,47 @@ public class IOUtilities
          
          //Adds Student object to the ArrayList to be returned
          masterStudents.add(new Student(lastName, firstName, email));
-         System.out.println(masterStudents.get(i-1));
       }
       return masterStudents;
    }
+   
+   // combine the requests student array and master array
+   public static void combineStudentArrays(ArrayList<Student> requests, ArrayList<Student> master) {
+   	// sort the student array using names
+   	Collections.sort(requests, new Comparator<Student>() {
+			@Override
+			public int compare(Student o1, Student o2) {
+				return o1.compareToName(o2);
+			}	
+   	});
+   	int index = -1;
+   	for (int i = 0; i < master.size(); i++) 
+   		if ((index = indexOf(master.get(i), requests)) != -1) 
+   			master.set(i, requests.get(index));
+   		
+   }
+   
+   /**
+    * binary search of the requests for a student. assumes the array is sorted
+    */
+   private static int indexOf(Student target, ArrayList<Student> requests) {
+   	System.out.println("searching for "+target.getFullName());
+   	return binarySearch(requests, 0, requests.size(), target);
+   }
+   
+   private static int binarySearch(ArrayList<Student> arr, int l, int r, Student target) { 
+       if (r >= l) { 
+           int mid = l + (r - l) / 2; 
+           System.out.println(mid);
+           System.out.println(arr.get(mid));
+ 
+           if (arr.get(mid).equals(target)) 
+               return mid; 
+           if (arr.get(mid).compareToName(target) > 0) 
+               return binarySearch(arr, l, mid - 1, target); 
+           return binarySearch(arr, mid + 1, r, target); 
+       } 
+ 
+       return -1; 
+   } 
 }

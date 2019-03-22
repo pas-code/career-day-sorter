@@ -30,6 +30,7 @@ import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 
+@Deprecated
 public class ClassroomMoreInfo extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {
    private static final long serialVersionUID = 1L;

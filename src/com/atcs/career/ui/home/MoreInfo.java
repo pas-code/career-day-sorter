@@ -69,8 +69,8 @@ public abstract class MoreInfo {
 		}
 		
 		protected byte getPeriod() {
-			return 0;
-//			return master.getSelectedPeriod();
+//			return 0;
+			return master.getSelectedPeriod();
 		}
 		
 		protected CareerDayGUI getMaster() {
@@ -160,16 +160,18 @@ public abstract class MoreInfo {
 		public void refresh() {
 			System.out.println("refresh");
 			sessionName.setText(room.getResidentSessions() == null || room.getResidentSessions().length == 0 ? 
-					"No Resident Session" : room.getResidentSessions()[getPeriod()].getIdentifier());
+					"No Resident Session" :
+						// only one resident session per room, so no need for an array.
+								room.getResidentSessions()[0].getIdentifier());
 			studentList.setListData(room.getResidentSessions() == null || room.getResidentSessions().length == 0 ?
 					new Student[0] : 
 					
 					//get the current session
-					room.getResidentSessions()[getPeriod()]
+					room.getResidentSessions()[0]
 							// get that session's students for this period
 							.getStudents().get(getPeriod())
 							// turn to standard array
-									.toArray(new Student[room.getResidentSessions()[getPeriod()].getStudents()
+									.toArray(new Student[room.getResidentSessions()[0].getStudents()
 													.get(getPeriod()).size()]));
 			
 		}
@@ -229,9 +231,15 @@ public abstract class MoreInfo {
 						
 			requestPanel = new JPanel(new GridLayout(0, 1));
 			requestPanel.setBorder(BorderFactory.createTitledBorder("Requests"));
-			System.out.println("STUDENT HAS REQ: "+student.getRequests());
 			for (int i = 0; i < student.getRequests().size(); i++)
 				requestPanel.add(createRequestSlot(i + 1, student.getRequests().get(i)));
+			if (student.getRequests().size() < Student.MAX_REQUESTS) {
+				JButton addRequest = new JButton("Add Request");
+				addRequest.addActionListener(e -> {
+					addRequest(addRequest);
+				});
+				requestPanel.add(addRequest);	
+			}
 			add(requestPanel);
 			
 			
@@ -382,7 +390,7 @@ public abstract class MoreInfo {
 
 			speakerName = new JTextField(session.getSpeaker());
 
-			classroomNumber = new JTextField("255");// session.getRoom().getRoomNumber());
+			classroomNumber = new JTextField(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 
 			
 
@@ -431,13 +439,8 @@ public abstract class MoreInfo {
 
 					System.out.println("test");
 					if (listStudents.getSelectedIndex() != -1) {
-						// System.out.println(studentNames);
-						// studentNames.remove(listStudents.getSelectedIndex());
-						// System.out.println(studentNames);
 						scrollPane.revalidate();
 						scrollPane.repaint();
-						// standard = studentNames.toArray(new
-						// String[studentNames.size()]);
 					}
 				}
 			});
@@ -455,6 +458,7 @@ public abstract class MoreInfo {
 			System.out.println("refresh");
 			System.out.println("getting period "+getPeriod());
 			populateList(getPeriod());
+			classroomNumber.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 		}
 	}
 

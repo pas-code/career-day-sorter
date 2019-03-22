@@ -201,10 +201,13 @@ public class PropertiesPane extends JPanel {
 			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
 		if (checkNullPassed(allStudentFile))
 			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile));
-		if (checkNullPassed(studentFile))
+		if (checkNullPassed(studentFile)) {
 			ret.setStudents(IOUtilities.loadStudentArray(studentFile));
+			IOUtilities.combineStudentArrays(ret.getStudents(), ret.getMasterStudents());
+		}
 		if (checkNullPassed(classroomFile))
 			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
+		
 		
 		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
 		ret.setLastModified(LocalDate.now());
