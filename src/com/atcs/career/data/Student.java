@@ -72,6 +72,9 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this(lName, fName, email, new ArrayList<Session>(), 0, false);
 	}
 
+	public boolean equals(Student s){
+   return email.equals(s.getEmail());
+}
 	/**
 	 * Returns 0 if an invalid email is used
 	 * 

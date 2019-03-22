@@ -30,7 +30,6 @@ public class Event implements Serializable {
 	private boolean sorted;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
-	
 
 	/**
 	 * Creates a new Event from scratch
