@@ -234,8 +234,8 @@ public class Algorithms{
    public static void assignRandomsAtEnd(ArrayList<Session> sessions){
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
          for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
-            Session sessionToAssign = getLeastPopulatedSessionPerPeriod(sessions, i);
             Student stud = toBeRandomlyAssigned.get(i).remove(j);
+            Session sessionToAssign = getLeastPopulatedSessionPerPeriodStudentConscious(sessions, i, stud);
             System.out.println("assigning "+stud.getAssignments());
             sessionToAssign.getStudents().get(i).add(stud);
             if (stud.getAssignments().size() <= i)
@@ -251,6 +251,18 @@ public class Algorithms{
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
          if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size() && sessions.get(i).getAvailableThisPeriod()[period]){
+            min = sessions.get(i);
+         }
+      }
+      return min;
+   }
+   
+   //Same as above, but won't return a session the student already has
+   private static Session getLeastPopulatedSessionPerPeriodStudentConscious(ArrayList<Session> sessions, int period, Student stud) {
+      Session min = sessions.get(0);
+      for(int i = 1; i < sessions.size(); i++){
+         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()
+               && sessions.get(i).getAvailableThisPeriod()[period] && !stud.getAssignments().contains(sessions.get(i))){
             min = sessions.get(i);
          }
       }
