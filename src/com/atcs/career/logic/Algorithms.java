@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import com.atcs.career.data.Event;
 import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
+import com.atcs.career.program.MainClass;
 
 public class Algorithms{
     /*Each sub ArrayList corresponds to a period
@@ -22,6 +25,26 @@ public class Algorithms{
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    
    public static void sort(Event e) {
+   	// check if we need more information
+   	// request, room. session, master
+   	// 1, 2, 3, 4
+   	String thingsMissing = "";
+   	if (e.getStudents().isEmpty())
+   		thingsMissing += "student request data.\n";
+   	if (e.getRooms().isEmpty())
+   		thingsMissing += "room data.\n";
+   	if (e.getSessions().isEmpty())
+   		thingsMissing += "session data.\n";
+   	if (e.getMasterStudents().isEmpty())
+   		thingsMissing  += "master student array\n";
+   		
+   	if (!thingsMissing.equals("")) {
+   		JOptionPane.showMessageDialog(null, "You are missing important data:\n" + thingsMissing
+   				 + "Please input this information and try again.", MainClass.APP_NAME + ": Cannot Sort Students",
+   				 JOptionPane.WARNING_MESSAGE, null);
+   		e.setSorted(false);
+   		return;
+   	}
    	if (e.isSorted()) {
    		clearAssignments(e.getStudents(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
    		e.setSorted(false);
