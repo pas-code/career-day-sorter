@@ -37,10 +37,7 @@ import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
 /*
  * TODO 
- * search students
  * save button
- * session names??
- * ui between different panels
  */
 
 
