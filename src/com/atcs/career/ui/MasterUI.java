@@ -3,6 +3,10 @@
 
 package com.atcs.career.ui;
 
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+
 import javax.swing.JFrame;
 
 import com.atcs.career.data.Event;
@@ -35,11 +39,43 @@ public class MasterUI {
 	
 	public void openMain() {
 		mainGui = new CareerDayGUI(masterEvent);
-		mainGui.makeWindow();
+		configureMenuBar(mainGui.makeWindow());
 	}
 	
 	public void setEvent(Event e) {
 		this.masterEvent = e;
+	}
+	
+	public void configureMenuBar(JFrame target) {
+		MenuBar bar = new MenuBar();
+		Menu menu; // the menu shown on the top level (file, edit, etc)
+		MenuItem item; // the item inside the menu. only using one variable to save space.
+		// File
+		menu = new Menu("File");
+		item = menu.add(new MenuItem("New..."));
+		
+		item = menu.add(new MenuItem("Save"));
+		
+		item = menu.add(new MenuItem("Save as..."));
+		bar.add(menu);
+		// Edit
+		menu = new Menu("Edit");
+		
+		bar.add(menu);
+		// Info
+		menu = new Menu("Info");
+		
+		bar.add(menu);
+		// Email
+		menu = new Menu("Email");
+		
+		bar.add(menu);
+		// Help
+		menu = new Menu("Help");
+		
+		bar.add(menu);
+		bar.setHelpMenu(menu);
+		target.setMenuBar(bar);
 	}
 	
 	public static void main(String[] args) {

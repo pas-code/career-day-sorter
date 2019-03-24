@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
+import com.atcs.career.ui.MasterUI;
 
 /**
  * NAME WILL BE CHANGED. 
@@ -14,7 +15,7 @@ import com.atcs.career.io.file.FileHandler;
  *
  */
 public class MainClass {
-	public static final String APP_NAME = "ofCourse";
+	public static final String APP_NAME = "Career Day";
    public static final String BUILD = "0.1";
    public static final String LAST_UPDATED = "Dec 2018";
    public static final boolean fullRelease = false;
@@ -37,12 +38,15 @@ public class MainClass {
 	}
 	
 	private static void initialize(String eventPathToOpen) {
-		if (eventPathToOpen == null || eventPathToOpen == "")
+		if (eventPathToOpen == null || eventPathToOpen == "") {
 			//open the welcome screen
+			new MasterUI().openWelcome();
 			System.out.println("we have an event");
+		}
 		else {
 			try {
 				Event e = FileHandler.load(eventPathToOpen);
+				new MasterUI().openEventFromWelcome(e);
 			} catch (ClassNotFoundException | IOException e) {
 				//open the main screen with said event
 				e.printStackTrace();

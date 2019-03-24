@@ -21,23 +21,23 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	private int popularity;
 	private int numOfPeriods;
 
-	public Session(String title, String speaker,
-			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
-			int popularity) {
-		super();
-		this.title = title;
-		this.speaker = speaker;
-		this.students = students;
-		this.gradesAvailable = gradesAvailable;
-		this.popularity = popularity;
-		if(this.speaker.charAt(0) == '"') {
-		   this.speaker = this.speaker.substring(1);
-		}
-		this.availableThisPeriod = new boolean[numOfPeriods];
-      for(int i = 0; i < availableThisPeriod.length; i++) {
-         availableThisPeriod[i] = true;
-      }
-	}
+//	public Session(String title, String speaker,
+//			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
+//			int popularity) {
+//		super();
+//		this.title = title;
+//		this.speaker = speaker;
+//		this.students = students;
+//		this.gradesAvailable = gradesAvailable;
+//		this.popularity = popularity;
+//		if(this.speaker.charAt(0) == '"') {
+//		   this.speaker = this.speaker.substring(1);
+//		}
+//		this.availableThisPeriod = new boolean[numOfPeriods];
+//      for(int i = 0; i < availableThisPeriod.length; i++) {
+//         availableThisPeriod[i] = true;
+//      }
+//	}
 
 	public Session(String title, String speaker, int numOfPeriods) {
 		this.title = title;

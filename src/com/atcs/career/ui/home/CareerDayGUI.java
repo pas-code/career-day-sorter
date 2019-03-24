@@ -29,16 +29,12 @@ import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.logic.Algorithms;
+import com.atcs.career.program.MainClass;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.MoreInfo.SideInfoPanel;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
-
-/*
- * TODO 
- * save button
- */
 
 
 public class CareerDayGUI extends JPanel {
@@ -75,7 +71,7 @@ public class CareerDayGUI extends JPanel {
 		layoutConfig();
 	}
 
-	private void refresh() {
+	protected void refresh() {
 	    //TODO make refresh more efficient
 		int previouslySelectedIndex = tabs.getSelectedIndex();
 		tabs.removeAll();
@@ -230,13 +226,14 @@ public class CareerDayGUI extends JPanel {
 		tabs.addTab(((GuiListable) eventData.get(0)).getType(), sessionScroll);
 	}
 
-	public void makeWindow() {
-		JFrame frame = new JFrame("Default JPanel");
+	public JFrame makeWindow() {
+		JFrame frame = new JFrame(MainClass.APP_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		return frame;
 	}
 
 	/**

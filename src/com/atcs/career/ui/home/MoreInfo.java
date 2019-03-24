@@ -2,6 +2,7 @@
 //Dec 10, 2018
 package com.atcs.career.ui.home;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -35,6 +36,7 @@ import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
+import com.atcs.career.resources.FontManager;
 
 public abstract class MoreInfo {
 
@@ -65,6 +67,7 @@ public abstract class MoreInfo {
 
 		public void generalSetup() {
 			setFocusable(true);
+			setFont(FontManager.finalFont(18));
 			this.setBackground(Color.WHITE);
 		}
 		
@@ -91,9 +94,7 @@ public abstract class MoreInfo {
 
 	/*
 	 * TODO be able to move students directly from this panel. have a popup idc
-	 * when selecting a student, have a button like "move student" or "remove student" and then do those popups
-	 * make sure to log all changes just in case they want to undo
-	 * 	make it a human-readable list 
+	 * when selecting a student, have a button like "move student" or "remove student" and then do those popups 
 	 */
 	public static class RoomPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
@@ -198,23 +199,23 @@ public abstract class MoreInfo {
 		private void initializeUI() {
 			JPanel north = new JPanel(new GridLayout(0, 1));
 			north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
-			north.add(createInfoField("First Name", student.getfName(), new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			north.add(createInfoField("First Name", student.getfName(), new EditingAction() {
+				public void edit(AWTEvent e) {
 					student.setfName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
 				}
 			}));
 			
 			
-			north.add(createInfoField("Last Name", student.getlName(), new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			north.add(createInfoField("Last Name", student.getlName(), new EditingAction() {
+				public void edit(AWTEvent e) {
 					student.setlName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
 				}
 			}));
 			
-			north.add(createInfoField("Grade", student.getGrade(), new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			north.add(createInfoField("Grade", student.getGrade(), new EditingAction() {
+				public void edit(AWTEvent e) {
 					try {
 					 student.setGrade(Integer.parseInt(((JTextComponent) e.getSource()).getText()));
 					} catch (NumberFormatException er) {
@@ -222,8 +223,8 @@ public abstract class MoreInfo {
 					}
 				}
 			}));
-			north.add(createInfoField("Email", student.getEmail(), new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			north.add(createInfoField("Email", student.getEmail(), new EditingAction() {
+				public void edit(AWTEvent e) {
 					student.setEmail(((JTextComponent) e.getSource()).getText());
 				}
 			}));
@@ -357,15 +358,6 @@ public abstract class MoreInfo {
 			
 		}
 		
-		private JPanel createInfoField(String title, Object data, ActionListener action) {
-			JPanel panel = new JPanel(new BorderLayout());
-			panel.add(new JLabel(title + ": "), BorderLayout.WEST);
-			JTextField editField = new JTextField(data.toString());
-			editField.addActionListener(action);
-			panel.add(editField, BorderLayout.CENTER);
-			return panel;
-		}
-		
 		
 		public void refresh() {
 			System.out.println("refresh");
@@ -377,7 +369,7 @@ public abstract class MoreInfo {
 		private static final long serialVersionUID = 1L;
 		// Session instance variables
 		private JButton editStudent, addStudent, removeStudent;
-		private JTextField speakerName, classroomNumber;
+		private JPanel speakerName, classroomNumber;
 		private Session session;
 		private JList<Student> listStudents;
 
@@ -388,9 +380,28 @@ public abstract class MoreInfo {
 			editStudent = new JButton("Edit Student");
 			removeStudent = new JButton("Remove Student");
 
-			speakerName = new JTextField(session.getSpeaker());
+			speakerName = createInfoField("Speaker:", session.getSpeaker(), new EditingAction() {
+				@Override
+				public void edit(AWTEvent e) {
+					session.setSpeaker(((JTextField)e.getSource()).getText());
+				}
+			});
 
-			classroomNumber = new JTextField(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
+//			classroomNumber = new JTextField(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
+			classroomNumber = createInfoField("Room No.", 
+					session.getRoom() == null ? "" : session.getRoom().getRoomNumber(),
+							new EditingAction() {
+								@Override
+								public void edit(AWTEvent e) {
+									try {
+										//TODO search rooms and parse namess
+//									session.setRoom(((JTextField)e.getSource()).getText());
+									} catch (NumberFormatException e1) {
+										System.out.println("oops");
+										((JTextField)e.getSource()).setText(session.getRoom().getRoomNumber());
+									}
+								}
+			});
 
 			
 
@@ -458,8 +469,20 @@ public abstract class MoreInfo {
 			System.out.println("refresh");
 			System.out.println("getting period "+getPeriod());
 			populateList(getPeriod());
-			classroomNumber.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
+			//TODO uh oh
+//			classroomNumber.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 		}
+		
+	}
+	
+	private static JPanel createInfoField(String title, Object data, EditingAction action) {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(new JLabel(title + ": "), BorderLayout.WEST);
+		JTextField editField = new JTextField(data.toString());
+		editField.addActionListener(action);
+		editField.addFocusListener(action);
+		panel.add(editField, BorderLayout.CENTER);
+		return panel;
 	}
 
 	private static void show(SideInfoPanel p) {

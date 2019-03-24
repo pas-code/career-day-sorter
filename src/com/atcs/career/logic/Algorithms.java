@@ -187,17 +187,18 @@ public class Algorithms{
       
       assignRandomsAtEnd(sessions);
       
+      // Backfill: remove students from populated sessions and add them to unpopular sessions
       //COMMENT BELOW HERE TO STOP BACKFILL
       int minCap = 10;
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
-            if(sessions.get(i).getAvailableThisPeriod()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesnt have enough during that period...
+            if(sessions.get(i).getAvailableThisPeriod()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesn't have enough during that period...
                do {
                   for(int k = students.size() - 1; k >= 0; k--) { //Look at every student.
                      Student currentStud = students.get(k);
-                     if(currentStud.isSwitchable()) { //If they haven't alread been moved during the backfill...
-                        if(sessions.indexOf(currentStud.getAssignment(j)) != -1) //This is just because of the issue with quotes before speaker name. shouldnt be an issue otherwise
+                     if(currentStud.isSwitchable()) { //If they haven't already been moved during the backfill...
+                        if(sessions.indexOf(currentStud.getAssignment(j)) != -1) //This is just because of the issue with quotes before speaker name. shouldn't be an issue otherwise
                            sessions.get(sessions.indexOf(currentStud.getAssignment(j))).getStudents().get(j).remove(currentStud); //Take them out of their old session at that period
                         sessions.get(i).getStudents().get(j).add(currentStud); //Add them to this student
                         currentStud.getAssignments().set(j, sessions.get(i)); //Update this in their assignment array
@@ -215,6 +216,7 @@ public class Algorithms{
 	//Assigns one students bases on their choices and period
    private static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
       System.out.println(currentStud);
+      System.out.println("FINDING AT "+period);
       
       for(int k = 0; k < currentStud.getRequests().size(); k++){ //Check every request the student makes
          System.out.println("REQUEST: " + currentStud.getRequests().get(k));
@@ -222,11 +224,13 @@ public class Algorithms{
          
          Session desiredSession = sessions.get(0);
          if(sessionIndex >= 0) desiredSession = sessions.get(sessionIndex);
-         
-         System.out.println("FOUND SESSION: " + desiredSession);
-         if(desiredSession.getAvailableThisPeriod()[period] && desiredSession.getStudents().get(period).size() < desiredSession.getRoom().getMaxCapacity() &&
-           !currentStud.getAssignments().contains(desiredSession)){
-            System.out.println("SUCCESS!");
+
+			System.out.println("FOUND SESSION: " + desiredSession);
+			if (desiredSession.getAvailableThisPeriod()[period]
+					&& desiredSession.getStudents().get(period)
+							.size() < desiredSession.getRoom().getMaxCapacity()
+					&& !currentStud.getAssignments().contains(desiredSession)) {
+				System.out.println("SUCCESS!");
             desiredSession.getStudents().get(period).add(currentStud);
             currentStud.getAssignments().add(period, desiredSession); //Changed from set --> add //took out period - 1
             changeStudentContentness(currentStud); //Deals with contentness
@@ -294,6 +298,7 @@ public class Algorithms{
             min = sessions.get(i);
          }
       }
+      System.out.println("adding " + min + " to "+stud.getAssignments());
       return min;
    }
    
