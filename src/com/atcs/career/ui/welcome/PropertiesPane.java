@@ -38,6 +38,8 @@ public class PropertiesPane extends JPanel {
 	public static final int PREF_H = 300;
 	public static final int BORDER_SIZE = 50;
 
+	
+	//note for future... not nuts about having every single element as an instance variable...
 	private JPanel gridPanel;
 	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel,
 			allStudentLabel;
@@ -46,16 +48,18 @@ public class PropertiesPane extends JPanel {
 	private String sessionFile, studentFile, classroomFile, allStudentFile;
 	private JButton submit, cancel;
 	private JTextField title;
-	private final String textPrompt = "Enter Project Name Here";
+	private static final String textPrompt = "Enter Project Name Here";
 	private Event event;
 
 	private WelcomeScreen welc;
 	private JSpinner periodCount;
 
-	private final String BUTTON_DEFAULT_TEXT = "Choose File";
+	private static final String BUTTON_DEFAULT_TEXT = "Choose File";
 
 	/**
-	 * master can be none. will bring a popup if not.
+	 * welc can be none. will bring a popup if not.
+	 * @param welc welcome screen calling the props pane. 
+	 * @param e the event being edited
 	 */
 	public PropertiesPane(WelcomeScreen welc, Event e) {
 		setFocusable(true);
@@ -94,18 +98,18 @@ public class PropertiesPane extends JPanel {
 	}
 
 	private void configFrame() {
+		//make a frame. if welc is given, remove welc from its frame and use it.
 		JFrame container = welc == null ? createFrame() : welc.parentFrame;
 		if (welc != null) {
 			container.getContentPane().remove(0);
 		}
 		container.getContentPane().add(this);
 		container.pack();
-		// container.setResizable(true)
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// notify that data has been lost
+				// TODO notify that data has been lost
 			}
 		});
 		container.setVisible(true);

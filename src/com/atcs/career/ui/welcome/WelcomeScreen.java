@@ -2,6 +2,7 @@ package com.atcs.career.ui.welcome;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,6 +12,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -20,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -40,7 +45,6 @@ public class WelcomeScreen extends JPanel {
 	
 	private JPanel topPanel, leftPanel, rightPanel;
 
-	private Font openSans;
 	private JButton newButton, openButton;
 	private Event selected;
 
@@ -68,7 +72,7 @@ public class WelcomeScreen extends JPanel {
 	}
 
 	private void configureButton(JButton b) {
-		b.setFont(openSans);
+		b.setFont(getFont());
 		b.setBorderPainted(false);
 //		b.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		b.setBackground(Color.GRAY);
@@ -131,7 +135,7 @@ public class WelcomeScreen extends JPanel {
 	private void configGui() {
 		// initialize gui
 		title = new JLabel(MainClass.APP_NAME);
-		openSans = FontManager.finalFont(25f);
+		setFont(FontManager.finalFont(25f));
 		topPanel = topPanelConfig();
 
 		newButton = new JButton("New");
@@ -154,41 +158,106 @@ public class WelcomeScreen extends JPanel {
 		});
 
 		// Class Panel config
-		leftPanel = new JPanel(new GridLayout(2, 0));
 		this.setLayout(new BorderLayout());
 		this.add(topPanel, BorderLayout.NORTH);
 		this.setBackground(Color.gray);
 
 		// Left Panel config
-//		leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
+		leftPanel = new JPanel(new GridLayout(2, 0));
 		leftPanel.setPreferredSize(new Dimension(150, 0));
-//		((GridLayout) leftPanel.getLayout()).setVgap(20);
 		
 		
-		leftPanel.setBackground(Color.gray);
+		leftPanel.setBackground(Color.GRAY);
 		leftPanel.add(newButton);
 		leftPanel.add(openButton);
 
 		this.add(leftPanel, BorderLayout.WEST);
 
+		// config right panel (recents / submit)
 		rightPanelConfig();
 
 		this.add(rightPanel);
 	}
 	
 	/**
-	 * gets the last 4 events opened.
+	 * gets the last 9 events opened.
 	 */
-	private ArrayList<String> getRecentEvents() {
-		final int amtRecents = 4;
+	private ArrayList<RecentEventListItem> getRecentEvents() {
+		final int amtRecents = 9;
 		
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<RecentEventListItem> ret = new ArrayList<RecentEventListItem>();
 		File saveDir = new File(FileHandler.SAVE_DIR);
-		final File[] children = saveDir.listFiles();
+		// get all saved event files
+		File[] children = saveDir.listFiles();
+		// sort so the latest event comes first
+		Arrays.sort(children, new Comparator<File>() {
+			public int compare(File o1, File o2) {
+				return (int)(o2.lastModified() - o1.lastModified());
+			}
+		});
+		// return the last 9 event list items from the sorted files
 		for (int i = 0; i < Math.min(children.length, amtRecents); i++) 
-			ret.add(getEventName(children[i].getPath()));
+			ret.add(new RecentEventListItem(getEventName(children[i].getPath()), children[i].lastModified()));
 		
 		return ret;
+	}
+	
+	/**
+	 *  a holder for information regarding events found from their file holdings
+	 */
+	private static class RecentEventListItem {
+		private String name, lastModified;
+		
+		public RecentEventListItem(String name, long lastModifiedMillis) {
+			this.name = name;
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(lastModifiedMillis);
+			lastModified = cal.get(Calendar.MONTH) + " / " + cal.get(Calendar.DAY_OF_MONTH) + " / "+cal.get(Calendar.YEAR);
+		}
+	}
+	/**
+	 * a render template for RecentEventListItem in JLists
+	 */
+	private static class RecentEventListItemRenderer extends JPanel 
+		implements ListCellRenderer<RecentEventListItem> {
+		private static final long serialVersionUID = 1L;
+
+		public RecentEventListItemRenderer() {
+			super(new BorderLayout());
+		}
+		
+		private void refresh(RecentEventListItem e, boolean isSelected) {
+			removeAll();
+			JLabel label = new JLabel(e.name);
+			label.setFont(FontManager.finalFont(24).deriveFont(Font.BOLD));
+			add(label, BorderLayout.WEST);
+			
+			JPanel east = new JPanel(new BorderLayout());
+			label = new JLabel("Last Modified: ");
+			label.setFont(FontManager.finalFont(12));
+			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+			east.add(label, BorderLayout.WEST);
+			label = new JLabel(e.lastModified);
+			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+			label.setFont(FontManager.finalFont(18));
+			east.add(label, BorderLayout.EAST);
+			east.setOpaque(false);
+			add(east, BorderLayout.EAST);
+			
+			if (isSelected)
+				setBackground(Color.GRAY);
+			else
+				setBackground(Color.WHITE);
+		}
+
+		@Override
+		public Component getListCellRendererComponent(
+				JList<? extends RecentEventListItem> list,
+				RecentEventListItem value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			refresh(value, isSelected);
+			return this;
+		}
 	}
 	
 	private String getEventName(String filePath) {
@@ -202,11 +271,10 @@ public class WelcomeScreen extends JPanel {
 	private JPanel topPanelConfig() {
 		JPanel t = new JPanel();
 		t.setPreferredSize(new Dimension(0, 50));
-		t.setBackground(Color.black);
 		t.setLayout(new BorderLayout());
 
-		title.setForeground(Color.white);
-		title.setFont(openSans);
+		title.setForeground(Color.BLACK);
+		title.setFont(getFont());
 
 		t.add(title, BorderLayout.WEST);
 		return t;
@@ -216,24 +284,27 @@ public class WelcomeScreen extends JPanel {
 		// right panel config (recents)
 		rightPanel = new JPanel(new BorderLayout());
 		rightPanel.setBorder(BorderFactory.createTitledBorder(
-				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, openSans, Color.BLACK));
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		ArrayList<String> recentEventNames = getRecentEvents();
-		for (String s : recentEventNames) 
+				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, getFont(), Color.BLACK));
+		DefaultListModel<RecentEventListItem> model = new DefaultListModel<RecentEventListItem>();
+		
+		// create jlist model for recent events
+		ArrayList<RecentEventListItem> recentEvents = getRecentEvents();
+		for (RecentEventListItem s : recentEvents) 
 			model.addElement(s);
-
-		JList<String> recents = new JList<String>(model);
-		recents.setFont(FontManager.finalFont(24f).deriveFont(Font.BOLD));
+		// add list model to list
+		JList<RecentEventListItem> recents = new JList<RecentEventListItem>(model);
+		recents.setCellRenderer(new RecentEventListItemRenderer());
 
 		rightPanel.add(recents);
 		JPanel lowerRight = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+		// open button, only enabled when an event is selected
 		JButton openConfirmation = new JButton("Open");
 		openConfirmation.setEnabled(false);
 		openConfirmation.addActionListener(e -> {
 			log.info("recent event "+recents.getSelectedValue() + " opened");
 			try {
 				sendEventAndClose(FileHandler.load(FileHandler.SAVE_DIR
-						+ Event.saveFileName(recents.getSelectedValue())));
+						+ Event.saveFileName(recents.getSelectedValue().name)));
 			} catch (ClassNotFoundException | IOException e1) {
 				e1.printStackTrace();
 			}
@@ -249,7 +320,7 @@ public class WelcomeScreen extends JPanel {
 		rightPanel.add(lowerRight, BorderLayout.SOUTH);
 	}
 	
-	// -------------------------------------------------------------------------------------------------------
+	// -----------------------------------END INITIAL GUI CONFIG-----------------------------------------
 	
 	
 	protected void sendEventAndClose(Event e) {
