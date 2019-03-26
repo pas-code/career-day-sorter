@@ -6,6 +6,7 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
+@Deprecated
 public class RoundedBorder implements Border {
 
     private int radius;

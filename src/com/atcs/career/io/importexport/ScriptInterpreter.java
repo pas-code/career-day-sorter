@@ -64,7 +64,7 @@ public class ScriptInterpreter {
 		br = new BufferedReader(
 				new InputStreamReader(p.getErrorStream()));
 		while ((s = br.readLine()) != null) {
-			System.out.println(s);
+			System.err.println(s);
 		}
 		
 		p.waitFor();

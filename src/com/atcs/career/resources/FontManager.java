@@ -37,9 +37,8 @@ public class FontManager
             // register the font
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
                     ClassLoader.getSystemClassLoader().getResourceAsStream("com/atcs/career/resources/OpenSans-Light.ttf")));
-        } catch (FontFormatException | IOException e)
-        {
-            ErrorManager.processException(e, FontManager.class, "failed to create font", false);
+        } catch (FontFormatException | IOException e) {
+            ErrorManager.processException(e, "failed to create font", false);
         }
         return x;
     }

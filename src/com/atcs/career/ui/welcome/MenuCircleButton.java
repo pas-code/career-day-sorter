@@ -16,6 +16,7 @@ import com.atcs.career.resources.FontManager;
 //Edward Fominykh
 //Program Description
 //Nov 16, 2018
+@Deprecated
 public class MenuCircleButton extends JPanel
 {
     private final int strokeSize = 2;

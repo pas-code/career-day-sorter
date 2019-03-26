@@ -33,7 +33,7 @@ public final class ResourceAccess {
       try {
          return new ImageIcon(ResourceAccess.class.getResource(localPath));
       } catch (NullPointerException e) {
-         e.printStackTrace();
+      	com.atcs.career.program.ErrorManager.processException(e, "cannot find image at " + localPath, false);
          return null;
       }
    }
@@ -67,7 +67,7 @@ public final class ResourceAccess {
          in.close();
          bw.close();
       } catch (IOException | NullPointerException e) {
-         ErrorManager.processException(e, log, "error in transferring "+localPath, false);
+         ErrorManager.processException(e, "error in transferring "+localPath, false);
       }
    }
 }

@@ -306,7 +306,7 @@ public class WelcomeScreen extends JPanel {
 				sendEventAndClose(FileHandler.load(FileHandler.SAVE_DIR
 						+ Event.saveFileName(recents.getSelectedValue().name)));
 			} catch (ClassNotFoundException | IOException e1) {
-				e1.printStackTrace();
+				com.atcs.career.program.ErrorManager.processException(e1, "Error in opening event", true);
 			}
 		});
 

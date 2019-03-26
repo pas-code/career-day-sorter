@@ -16,6 +16,7 @@ import com.atcs.career.resources.FontManager;
 //Edward Fominykh
 //Program Description
 //Nov 15, 2018
+@Deprecated
 public class MenuButton extends JPanel
 {
 	private static final long serialVersionUID = 1L;

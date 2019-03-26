@@ -7,6 +7,7 @@ import com.atcs.career.data.Session;
 //Edward Fominykh
 //Program Description
 //Nov 26, 2018
+@Deprecated
 public class SessionInfoUtil extends JPanel
 {
     

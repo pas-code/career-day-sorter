@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.program.ErrorManager;
 import com.atcs.career.program.MainClass;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.ResourceAccess;
@@ -23,6 +24,7 @@ public class FileHandler {
 	
    public static String HOME_DIR, SAVE_DIR, LOG_DIR, EMAIL_DIR;
    public static String JAVA_EXEC;
+   public static String GEN_LOG, ERROR_LOG, CHANGE_LOG;
    public static final String SUFFIX = ".event";
       
    //initial file work
@@ -75,8 +77,9 @@ public class FileHandler {
          if (e.nameChanged() && e.getOldName() != null)
          	new File(SAVE_DIR + e.getOldName() + SUFFIX).delete();
 
-      } catch(IOException i){
-         i.printStackTrace();
+      } catch(IOException e1){
+      	ErrorManager.showErrorMessage("Cannot Save Event.\nPlease Try Again.");
+         ErrorManager.processException(e1, "cannot save event", false);
       }
    }
    
