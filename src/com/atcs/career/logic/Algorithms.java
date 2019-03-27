@@ -16,6 +16,7 @@ import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.program.MainClass;
+import com.atcs.career.program.logging.BasicLogger;
 
 public class Algorithms{
     /*Each sub ArrayList (in sessions) corresponds to a period
@@ -23,11 +24,9 @@ public class Algorithms{
     * Students who couldn't get a top 5 choice placed into specific sub array for that period
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
+   private static final BasicLogger log = BasicLogger.getLogger(Algorithms.class.getName());
    
    public static void sort(Event e) {
-   	// check if we need more information
-   	// request, room. session, master
-   	// 1, 2, 3, 4
    	String thingsMissing = "";
    	if (e.getStudents().isEmpty())
    		thingsMissing += "student request data.\n";
@@ -55,17 +54,14 @@ public class Algorithms{
    
    //BIG METHOD THAT DOES EVERYTHING
    private static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
-      System.out.println("Method 1 Starting");
       assignRoomsToSessions(students, rooms, sessions);
-      System.out.println("Method 1 Done");
+      log.info("Method 1 Finished");
       
-      System.out.println("Method 2 Starting");
       rankStudents(students, master);
-      System.out.println("Method 2 Done");
+      log.info("Method 2 Finished");
       
-      System.out.println("Method 3 Starting");
       assignStudentsToSessions(students, sessions);
-      System.out.println("Method 3 Done");
+      log.info("Method 3 Finished");
       
       System.out.println("Classes under Cap:");
       for(int i = 0; i < sessions.size(); i++) {
@@ -142,11 +138,11 @@ public class Algorithms{
 	//ALGORITHM 2. Gives students their priority in order for them to be rank so student assignment can be done correctly
    private static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
     //Creates Array Lists for Random Assignment
-      for(int i = 0; i < 3; i++) { //Change 3 later to not be a magic number
+      for(int i = 0; i < 3; i++)  //Change 3 later to not be a magic number
          toBeRandomlyAssigned.add(new ArrayList<Student>());
-      }
+      
       for(int i = 0; i < master.size(); i++) {
-         if(!students.contains(master.get(i))) {
+         if (master.get(i).getRequests().isEmpty()) {
             for(int j = 0; j < toBeRandomlyAssigned.size(); j++) {
                toBeRandomlyAssigned.get(j).add(master.get(i));
             }
@@ -265,10 +261,9 @@ public class Algorithms{
 	//Takes people who are "randos" (didn't sign up) and assigns to the least populated sessions
    private static void assignRandomsAtEnd(ArrayList<Session> sessions){
       for(int i = 0; i < toBeRandomlyAssigned.size(); i++) {   //toBeRandomlyAssigned.size() is representing the amount of periods
-         for(int j = 0; j < toBeRandomlyAssigned.get(i).size(); j++){
+      	for(int j = toBeRandomlyAssigned.get(i).size() - 1; j >= 0; j--){
             Student stud = toBeRandomlyAssigned.get(i).remove(j);
             Session sessionToAssign = getLeastPopulatedSessionPerPeriodStudentConscious(sessions, i, stud);
-            System.out.println("assigning "+stud.getAssignments());
             sessionToAssign.getStudents().get(i).add(stud);
             if (stud.getAssignments().size() <= i)
             	stud.getAssignments().add(sessionToAssign);
