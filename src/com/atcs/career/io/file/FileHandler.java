@@ -78,8 +78,8 @@ public class FileHandler {
          	new File(SAVE_DIR + e.getOldName() + SUFFIX).delete();
 
       } catch(IOException e1){
-      	ErrorManager.showErrorMessage("Cannot Save Event.\nPlease Try Again.");
-         ErrorManager.processException(e1, "cannot save event", false);
+         ErrorManager.processException(
+         		e1, "Cannot Save Event.\nPlease Try Again.", "cannot save event. ioException", false, true);
       }
    }
    

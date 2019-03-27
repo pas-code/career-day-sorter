@@ -229,7 +229,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 			case 0 :
 				return getGrade() + "";
 			case 1 :
-				return getAssignment(0).getTitle();
+				return "";
 			case 2 :
 				return getEmail();
 			default :
@@ -238,7 +238,6 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	}
 
-	/** Mainly used for tested, creates a fake session for a given period */
 	public Session getAssignment(int period) {
 		if (period < assignments.size())
 			return assignments.get(period);

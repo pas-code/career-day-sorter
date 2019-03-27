@@ -42,21 +42,27 @@ public class ErrorManager {
 		JOptionPane.showMessageDialog(null, msg, MainClass.APP_NAME + " | Error", JOptionPane.ERROR_MESSAGE, null);
 	}
 	
-	public static void processException(Throwable e, String msg, boolean fatal) {
+	public static void processException(Throwable e, String usrMsg, String logMsg, boolean fatal, boolean notify) {
 		if (fatal) {
 			// report the error in a separate thread
 			new Thread(new Runnable() {
 				public void run() {
-					reportException(e, msg);
+					reportException(e, logMsg);
 				}
 			}).start();
 			// show the exception to the user.
-			showException(e, msg);
+			showException(e, usrMsg);
 			e.printStackTrace();
 		}
 		else {
+			if (notify)
+				showErrorMessage(usrMsg);
 			StackTraceElement topElem = e.getStackTrace()[0];
-			logger.error(e, topElem.getClassName() + "-" + topElem.getLineNumber() + " " + msg);
+			logger.error(e, topElem.getClassName() + "-" + topElem.getLineNumber() + " " + logMsg);
 		}
+	}
+	
+	public static void processException(Throwable e, String univMsg, boolean fatal, boolean notify) {
+		processException(e, univMsg, univMsg, fatal, notify);
 	}
 }

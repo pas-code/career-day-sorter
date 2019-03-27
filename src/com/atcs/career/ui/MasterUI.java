@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
+import com.atcs.career.io.importexport.CSVWriter;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.welcome.WelcomeScreen;
 
@@ -57,6 +58,10 @@ public class MasterUI {
 		item = menu.add(new MenuItem("Save"));
 		
 		item = menu.add(new MenuItem("Save as..."));
+		item = menu.add(new MenuItem("Export..."));
+		item.addActionListener(e -> {
+			CSVWriter.exportEvent(masterEvent);
+		});
 		bar.add(menu);
 		// Edit
 		menu = new Menu("Edit");
