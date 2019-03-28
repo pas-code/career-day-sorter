@@ -21,11 +21,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -173,15 +176,9 @@ public abstract class MoreInfo {
 							.getStudents().get(getPeriod())
 							// turn to standard array
 									.toArray(new Student[room.getResidentSessions()[0].getStudents()
-													.get(getPeriod()).size()]));
-			
+													.get(getPeriod()).size()]));		
 		}
-		
 	}
-
-	/* TODO
-	 * add resident sessions to use and add / remove
-	 */
 	
 	public static class StudentPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
@@ -246,22 +243,81 @@ public abstract class MoreInfo {
 			
 			JPanel south = new JPanel(new GridLayout(0, 1));
 			south.setBorder(BorderFactory.createTitledBorder("Assigned Sessions"));
-			JButton addAssignment = new JButton("Add Session");
-			JButton removeAssignment = new JButton("Remove");
 			
 			memberSessions = new JList<Session>();
 			memberSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			refresh();
+			JButton addAssignment = new JButton("Add Session");
+			JButton removeAssignment = new JButton("Remove");
+			addAssignment.setEnabled(
+					memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
+			removeAssignment.setEnabled(false);
 			memberSessions.addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-
+					removeAssignment.setEnabled(true);
+					addAssignment.setEnabled(
+							memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
 				}
 			});
-//			student.
+			addAssignment.addActionListener(e -> {
+				byte periodToInsertTo;
+				Session sessionToInsert;
+				JTextField sessionBox = sessionSearchField();
+				// highest possible period to insert is either the 
+				//max period available in the event or the highest number event that the student already has
+				System.out.println("MAX " + master.getEvent().getNumberOfPeriods());
+				int highestPossiblePeriod = Math.min(
+						master.getEvent().getNumberOfPeriods(), memberSessions.getModel().getSize());
+				SpinnerNumberModel model = new SpinnerNumberModel(highestPossiblePeriod + 1, 1, highestPossiblePeriod + 1, 1);
+				JSpinner periodInsertSelect = new JSpinner(model);
+				
+				JPanel msg = new JPanel(new GridLayout(0, 1));
+				JPanel row = new JPanel(new BorderLayout());
+				row.add(new JLabel("Insert Session: "), BorderLayout.WEST);
+				row.add(sessionBox, BorderLayout.CENTER);
+				msg.add(row);
+				row = new JPanel(new BorderLayout());
+				row.add(new JLabel("Into Period: "), BorderLayout.WEST);
+				row.add(periodInsertSelect);
+				msg.add(row);
+				
+				int confirmation = JOptionPane.showOptionDialog(
+						null, msg, "Add Session Assignment", JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null, null, JOptionPane.OK_OPTION);
+				
+				if (confirmation != JOptionPane.OK_OPTION) return;
+				periodToInsertTo = (byte)((Integer)periodInsertSelect.getValue()).intValue();
+				
+				if ((sessionToInsert = master.getEvent().getSessionFromName(sessionBox.getText())) == null)
+					return;
+				else {
+//					if (periodToInsertTo >= student.getAssignments().size())
+//						student.getAssignments().add(sessionToInsert);
+//					else
+						student.getAssignments().add(periodToInsertTo - 1, sessionToInsert);
+					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
+				}
+				addAssignment.setEnabled(
+						memberSessions.getModel().getSize() <= master.getEvent().getNumberOfPeriods());
+				removeAssignment.setEnabled(false);
+				refresh();
+			});
+			
+			removeAssignment.addActionListener(e -> {
+				Session val = memberSessions.getSelectedValue();
+				student.getAssignments().remove(val);
+				val.getStudents().get(memberSessions.getSelectedIndex()).remove(student);
+
+				refresh();
+				addAssignment.setEnabled(
+						memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
+				removeAssignment.setEnabled(false);
+			});
+			
 			south.add(memberSessions);
 			south.add(addAssignment);
 			south.add(removeAssignment);
-			removeAssignment.setEnabled(false);
 			add(south, BorderLayout.SOUTH);
 			refresh();
 		}
@@ -283,17 +339,21 @@ public abstract class MoreInfo {
 		}
 		
 		private void removeRequest(JPanel requestSlot) {
+			// counts the amount of spots in the request panel
 			int amountSlots = 0;
 			for (Component c : requestPanel.getComponents())
 				if (c instanceof JPanel)
 					amountSlots++;
 				else 
+					// if not a jpanel, requests are over.
 					break;
-			System.out.println("count="+requestPanel.getComponentCount());
+			//already under = before anything, does the student not have enough requests?
 			boolean alreadyUnder = amountSlots < Student.MAX_REQUESTS;
 			requestPanel.remove(requestSlot);
+			//move every request up a slot from what you just removed
 			for (int i = 0; i < amountSlots - 1; i++)
 				((JLabel) ((JPanel)requestPanel.getComponent(i)).getComponent(0)).setText((i + 1) + ": ");
+			// essentially, if the addButton was already present, don't bother adding it.
 			if (!alreadyUnder) {
 				JButton addButton = new JButton("Add Request");
 				addButton.addActionListener(e -> {
@@ -360,8 +420,8 @@ public abstract class MoreInfo {
 		
 		
 		public void refresh() {
-			System.out.println("refresh");
 			memberSessions.setListData(student.getAssignments().toArray(new Session[student.getAssignments().size()]));
+			revalidate();
 		}
 	}
 
@@ -387,7 +447,6 @@ public abstract class MoreInfo {
 				}
 			});
 
-//			classroomNumber = new JTextField(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 			classroomNumber = createInfoField("Room No.", 
 					session.getRoom() == null ? "" : session.getRoom().getRoomNumber(),
 							new EditingAction() {

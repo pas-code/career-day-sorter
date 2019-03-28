@@ -52,8 +52,8 @@ public class CSVWriter {
 		row.add("Student Name, ");
 		row.add("Student Email, ");
 		for (byte i = 0; i < e.getNumberOfPeriods(); i++) {
-			row.add("Period " + i + " Session, ");
-			row.add("Period " + i + " Room");
+			row.add("Period " + (i + 1) + " Session, ");
+			row.add("Period " + (i + 1) + " Room, ");
 		}
 		values.add(row);
 		

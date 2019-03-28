@@ -100,6 +100,12 @@ public class Event implements Serializable {
 		return ret;
 	}
 	
+	public Session getSessionFromName(String title) {
+		for (Session s : sessions)
+			if (s.getTitle().equals(title))
+				return s;
+		return null;
+	}
 
 	public void selectStudentFile() {
 		students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));

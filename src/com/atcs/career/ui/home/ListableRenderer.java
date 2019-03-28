@@ -44,14 +44,11 @@ public class ListableRenderer extends JPanel implements ListCellRenderer<GuiList
 	}
 
 	@Override
-	public void focusGained(FocusEvent e) {
-		
-	}
+	public void focusGained(FocusEvent e) {}
 
 
 
 	@Override
-	public void focusLost(FocusEvent e) {
-	}
+	public void focusLost(FocusEvent e) {}
 
 }

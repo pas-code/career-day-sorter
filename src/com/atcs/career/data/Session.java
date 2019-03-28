@@ -19,7 +19,6 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	private int[] gradesAvailable;
 	private boolean[] availableThisPeriod;
 	private int popularity;
-	private int numOfPeriods;
 
 //	public Session(String title, String speaker,
 //			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
@@ -42,7 +41,6 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	public Session(String title, String speaker, int numOfPeriods) {
 		this.title = title;
 		this.speaker = speaker;
-		this.numOfPeriods = numOfPeriods;
 		this.students = new ArrayList<ArrayList<Student>>();
 		for (int i = 0; i < numOfPeriods; i++) {
 			students.add(new ArrayList<Student>());

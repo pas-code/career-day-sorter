@@ -63,19 +63,18 @@ public class Algorithms{
       assignStudentsToSessions(students, sessions);
       log.info("Method 3 Finished");
       
-      System.out.println("Classes under Cap:");
+      log.fine("Classes under Cap:");
       for(int i = 0; i < sessions.size(); i++) {
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) {
             if(sessions.get(i).getStudents().get(j).size() < 10) {
-               System.out.println(sessions.get(i).getSpeaker() + " PERIOD " + j + " HAS " + sessions.get(i).getStudents().get(j).size());
+            	log.fine(sessions.get(i).getSpeaker() + " PERIOD " + j + " HAS " + sessions.get(i).getStudents().get(j).size());
                for(int k = 0; k < sessions.get(i).getStudents().get(j).size(); k++)
-                  System.out.println(sessions.get(i).getStudents().get(j).get(k));
+               	log.fine(sessions.get(i).getStudents().get(j).get(k) + "");
             }
          }
       }
       
-      System.out.println("Accuracy:");
-      System.out.println(getSortingAccuracyAverage(students));
+      log.info("Accuracy:" + getSortingAccuracyAverage(students));
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
@@ -211,29 +210,29 @@ public class Algorithms{
       
 	//Assigns one students bases on their choices and period
    private static void assignBasedOnChoice(Student currentStud, ArrayList<Session> sessions, int period) {
-      System.out.println(currentStud);
-      System.out.println("FINDING AT "+period);
+      log.finer(currentStud);
+      log.finer("FINDING AT "+period);
       
       for(int k = 0; k < currentStud.getRequests().size(); k++){ //Check every request the student makes
-         System.out.println("REQUEST: " + currentStud.getRequests().get(k));
+      	log.finer("REQUEST: " + currentStud.getRequests().get(k));
          int sessionIndex = findIndexOfSession(currentStud.getRequests().get(k), sessions);
          
          Session desiredSession = sessions.get(0);
          if(sessionIndex >= 0) desiredSession = sessions.get(sessionIndex);
 
-			System.out.println("FOUND SESSION: " + desiredSession);
+         log.finer("FOUND SESSION: " + desiredSession);
 			if (desiredSession.getAvailableThisPeriod()[period]
 					&& desiredSession.getStudents().get(period)
 							.size() < desiredSession.getRoom().getMaxCapacity()
 					&& !currentStud.getAssignments().contains(desiredSession)) {
-				System.out.println("SUCCESS!");
+				log.finer("SUCCESS!");
             desiredSession.getStudents().get(period).add(currentStud);
             currentStud.getAssignments().add(period, desiredSession); //Changed from set --> add //took out period - 1
             changeStudentContentness(currentStud); //Deals with contentness
             return;
          }
       }
-      System.out.println("No, Next!");
+      log.finer("No, Next!");
       
       
       
@@ -247,6 +246,8 @@ public class Algorithms{
    }
    
 	//Checks to make sure all sessions meet minimum capacity (that we define)
+   // can we delete this
+   @Deprecated
    private static boolean allSessionAreFilledToMin(ArrayList<Session> sessions){ 
       int minCapacity = 10;
       for(int i = 0; i < 3; i++) {
@@ -293,7 +294,6 @@ public class Algorithms{
             min = sessions.get(i);
          }
       }
-      System.out.println("adding " + min + " to "+stud.getAssignments());
       return min;
    }
    
