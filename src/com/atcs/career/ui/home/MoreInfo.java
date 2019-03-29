@@ -561,8 +561,8 @@ public abstract class MoreInfo {
 //				e.getSessions().get(0), null);
 
 //		SideInfoPanel s = MoreInfo.getInfoPanel(e.getRooms().get(0), null);
-		SideInfoPanel s = MoreInfo.getInfoPanel(e.getStudents().get(0), null);
+//		SideInfoPanel s = MoreInfo.getInfoPanel(e.getStudents().get(0), null);
 //		SideInfoPanel s = MoreInfo.getInfoPanel(e.getSessions().get(0), null);
-		 show(s);
+//		 show(s);
 	}
 }

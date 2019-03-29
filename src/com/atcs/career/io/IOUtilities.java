@@ -119,7 +119,7 @@ public class IOUtilities
    	Collections.sort(requests, new Comparator<Student>() {
 			@Override
 			public int compare(Student o1, Student o2) {
-				return o1.compareToName(o2);
+				return o1.compareToEmail(o2);
 			}	
    	});
    	int index = -1;
@@ -133,7 +133,6 @@ public class IOUtilities
     * binary search of the requests for a student. assumes the array is sorted
     */
    private static int indexOf(Student target, ArrayList<Student> requests) {
-   	System.out.println("searching for "+target.getFullName());
    	return binarySearch(requests, 0, requests.size(), target);
    }
    
@@ -145,7 +144,7 @@ public class IOUtilities
  
            if (arr.get(mid).equals(target)) 
                return mid; 
-           if (arr.get(mid).compareToName(target) > 0) 
+           if (arr.get(mid).compareToEmail(target) > 0) 
                return binarySearch(arr, l, mid - 1, target); 
            return binarySearch(arr, mid + 1, r, target); 
        } 

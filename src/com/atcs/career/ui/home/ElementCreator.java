@@ -22,8 +22,6 @@ public class ElementCreator {
 		ArrayList<JTextField> fields = new ArrayList<JTextField>();
 		message.add(createInfoField("Title", fields));
 		message.add(createInfoField("Speaker", fields));
-
-//		JOptionPane.showMessageDialog(null, message, "Create Session", JOptionPane.PLAIN_MESSAGE);
 		
 		if (JOptionPane.showConfirmDialog(null, message, "Create Session",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 

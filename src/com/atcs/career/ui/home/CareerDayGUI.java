@@ -135,7 +135,7 @@ public class CareerDayGUI extends JPanel {
 						Student add = ElementCreator.createStudent();
 						if (add == null) return;
 						event.getMasterStudents().add(add);
-						event.getStudents().add(add);
+//						event.getStudents().add(add);
 						System.out.println(event.getMasterStudents().indexOf(add));
 						refresh();
 					}

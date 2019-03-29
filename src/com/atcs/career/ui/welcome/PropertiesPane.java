@@ -206,8 +206,7 @@ public class PropertiesPane extends JPanel {
 		if (checkNullPassed(allStudentFile))
 			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile));
 		if (checkNullPassed(studentFile)) {
-			ret.setStudents(IOUtilities.loadStudentArray(studentFile));
-			IOUtilities.combineStudentArrays(ret.getStudents(), ret.getMasterStudents());
+			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(studentFile), ret.getMasterStudents());
 		}
 		if (checkNullPassed(classroomFile))
 			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));

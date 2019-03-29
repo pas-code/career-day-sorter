@@ -21,7 +21,7 @@ public class Event implements Serializable {
 	public static int startYear = 0;
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
-	private ArrayList<Student> students = new ArrayList<Student>();
+//	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
@@ -36,21 +36,24 @@ public class Event implements Serializable {
 	 */
 	public Event(String name) {
 		eventName = name;
-		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
+//		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
 		 masterStudents = IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
+		 IOUtilities.combineStudentArrays(
+					IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv")), getMasterStudents());
 		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
 		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
 		 System.out.println("AFTER THIS");
 		 amountOfSessions = sessions.size();
 		 
-		 startYear = students.get(0).getTimeEntered()/1000;
-		 startDay = students.get(0).getTimeEntered()%1000;
+		 startYear = masterStudents.get(0).getTimeEntered()/1000;
+		 startDay = masterStudents.get(0).getTimeEntered()%1000;
 	}
 	
 	public Event() {
-		students = new ArrayList<Student>();
+//		students = new ArrayList<Student>();
 		rooms = new ArrayList<Room>();
 		sessions = new ArrayList<Session>();
+		masterStudents = new ArrayList<Student>();
 	}
 	
 	public static Event testEvent() {
@@ -78,7 +81,7 @@ public class Event implements Serializable {
        students.add(perOne);
        students.add(perOne);
        sessions.get(0).setStudents(students);
-       ret.setStudents(perOne);
+//       ret.setStudents(perOne);
        ArrayList<Room> rooms = ret.rooms;
        for(int i = 121; i< 140; i++)
       	 rooms.add(new Room(i + "", 30));
@@ -86,7 +89,7 @@ public class Event implements Serializable {
 
        ret.eventName = "TEST";
        
-       ret.students = students.get(0);
+//       ret.students = students.get(0);
        sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
 
        return ret; 
@@ -108,7 +111,8 @@ public class Event implements Serializable {
 	}
 
 	public void selectStudentFile() {
-		students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
+		IOUtilities.combineStudentArrays(
+				IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv")), getMasterStudents());
 		amountOfSessions = sessions.size();
 	}
 
@@ -135,9 +139,9 @@ public class Event implements Serializable {
 		return sessions;
 	}
 
-	public ArrayList<Student> getStudents() {
-		return students;
-	}
+//	public ArrayList<Student> getStudents() {
+//		return students;
+//	}
 
 	public ArrayList<Room> getRooms() {
 		return rooms;
@@ -212,8 +216,16 @@ public class Event implements Serializable {
       this.sessions = sessions;
    }
 
-   public void setStudents(ArrayList<Student> students) {
-      this.students = students;
+//   public void setStudents(ArrayList<Student> students) {
+//      this.students = students;
+//   }
+   
+   public ArrayList<Student> studentsWithRequests() {
+   	ArrayList<Student> retval = new ArrayList<Student>();
+   	for (Student s : masterStudents) 
+   		if (!s.getRequests().isEmpty())
+   			retval.add(s);
+   	return retval;
    }
 
    public void setRooms(ArrayList<Room> rooms) {
@@ -265,7 +277,7 @@ public class Event implements Serializable {
 	}
 	
 	public String infoString() {
-		return getEventName()  + "\n" + masterStudents + "\n" + students + "\n" + rooms + "\n" + sessions; 
+		return getEventName()  + "\n" + masterStudents + "\n" + rooms + "\n" + sessions; 
 	}
 	
 }

@@ -214,8 +214,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 				- o.getStudentPriority().getPriority());
 	}
 
-	public int compareToName(Student o) {
-		return getFullName().compareTo(o.getFullName());
+	public int compareToEmail(Student o) {
+		return getEmail().compareTo(o.getEmail());
 	}
 	
 	@Override

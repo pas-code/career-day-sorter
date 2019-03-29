@@ -28,8 +28,6 @@ public class Algorithms{
    
    public static void sort(Event e) {
    	String thingsMissing = "";
-   	if (e.getStudents().isEmpty())
-   		thingsMissing += "student request data.\n";
    	if (e.getRooms().isEmpty())
    		thingsMissing += "room data.\n";
    	if (e.getSessions().isEmpty())
@@ -45,22 +43,23 @@ public class Algorithms{
    		return;
    	}
    	if (e.isSorted()) {
-   		clearAssignments(e.getStudents(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
+   		clearAssignments(e.studentsWithRequests(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
    		e.setSorted(false);
    	}
-   	myBigFatGreekWethod(e.getStudents(), e.getMasterStudents(), e.getRooms(), e.getSessions());
+   	
+   	myBigFatGreekWethod(e.studentsWithRequests(), e.getMasterStudents(), e.getRooms(), e.getSessions());
    	e.setSorted(true);
    }
    
    //BIG METHOD THAT DOES EVERYTHING
-   private static void myBigFatGreekWethod(ArrayList<Student> students, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
-      assignRoomsToSessions(students, rooms, sessions);
+   private static void myBigFatGreekWethod(ArrayList<Student> requestStudents, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
+      assignRoomsToSessions(requestStudents, rooms, sessions);
       log.info("Method 1 Finished");
       
-      rankStudents(students, master);
+      rankStudents(requestStudents, master);
       log.info("Method 2 Finished");
       
-      assignStudentsToSessions(students, sessions);
+      assignStudentsToSessions(requestStudents, sessions);
       log.info("Method 3 Finished");
       
       log.fine("Classes under Cap:");
@@ -74,7 +73,7 @@ public class Algorithms{
          }
       }
       
-      log.info("Accuracy:" + getSortingAccuracyAverage(students));
+      log.info("Accuracy:" + getSortingAccuracyAverage(requestStudents));
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness

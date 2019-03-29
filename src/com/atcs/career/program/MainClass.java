@@ -41,7 +41,6 @@ public class MainClass {
 		if (eventPathToOpen == null || eventPathToOpen == "") {
 			//open the welcome screen
 			new MasterUI().openWelcome();
-			System.out.println("we have an event");
 		}
 		else {
 			try {
