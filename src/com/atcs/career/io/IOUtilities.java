@@ -137,10 +137,9 @@ public class IOUtilities
    }
    
    private static int binarySearch(ArrayList<Student> arr, int l, int r, Student target) { 
-       if (r >= l) { 
+//   	System.out.println("SEARCH FROM " + l + " to " + r + " from "+arr.size());
+       if (r > l) { 
            int mid = l + (r - l) / 2; 
-           System.out.println(mid);
-           System.out.println(arr.get(mid));
  
            if (arr.get(mid).equals(target)) 
                return mid; 

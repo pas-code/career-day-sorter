@@ -268,7 +268,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	
 	public boolean assignmentsContain(Session sess) {
 		for (Session s : assignments)
-			if (s.equals(sess))
+			if (s != null && s.equals(sess))
 				return true;
 		return false;
 	}
