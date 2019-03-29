@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -261,12 +262,13 @@ public abstract class MoreInfo {
 				}
 			});
 			addAssignment.addActionListener(e -> {
+				// create new bar
 				byte periodToInsertTo;
 				Session sessionToInsert;
-				JTextField sessionBox = sessionSearchField();
+				JTextField sessionBox = sessionSearchField(e1 -> {});
+				
 				// highest possible period to insert is either the 
 				//max period available in the event or the highest number event that the student already has
-				System.out.println("MAX " + master.getEvent().getNumberOfPeriods());
 				int highestPossiblePeriod = Math.min(
 						master.getEvent().getNumberOfPeriods(), memberSessions.getModel().getSize());
 				SpinnerNumberModel model = new SpinnerNumberModel(highestPossiblePeriod + 1, 1, highestPossiblePeriod + 1, 1);
@@ -325,7 +327,16 @@ public abstract class MoreInfo {
 		private JPanel createRequestSlot(int choice, Session request) {
 			JPanel ret = new JPanel(new BorderLayout());
 			ret.add(new JLabel(choice + ":"), BorderLayout.WEST);
-			JTextField title = sessionSearchField();
+			JTextField title = sessionSearchField(e1 -> {
+				// check if the session is valid. if not, tell them
+				for (Session s : master.getEvent().getSessions())
+					if (s.getTitle().equals(((JTextComponent) e1.getSource()).getText())) {
+						submitNewRequest(s, choice - 1);
+						return;
+					}
+				//notify not found and reset text? TODO
+			});
+			
 			title.setText(request == null ? "" : request.getTitle());
 			ret.add(title);
 			JButton remove = new JButton("Remove");
@@ -372,17 +383,9 @@ public abstract class MoreInfo {
 			requestPanel.revalidate();
 		}
 		
-		private JTextField sessionSearchField() {
+		private JTextField sessionSearchField(ActionListener action) {
 			JTextField searchBar = new JTextField();
-			searchBar.addActionListener(e -> {
-				// check if the session is valid. if not, tell them
-				for (Session s : master.getEvent().getSessions())
-					if (s.getTitle().equals(searchBar.getText())) {
-						submitNewRequest(s);
-						return;
-					}
-				//notify not found and reset text?
-			});
+			searchBar.addActionListener(action);
 			//auto-complete
 			searchBar.addKeyListener(new KeyListener() {
 				@Override
@@ -403,7 +406,7 @@ public abstract class MoreInfo {
 						final int index = i;
 						addition.addActionListener(e1 -> {
 							searchBar.setText(resultData.get(index).getTitle());
-							submitNewRequest(resultData.get(index));
+							action.actionPerformed(new ActionEvent(searchBar, 0, "selected autocomplete"));
 						});
 						results.add(addition);
 					}
@@ -414,8 +417,8 @@ public abstract class MoreInfo {
 			return searchBar;
 		}
 		
-		private void submitNewRequest(Session s) {
-			
+		private void submitNewRequest(Session s, int slot) {
+			student.getRequests().add(slot, s);
 		}
 		
 		
@@ -428,7 +431,6 @@ public abstract class MoreInfo {
 	public static class SessionPanel extends SideInfoPanel {
 		private static final long serialVersionUID = 1L;
 		// Session instance variables
-		private JButton editStudent, addStudent, removeStudent;
 		private JPanel speakerName, classroomNumber;
 		private Session session;
 		private JList<Student> listStudents;
@@ -436,9 +438,6 @@ public abstract class MoreInfo {
 		public SessionPanel(Session session, CareerDayGUI master) {
 			super(master);
 			this.session = session;
-			addStudent = new JButton("Add Student");
-			editStudent = new JButton("Edit Student");
-			removeStudent = new JButton("Remove Student");
 
 			speakerName = createInfoField("Speaker:", session.getSpeaker(), new EditingAction() {
 				@Override
@@ -489,30 +488,38 @@ public abstract class MoreInfo {
 			north.add(speakerName);
 			north.add(classroomNumber);
 
-			editStudent.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-				}
-			});
-
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
 			south.setLayout(new GridLayout(5, 1));
-			south.add(editStudent);
-			south.add(addStudent);
-			south.add(removeStudent);
-
-			removeStudent.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					System.out.println("test");
-					if (listStudents.getSelectedIndex() != -1) {
-						scrollPane.revalidate();
-						scrollPane.repaint();
-					}
-				}
+			
+			JButton button = new JButton("Add Student");
+			button.addActionListener(e -> {
+				JPanel studentSearchPanel = new JPanel(new BorderLayout());
+				studentSearchPanel.add(studentSearchField(e1 -> {
+					for (Student s : master.getEvent().getMasterStudents())
+						if (s.getFullName().equals(((JTextComponent) e1.getSource()).getText())) {
+							// student exists
+							session.getStudents().get(getPeriod()).add(s);
+							if (s.getAssignments().size() > getPeriod())
+								s.getAssignments().set(getPeriod(), session);
+							
+						}
+				}));
+			});
+			
+			south.add(button);
+			
+			button = new JButton("Show Student Info");
+			button.addActionListener(e -> {
+				master
+			});
+			
+			button = new JButton("Remove from Session");
+			button.addActionListener(e -> {
+				Student selected = listStudents.getSelectedValue();
+				session.getStudents().get(getPeriod()).remove(selected);
+				selected.getAssignments().remove(session);
+				refresh();
 			});
 
 		}
@@ -525,12 +532,43 @@ public abstract class MoreInfo {
 		}
 
 		public void refresh() {
-			System.out.println("refresh");
-			System.out.println("getting period "+getPeriod());
 			populateList(getPeriod());
 			//TODO uh oh
 //			classroomNumber.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 		}
+		
+		private JTextField studentSearchField(ActionListener action) {
+			JTextField searchBar = new JTextField();
+			searchBar.addActionListener(action);
+			//auto-complete
+			searchBar.addKeyListener(new KeyListener() {
+				public void keyTyped(KeyEvent e) {}
+				public void keyPressed(KeyEvent e) {}
+				
+				public void keyReleased(KeyEvent e) {
+					final int maxAmtResults = 5;
+					ArrayList<Student> resultData = new ArrayList<Student>();
+					for (Student s : master.getEvent().getMasterStudents()) 
+						if (s.getIdentifier().toLowerCase().contains(searchBar.getText().toLowerCase()))
+							resultData.add(s);
+					if (resultData.isEmpty()) return;
+					JPopupMenu results = new JPopupMenu();
+					for (int i = 0; i < Math.min(maxAmtResults, resultData.size()); i++) {
+						JMenuItem addition = new JMenuItem(resultData.get(i).getTitle());
+						final int index = i;
+						addition.addActionListener(e1 -> {
+							searchBar.setText(resultData.get(index).getTitle());
+							action.actionPerformed(new ActionEvent(searchBar, 0, "autocomplete student select"));
+						});
+						results.add(addition);
+					}
+					results.show(searchBar, 0, searchBar.getHeight() - 3);
+					searchBar.requestFocus();
+				}
+			});
+			return searchBar;
+		}
+		
 		
 	}
 	
