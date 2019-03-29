@@ -200,19 +200,21 @@ public class PropertiesPane extends JPanel {
 	
 	private Event createEvent() {
 		Event ret = new Event();
+		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
+		
 		ret.changeName(title.getText());
 		if (checkNullPassed(sessionFile))
 			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
 		if (checkNullPassed(allStudentFile))
-			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile));
+			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile, ret.getNumberOfPeriods()));
 		if (checkNullPassed(studentFile)) {
-			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(studentFile), ret.getMasterStudents());
+			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
+					studentFile, ret.getNumberOfPeriods()), ret.getMasterStudents());
 		}
 		if (checkNullPassed(classroomFile))
 			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
 		
 		
-		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
 		ret.setLastModified(LocalDate.now());
 		return ret;
 	}

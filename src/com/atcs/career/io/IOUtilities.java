@@ -23,7 +23,7 @@ public class IOUtilities
 //      ArrayList<Room> arr = loadRoomArray(importCSV());
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
-      loadStudentArray(CSVReader.getFileLocation(".csv"));
+      loadStudentArray(CSVReader.getFileLocation(".csv"), 3);
    }
    
    /**
@@ -70,7 +70,7 @@ public class IOUtilities
     * @param fileName the file name of the .csv file, including suffix and path
     * @return ArrayList of Student objects who submitted a form
     */
-   public static ArrayList<Student> loadStudentArray(String fileName){
+   public static ArrayList<Student> loadStudentArray(String fileName, int numPeriods){
       ArrayList<Student> students = new ArrayList<Student>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
       for(int i = 1; i < lines.size(); i++){
@@ -89,7 +89,7 @@ public class IOUtilities
             sessionRequests.add(new Session(lines.get(i)[k].substring(lines.get(i)[k].indexOf("-")+2), lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-")-1)));         
          
          //Adds Student object to the ArrayList to be returned
-         students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true));
+         students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true, numPeriods));
       }
       return students;
    }
@@ -98,7 +98,7 @@ public class IOUtilities
     * @param fileName
     * @return ArrayList of every student
     */
-   public static ArrayList<Student> loadMasterStudentArray(String fileName){
+   public static ArrayList<Student> loadMasterStudentArray(String fileName, int numPeriods){
       ArrayList<Student> masterStudents = new ArrayList<Student>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
       for(int i = 1; i < lines.size(); i++){
@@ -108,7 +108,7 @@ public class IOUtilities
          String email = lines.get(i)[2].trim().replace("\"", "");
          
          //Adds Student object to the ArrayList to be returned
-         masterStudents.add(new Student(lastName, firstName, email));
+         masterStudents.add(new Student(lastName, firstName, email, numPeriods));
       }
       return masterStudents;
    }

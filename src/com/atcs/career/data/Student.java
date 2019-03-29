@@ -12,7 +12,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private static final long serialVersionUID = 2820547053629559120L;
 	public static int MAX_REQUESTS = 5;
 	private String lName, fName, email;
-	private ArrayList<Session> requests, assignments;
+	private ArrayList<Session> requests;
+	private Session[] assignments;
 	private int grade, timeEntered;
 	private Priority priority;
 	private boolean isSwitchable;
@@ -20,7 +21,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	public static void main(String[] args) {
 		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
-				null, 100, true);
+				null, 100, true, 3);
 		System.out.println(s.getGrade());
 		System.out.println(s);
 	}
@@ -35,7 +36,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	 * @param submitted
 	 */
 	public Student(String lName, String fName, String email,
-			ArrayList<Session> requests, int timeEntered, boolean submitted) {
+			ArrayList<Session> requests, int timeEntered, boolean submitted, int numPeriods) {
 		this.lName = lName;
 		this.fName = fName;
 		this.email = email;
@@ -43,7 +44,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		grade = getGradeFromEmail();
 		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
-		this.assignments = new ArrayList<Session>();
+		this.assignments = new Session[numPeriods];
 		isSwitchable = true;
 		this.submitted = submitted;
 	}
@@ -57,8 +58,9 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	 * @param requests
 	 * @param timeEntered
 	 */
-	public Student(String lName, String fName, String email, ArrayList<Session> requests, int timeEntered) {
-		this(lName, fName, email, requests, timeEntered, true);
+	public Student(String lName, String fName, String email, 
+			ArrayList<Session> requests, int timeEntered, int numPeriods) {
+		this(lName, fName, email, requests, timeEntered, true, numPeriods);
 	}
 
 	/**
@@ -68,8 +70,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	 * @param fName
 	 * @param email
 	 */
-	public Student(String lName, String fName, String email) {
-		this(lName, fName, email, new ArrayList<Session>(), 0, false);
+	public Student(String lName, String fName, String email, int numPeriods) {
+		this(lName, fName, email, new ArrayList<Session>(), 0, false, numPeriods);
 	}
 
 	public boolean equals(Student s){
@@ -112,10 +114,10 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	public int getPeriodOfLeastDesired() {
 		int leastDesiredPeriodIndex = 0;
-		for (int i = 1; i < assignments.size(); i++) {
-			if (requests.indexOf(assignments.get(i)) == -1) return i;
-			if (requests.indexOf(assignments.get(i)) > requests
-					.indexOf(assignments.get(leastDesiredPeriodIndex)))
+		for (int i = 1; i < assignments.length; i++) {
+			if (requests.indexOf(assignments[i]) == -1) return i;
+			if (requests.indexOf(assignments[i]) > requests
+					.indexOf(assignments[leastDesiredPeriodIndex]))
 				leastDesiredPeriodIndex = i;
 		}
 		return leastDesiredPeriodIndex;
@@ -157,11 +159,11 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this.requests = requests;
 	}
 
-	public ArrayList<Session> getAssignments() {
+	public Session[] getAssignments() {
 		return assignments;
 	}
 
-	public void setAssignments(ArrayList<Session> assignments) {
+	public void setAssignments(Session[] assignments) {
 		this.assignments = assignments;
 	}
 
@@ -239,8 +241,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	}
 
 	public Session getAssignment(int period) {
-		if (period < assignments.size())
-			return assignments.get(period);
+		if (period < assignments.length)
+			return assignments[period];
 		else
 			return new Session();
 
@@ -262,6 +264,21 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	@Override
 	public String getIdentifier() {
 		return getFullName();
+	}
+	
+	public boolean assignmentsContain(Session sess) {
+		for (Session s : assignments)
+			if (s.equals(sess))
+				return true;
+		return false;
+	}
+	
+	public int getLowestAvailableAssignmentIndex() {
+		for (int i = 0; i < assignments.length; i++)
+			if (assignments[i] == null)
+				return i;
+		
+		return -1;
 	}
 
 }

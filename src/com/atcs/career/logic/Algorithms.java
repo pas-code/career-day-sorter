@@ -195,7 +195,7 @@ public class Algorithms{
                         if(sessions.indexOf(currentStud.getAssignment(j)) != -1) //This is just because of the issue with quotes before speaker name. shouldn't be an issue otherwise
                            sessions.get(sessions.indexOf(currentStud.getAssignment(j))).getStudents().get(j).remove(currentStud); //Take them out of their old session at that period
                         sessions.get(i).getStudents().get(j).add(currentStud); //Add them to this student
-                        currentStud.getAssignments().set(j, sessions.get(i)); //Update this in their assignment array
+                        currentStud.getAssignments()[j] = sessions.get(i); //Update this in their assignment array
                         currentStud.setSwitchable(false); //Don't let this student be switched anymore
                         break;
                      }
@@ -223,10 +223,10 @@ public class Algorithms{
 			if (desiredSession.getAvailableThisPeriod()[period]
 					&& desiredSession.getStudents().get(period)
 							.size() < desiredSession.getRoom().getMaxCapacity()
-					&& !currentStud.getAssignments().contains(desiredSession)) {
+					&& !currentStud.assignmentsContain(desiredSession)) {
 				log.finer("SUCCESS!");
             desiredSession.getStudents().get(period).add(currentStud);
-            currentStud.getAssignments().add(period, desiredSession); //Changed from set --> add //took out period - 1
+            currentStud.getAssignments()[period] =  desiredSession; //Changed from set --> add //took out period - 1
             changeStudentContentness(currentStud); //Deals with contentness
             return;
          }
@@ -236,8 +236,9 @@ public class Algorithms{
       
       
       //They couldn't get in any session they chose this period
+      //TODO do we need this line
+//      currentStud.getAssignments().add(period, new Session()); //Changed from set --> add //took out period - 1
       
-      currentStud.getAssignments().add(period, new Session()); //Changed from set --> add //took out period - 1
       toBeRandomlyAssigned.get(period).add(currentStud); //took out period - 1
       
       
@@ -265,10 +266,10 @@ public class Algorithms{
             Student stud = toBeRandomlyAssigned.get(i).remove(j);
             Session sessionToAssign = getLeastPopulatedSessionPerPeriodStudentConscious(sessions, i, stud);
             sessionToAssign.getStudents().get(i).add(stud);
-            if (stud.getAssignments().size() <= i)
-            	stud.getAssignments().add(sessionToAssign);
-            else
-            	stud.getAssignments().set(i, sessionToAssign);
+//            if (stud.getAssignments().length <= i)
+//            	stud.getAssignments().add(sessionToAssign);
+//            else
+            	stud.getAssignments()[i] = sessionToAssign;
          }
       }
    }
@@ -289,7 +290,7 @@ public class Algorithms{
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
          if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()
-               && sessions.get(i).getAvailableThisPeriod()[period] && !stud.getAssignments().contains(sessions.get(i))){
+               && sessions.get(i).getAvailableThisPeriod()[period] && !stud.assignmentsContain(sessions.get(i))){
             min = sessions.get(i);
          }
       }
@@ -298,12 +299,12 @@ public class Algorithms{
    
    //Changes the student's contentedness (or contentness) based on what requests they have gotten
    private static void changeStudentContentness(Student currentStud){
-      int selectionsAlreadyMade = currentStud.getAssignments().size();
+      int selectionsAlreadyMade = currentStud.getAssignments().length;
       
       double numerator = 0;
       double denominator = 0;
       for(int i = 0; i < selectionsAlreadyMade; i++) {
-         int choiceIndex = currentStud.getRequests().indexOf(currentStud.getAssignments().get(i));
+         int choiceIndex = currentStud.getRequests().indexOf(currentStud.getAssignments()[i]);
          if(choiceIndex != -1)
             numerator += currentStud.getRequests().size() - choiceIndex;
          denominator += currentStud.getRequests().size() - i;
@@ -324,7 +325,7 @@ public class Algorithms{
    
    private static void clearAssignments(ArrayList<Student> studentRequestList, ArrayList<Room> rooms, ArrayList<Session> sessions, int numPeriods) {
    	for (Student s : studentRequestList)
-   		s.setAssignments(new ArrayList<Session>());
+   		s.setAssignments(new Session[numPeriods]);
    	for (Room r : rooms) 
    		r.setResidentSessions(new Session[0]);
    	for (Session s : sessions) {

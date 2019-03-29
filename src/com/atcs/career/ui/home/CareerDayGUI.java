@@ -132,7 +132,7 @@ public class CareerDayGUI extends JPanel {
 				item = new JMenuItem("Add Student");
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Student add = ElementCreator.createStudent();
+						Student add = ElementCreator.createStudent(event.getNumberOfPeriods());
 						if (add == null) return;
 						event.getMasterStudents().add(add);
 //						event.getStudents().add(add);

@@ -30,24 +30,6 @@ public class Event implements Serializable {
 	private boolean sorted;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
-
-	/**
-	 * Creates a new Event from scratch
-	 */
-	public Event(String name) {
-		eventName = name;
-//		 students = IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"));
-		 masterStudents = IOUtilities.loadMasterStudentArray(CSVReader.getFileLocation(".csv"));
-		 IOUtilities.combineStudentArrays(
-					IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv")), getMasterStudents());
-		 rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
-		 sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
-		 System.out.println("AFTER THIS");
-		 amountOfSessions = sessions.size();
-		 
-		 startYear = masterStudents.get(0).getTimeEntered()/1000;
-		 startDay = masterStudents.get(0).getTimeEntered()%1000;
-	}
 	
 	public Event() {
 //		students = new ArrayList<Student>();
@@ -55,45 +37,6 @@ public class Event implements Serializable {
 		sessions = new ArrayList<Session>();
 		masterStudents = new ArrayList<Student>();
 	}
-	
-	public static Event testEvent() {
-	   Event ret = new Event();
-       ArrayList<Session> sessions = ret.sessions;
-       sessions.add(new Session("Business", "Donald Trump"));
-       sessions.add(new Session("Investment", "Warren Buffet"));
-       sessions.add(new Session("Military", "James Mattis"));
-       sessions.add(new Session("Electrical Engineering", "Elon Musk"));
-       sessions.add(new Session("Astronomy", "Albert Einstein"));
-       sessions.add( new Session("Criminal Defense", "Robert Shapiro"));
-       sessions.add(new Session("Intelligence", "James Comey"));
-       sessions.add(new Session("Software Development", "Johnny Ive"));
-       
-       ArrayList<ArrayList<Student>> students = new ArrayList<ArrayList<Student>>();
-       ArrayList<Student> perOne = new ArrayList<Student>();
-       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));      
-       perOne.add(new Student("Jack", "Black", "ppeter20@pascack.org",sessions, 0));
-       perOne.add(new Student("Eric", "Wang", "ppeter20@pascack.org",sessions, 0));
-       perOne.add(new Student("Jarret", "Bierman", "ppeter20@pascack.org",sessions, 0));
-       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
-       perOne.add(new Student("Peter", "Pan", "ppeter20@pascack.org",sessions, 0));
-       students.add(perOne);
-       students.add(perOne);
-       students.add(perOne);
-       students.add(perOne);
-       sessions.get(0).setStudents(students);
-//       ret.setStudents(perOne);
-       ArrayList<Room> rooms = ret.rooms;
-       for(int i = 121; i< 140; i++)
-      	 rooms.add(new Room(i + "", 30));
-       
-
-       ret.eventName = "TEST";
-       
-//       ret.students = students.get(0);
-       sessions.get(0).setStudents(students.get(0), 0); //what?? -tom
-
-       return ret; 
-   }
 	
 	
 	public static Event readTestEvent() { 
@@ -112,7 +55,8 @@ public class Event implements Serializable {
 
 	public void selectStudentFile() {
 		IOUtilities.combineStudentArrays(
-				IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv")), getMasterStudents());
+				IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods()),
+				getMasterStudents());
 		amountOfSessions = sessions.size();
 	}
 

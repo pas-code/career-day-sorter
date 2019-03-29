@@ -297,7 +297,7 @@ public abstract class MoreInfo {
 //					if (periodToInsertTo >= student.getAssignments().size())
 //						student.getAssignments().add(sessionToInsert);
 //					else
-						student.getAssignments().add(periodToInsertTo - 1, sessionToInsert);
+						student.getAssignments()[periodToInsertTo - 1] = sessionToInsert;
 					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
 				}
 				addAssignment.setEnabled(
@@ -308,7 +308,7 @@ public abstract class MoreInfo {
 			
 			removeAssignment.addActionListener(e -> {
 				Session val = memberSessions.getSelectedValue();
-				student.getAssignments().remove(val);
+				student.getAssignments()[memberSessions.getSelectedIndex()] = null;
 				val.getStudents().get(memberSessions.getSelectedIndex()).remove(student);
 
 				refresh();
@@ -423,7 +423,7 @@ public abstract class MoreInfo {
 		
 		
 		public void refresh() {
-			memberSessions.setListData(student.getAssignments().toArray(new Session[student.getAssignments().size()]));
+			memberSessions.setListData(student.getAssignments());
 			revalidate();
 		}
 	}
@@ -500,8 +500,8 @@ public abstract class MoreInfo {
 						if (s.getFullName().equals(((JTextComponent) e1.getSource()).getText())) {
 							// student exists
 							session.getStudents().get(getPeriod()).add(s);
-							if (s.getAssignments().size() > getPeriod())
-								s.getAssignments().set(getPeriod(), session);
+							if (s.getAssignments().length > getPeriod())
+								s.getAssignments()[getPeriod()] = session;
 							
 						}
 				}));
@@ -511,14 +511,14 @@ public abstract class MoreInfo {
 			
 			button = new JButton("Show Student Info");
 			button.addActionListener(e -> {
-				master
+				
 			});
 			
 			button = new JButton("Remove from Session");
 			button.addActionListener(e -> {
 				Student selected = listStudents.getSelectedValue();
 				session.getStudents().get(getPeriod()).remove(selected);
-				selected.getAssignments().remove(session);
+				selected.getAssignments()[getPeriod()] = null;
 				refresh();
 			});
 
@@ -589,18 +589,5 @@ public abstract class MoreInfo {
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		Event e = Event.testEvent();
-		
-		
-//		MoreInfo.SessionPanel s = new MoreInfo.SessionPanel(e,
-//				e.getSessions().get(0), null);
-
-//		SideInfoPanel s = MoreInfo.getInfoPanel(e.getRooms().get(0), null);
-//		SideInfoPanel s = MoreInfo.getInfoPanel(e.getStudents().get(0), null);
-//		SideInfoPanel s = MoreInfo.getInfoPanel(e.getSessions().get(0), null);
-//		 show(s);
 	}
 }

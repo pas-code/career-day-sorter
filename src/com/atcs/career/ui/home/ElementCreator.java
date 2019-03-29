@@ -29,7 +29,7 @@ public class ElementCreator {
 		return null;
 	}
 	
-	public static Student createStudent() {
+	public static Student createStudent(int numPeriods) {
 		JPanel message = new JPanel(new GridLayout(0, 1));
 		ArrayList<JTextField> fields = new ArrayList<JTextField>();
 		message.add(createInfoField("First Name", fields));
@@ -39,7 +39,7 @@ public class ElementCreator {
 		
 		if (JOptionPane.showConfirmDialog(null, message, "Create Student",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 
-			return new Student(fields.get(0).getText(), fields.get(1).getText(), fields.get(2).getText());
+			return new Student(fields.get(0).getText(), fields.get(1).getText(), fields.get(2).getText(), numPeriods);
 		return null;
 	}
 	
