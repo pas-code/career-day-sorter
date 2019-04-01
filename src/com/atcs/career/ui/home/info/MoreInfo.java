@@ -1,6 +1,6 @@
 //Thomas Varano
 //Dec 10, 2018
-package com.atcs.career.ui.home;
+package com.atcs.career.ui.home.info;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,12 +34,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
-import com.atcs.career.data.Event;
 import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.home.CareerDayGUI;
 
 public abstract class MoreInfo {
 
@@ -572,7 +571,7 @@ public abstract class MoreInfo {
 		
 	}
 	
-	private static JPanel createInfoField(String title, Object data, EditingAction action) {
+	public static JPanel createInfoField(String title, Object data, EditingAction action) {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JLabel(title + ": "), BorderLayout.WEST);
 		JTextField editField = new JTextField(data.toString());

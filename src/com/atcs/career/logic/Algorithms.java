@@ -7,6 +7,7 @@ package com.atcs.career.logic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -25,6 +26,11 @@ public class Algorithms{
     * */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    private static final BasicLogger log = BasicLogger.getLogger(Algorithms.class.getName());
+   
+   static {
+   	log.setVerbose(false);
+   	log.setFilter(Level.FINE);
+   }
    
    public static void sort(Event e) {
    	String thingsMissing = "";

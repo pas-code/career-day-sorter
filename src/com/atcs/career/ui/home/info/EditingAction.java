@@ -1,7 +1,7 @@
 //Thomas Varano
 //Mar 22, 2019
 
-package com.atcs.career.ui.home;
+package com.atcs.career.ui.home.info;
 
 import java.awt.AWTEvent;
 import java.awt.event.ActionEvent;
