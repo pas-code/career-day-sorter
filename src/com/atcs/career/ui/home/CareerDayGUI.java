@@ -98,7 +98,7 @@ public class CareerDayGUI extends JPanel {
 			listInfoChanged = event.getMasterStudents();
 		else
 			listInfoChanged = event.getRooms();
-		tabs.setTabComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
+		tabs.setComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
 //		tabs.removeAll();
 //		tabConfig();
 		tabs.setSelectedIndex(previouslySelectedIndex);
