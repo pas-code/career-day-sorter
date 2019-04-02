@@ -167,7 +167,7 @@ public class CareerDayGUI extends JPanel {
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Room r;
-						if ((r = ElementCreator.createRoom()) == null) return;
+						if ((r = ElementCreator.createRoom(event.getNumberOfPeriods())) == null) return;
 						event.getRooms().add(r);
 						changeLog.info("Room added: " + r);
 						refresh(r.getType());
@@ -223,14 +223,14 @@ public class CareerDayGUI extends JPanel {
 	public void tabConfig() {
 		lists = new ArrayList<JList<GuiListable>>();
 		tabs.setFont(smallFont);
-		addTab(event.getSessions());
-		addTab(event.getMasterStudents());
-		addTab(event.getRooms());
+		addTab(event.getSessions(), "Sessions");
+		addTab(event.getMasterStudents(), "Students");
+		addTab(event.getRooms(), "Rooms");
 	}
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
-	private void addTab(ArrayList<? extends GuiListable> eventData) {
-		tabs.addTab(((GuiListable) eventData.get(0)).getType(), createTab(eventData));
+	private void addTab(ArrayList<? extends GuiListable> eventData, String title) {
+		tabs.addTab(title, createTab(eventData));
 	}
 	
 	private JScrollPane createTab(ArrayList<? extends GuiListable> eventData) {
@@ -284,7 +284,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public void changePeriod(byte periodIndex) {
-		System.out.println("change period to " + periodIndex);
+		changeLog.info("change period to " + periodIndex);
 		this.selectedPeriod = periodIndex;
 		if (infoPanel != null) infoPanel.refresh();
 	}

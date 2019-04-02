@@ -40,6 +40,7 @@ import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.CareerDayGUI;
+import com.atcs.career.ui.home.Searchable;
 
 public abstract class MoreInfo {
 
@@ -163,15 +164,15 @@ public abstract class MoreInfo {
 
 		public void refresh() {
 			System.out.println("refresh");
-			sessionName.setText(room.getResidentSessions() == null || room.getResidentSessions().length == 0 ? 
+			sessionName.setText(room.getResidentSessions()[getPeriod()] == null ? 
 					"No Resident Session" :
 						// only one resident session per room, so no need for an array.
-								room.getResidentSessions()[0].getIdentifier());
-			studentList.setListData(room.getResidentSessions() == null || room.getResidentSessions().length == 0 ?
+								room.getResidentSessions()[getPeriod()].getIdentifier());
+			studentList.setListData(room.getResidentSessions()[getPeriod()]== null ?
 					new Student[0] : 
 					
 					//get the current session
-					room.getResidentSessions()[0]
+					room.getResidentSessions()[getPeriod()]
 							// get that session's students for this period
 							.getStudents().get(getPeriod())
 							// turn to standard array
@@ -247,10 +248,11 @@ public abstract class MoreInfo {
 			memberSessions = new JList<Session>();
 			memberSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			refresh();
+			int[] periodsAvailable = periodsEmpty();
 			JButton addAssignment = new JButton("Add Session");
 			JButton removeAssignment = new JButton("Remove");
 			addAssignment.setEnabled(
-					memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
+					periodsAvailable.length > 0);
 			removeAssignment.setEnabled(false);
 			memberSessions.addListSelectionListener(new ListSelectionListener() {
 				@Override
@@ -268,11 +270,45 @@ public abstract class MoreInfo {
 				
 				// highest possible period to insert is either the 
 				//max period available in the event or the highest number event that the student already has
-				int highestPossiblePeriod = Math.min(
-						master.getEvent().getNumberOfPeriods(), memberSessions.getModel().getSize());
-				SpinnerNumberModel model = new SpinnerNumberModel(highestPossiblePeriod + 1, 1, highestPossiblePeriod + 1, 1);
-				JSpinner periodInsertSelect = new JSpinner(model);
+				// int highestPossiblePeriod = Math.min(
+				// master.getEvent().getNumberOfPeriods(),
+				// memberSessions.getModel().getSize());
+				// SpinnerNumberModel model = new
+				// SpinnerNumberModel(highestPossiblePeriod + 1, 1,
+				// highestPossiblePeriod + 1, 1);
+
+				@SuppressWarnings("serial")
+				/**
+				 * A spinner model to show only the periods available for inserting. For example, if the student has 
+				 * an assignment in period 2, but not the other ones, when the "add session" prompt is shown, 
+				 * the user will only be able to add a session into periods 1 & 3 (periods are indexed from 1 for
+				 * the user, but 0 for the computer. that is why there are a lot of -1 all over the place.)
+				 */
+				SpinnerNumberModel model = new SpinnerNumberModel(periodsAvailable[0] + 1, periodsAvailable[0] + 1,
+						periodsAvailable[periodsAvailable.length - 1] + 1, 1) {					
+					@Override
+					public Object getNextValue() {
+						return incrValue(+1);
+					}
+					@Override
+					public Object getPreviousValue() {
+						return incrValue(-1);
+					}
+					
+					private Number incrValue(int dir) {
+						Number value = (Number) getValue();
+						int index = indexOf(value.intValue() -1 , periodsAvailable);
+						
+						if (dir > 0 && ++index < periodsAvailable.length)
+								return periodsAvailable[index] + 1;
+						else if (dir < 0 && --index >= 0)
+								return periodsAvailable[index] + 1;
+						return null;
+					}
+				};
 				
+				JSpinner periodInsertSelect = new JSpinner(model);
+
 				JPanel msg = new JPanel(new GridLayout(0, 1));
 				JPanel row = new JPanel(new BorderLayout());
 				row.add(new JLabel("Insert Session: "), BorderLayout.WEST);
@@ -288,19 +324,16 @@ public abstract class MoreInfo {
 						JOptionPane.PLAIN_MESSAGE, null, null, JOptionPane.OK_OPTION);
 				
 				if (confirmation != JOptionPane.OK_OPTION) return;
-				periodToInsertTo = (byte)((Integer)periodInsertSelect.getValue()).intValue();
+				periodToInsertTo = (byte) (((Integer)periodInsertSelect.getValue()).intValue() - 1);
 				
 				if ((sessionToInsert = master.getEvent().getSessionFromName(sessionBox.getText())) == null)
 					return;
 				else {
-//					if (periodToInsertTo >= student.getAssignments().size())
-//						student.getAssignments().add(sessionToInsert);
-//					else
 						student.getAssignments()[periodToInsertTo - 1] = sessionToInsert;
 					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
 				}
 				addAssignment.setEnabled(
-						memberSessions.getModel().getSize() <= master.getEvent().getNumberOfPeriods());
+						periodsEmpty().length > 0);
 				removeAssignment.setEnabled(false);
 				refresh();
 			});
@@ -321,6 +354,26 @@ public abstract class MoreInfo {
 			south.add(removeAssignment);
 			add(south, BorderLayout.SOUTH);
 			refresh();
+		}
+		
+		private static int indexOf(int target, int[] arr) {
+			for (int i = 0; i < arr.length; i++)
+				if (arr[i] == target)
+					return i;
+			return -1;
+		}
+		
+		private int[] periodsEmpty() {
+			int sizeOfRet = 0;
+			for (int i = 0; i < student.getAssignments().length; i++)
+				if (student.getAssignment(i) == null)
+					sizeOfRet++;
+			int[] ret = new int[sizeOfRet];
+			int index = 0;
+			for (int i = 0; i < student.getAssignments().length; i++)
+				if (student.getAssignment(i) == null) 
+					ret[index++] = i;
+			return ret;
 		}
 		
 		private JPanel createRequestSlot(int choice, Session request) {
@@ -383,37 +436,7 @@ public abstract class MoreInfo {
 		}
 		
 		private JTextField sessionSearchField(ActionListener action) {
-			JTextField searchBar = new JTextField();
-			searchBar.addActionListener(action);
-			//auto-complete
-			searchBar.addKeyListener(new KeyListener() {
-				@Override
-				public void keyTyped(KeyEvent e) {}
-				@Override
-				public void keyPressed(KeyEvent e) {}
-				@Override
-				public void keyReleased(KeyEvent e) {
-					final int maxAmtResults = 5;
-					ArrayList<Session> resultData = new ArrayList<Session>();
-					for (Session s : master.getEvent().getSessions()) 
-						if (s.getIdentifier().toLowerCase().contains(searchBar.getText().toLowerCase()))
-							resultData.add(s);
-					if (resultData.isEmpty()) return;
-					JPopupMenu results = new JPopupMenu();
-					for (int i = 0; i < Math.min(maxAmtResults, resultData.size()); i++) {
-						JMenuItem addition = new JMenuItem(resultData.get(i).getTitle());
-						final int index = i;
-						addition.addActionListener(e1 -> {
-							searchBar.setText(resultData.get(index).getTitle());
-							action.actionPerformed(new ActionEvent(searchBar, 0, "selected autocomplete"));
-						});
-						results.add(addition);
-					}
-					results.show(searchBar, 0, searchBar.getHeight() - 3);
-					searchBar.requestFocus();
-				}
-			});
-			return searchBar;
+			return anonSearchBar(master.getEvent().getSessions(), action);
 		}
 		
 		private void submitNewRequest(Session s, int slot) {
@@ -445,20 +468,41 @@ public abstract class MoreInfo {
 				}
 			});
 
-			classroomNumber = createInfoField("Room No.", 
-					session.getRoom() == null ? "" : session.getRoom().getRoomNumber(),
-							new EditingAction() {
-								@Override
-								public void edit(AWTEvent e) {
-									try {
-										//TODO search rooms and parse namess
-//									session.setRoom(((JTextField)e.getSource()).getText());
-									} catch (NumberFormatException e1) {
-										System.out.println("oops");
-										((JTextField)e.getSource()).setText(session.getRoom().getRoomNumber());
-									}
-								}
+			classroomNumber = new JPanel(new BorderLayout());
+			classroomNumber.add(new JLabel("Room: "), BorderLayout.WEST);
+			JTextField editField = roomSearchField(e -> {
+				Room set = searchRooms(((JTextComponent) e.getSource()).getText());
+				if (set == null) {
+					((JTextComponent) e.getSource()).setText(session.getRoom() == null
+									? ""
+									: session.getRoom().getRoomNumber());
+					return;
+				}
+				session.setRoom(set);
+				set.getResidentSessions()[getPeriod()] = session;
+				refresh();
 			});
+			editField.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
+			classroomNumber.add(editField, BorderLayout.CENTER);
+			
+//			classroomNumber = createInfoField("Room No",
+//					session.getRoom() == null
+//							? "" : session.getRoom().getRoomNumber(),
+//					new EditingAction() {
+//						@Override
+//						public void edit(AWTEvent e) {
+//							try {
+//								// TODO search rooms and parse namess
+//								// session.setRoom(((JTextField)e.getSource()).getText());
+//								((JTextField) e.getSource()).addActionListener(e1 -> {
+//									session.setRoom(((JTextField) e1.getSource()).getText());
+//								});
+//							} catch (NumberFormatException err) {
+//								System.out.println("oops");
+//								((JTextField) e.getSource()).setText(session.getRoom().getRoomNumber());
+//							}
+//						}
+//					});
 
 			
 
@@ -522,6 +566,17 @@ public abstract class MoreInfo {
 			});
 
 		}
+		
+		private JTextField roomSearchField(ActionListener action) {
+			return anonSearchBar(master.getEvent().getRooms(), action);
+		}
+		
+		private Room searchRooms(String roomTitle) {
+			for (Room r : master.getEvent().getRooms())
+				if (r.getTitle().equals(roomTitle))
+					return r;
+			return null;
+		}
 
 		public void populateList(int period) {
 			// model = new DefaultListModel<String>();
@@ -537,38 +592,44 @@ public abstract class MoreInfo {
 		}
 		
 		private JTextField studentSearchField(ActionListener action) {
-			JTextField searchBar = new JTextField();
-			searchBar.addActionListener(action);
-			//auto-complete
-			searchBar.addKeyListener(new KeyListener() {
-				public void keyTyped(KeyEvent e) {}
-				public void keyPressed(KeyEvent e) {}
-				
-				public void keyReleased(KeyEvent e) {
-					final int maxAmtResults = 5;
-					ArrayList<Student> resultData = new ArrayList<Student>();
-					for (Student s : master.getEvent().getMasterStudents()) 
-						if (s.getIdentifier().toLowerCase().contains(searchBar.getText().toLowerCase()))
-							resultData.add(s);
-					if (resultData.isEmpty()) return;
-					JPopupMenu results = new JPopupMenu();
-					for (int i = 0; i < Math.min(maxAmtResults, resultData.size()); i++) {
-						JMenuItem addition = new JMenuItem(resultData.get(i).getTitle());
-						final int index = i;
-						addition.addActionListener(e1 -> {
-							searchBar.setText(resultData.get(index).getTitle());
-							action.actionPerformed(new ActionEvent(searchBar, 0, "autocomplete student select"));
-						});
-						results.add(addition);
-					}
-					results.show(searchBar, 0, searchBar.getHeight() - 3);
-					searchBar.requestFocus();
-				}
-			});
-			return searchBar;
+			return anonSearchBar(master.getEvent().getMasterStudents(), action);
 		}
 		
 		
+	}
+	
+	private static JTextField anonSearchBar(ArrayList<? extends Searchable> values, ActionListener action) {
+		JTextField searchBar = new JTextField();
+		searchBar.addActionListener(action);
+		//auto-complete
+		searchBar.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {}
+			public void keyPressed(KeyEvent e) {}
+			
+			public void keyReleased(KeyEvent e) {
+				final int maxAmtResults = 5;
+				ArrayList<Searchable> resultData = new ArrayList<Searchable>();
+				for (Searchable s : values) 
+					if (s.getIdentifier().toLowerCase().contains(searchBar.getText().toLowerCase()))
+						resultData.add(s);
+				if (resultData.isEmpty()) return;
+				JPopupMenu results = new JPopupMenu();
+				for (int i = 0; i < Math.min(maxAmtResults, resultData.size()); i++) {
+					JMenuItem addition = new JMenuItem(((GuiListable) resultData.get(i)).getTitle());
+					final int index = i;
+					addition.addActionListener(e1 -> {
+						searchBar.setText(((GuiListable) resultData.get(index)).getTitle());
+						action.actionPerformed(new ActionEvent(searchBar, 0, "autocomplete student select"));
+					});
+					results.add(addition);
+				}
+				results.show(searchBar, 0, searchBar.getHeight() - 3);
+				searchBar.requestFocus();
+//				searchBar.setCaretPosition(searchBar.getText().length());
+				searchBar.setSelectionStart(searchBar.getText().length());
+			}
+		});
+		return searchBar;
 	}
 	
 	public static JPanel createInfoField(String title, Object data, EditingAction action) {

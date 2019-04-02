@@ -212,7 +212,7 @@ public class PropertiesPane extends JPanel {
 					studentFile, ret.getNumberOfPeriods()), ret.getMasterStudents());
 		}
 		if (checkNullPassed(classroomFile))
-			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
+			ret.setRooms(IOUtilities.loadRoomArray(classroomFile, ret.getNumberOfPeriods()));
 		
 		
 		ret.setLastModified(LocalDate.now());

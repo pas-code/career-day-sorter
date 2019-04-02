@@ -43,7 +43,7 @@ public class ElementCreator {
 		return null;
 	}
 	
-	public static Room createRoom() {
+	public static Room createRoom(int numPeriods) {
 		JPanel message = new JPanel(new GridLayout(0, 1));
 		ArrayList<JTextField> fields = new ArrayList<JTextField>();
 		message.add(createInfoField("Room Name", fields));
@@ -52,7 +52,7 @@ public class ElementCreator {
 		if (JOptionPane.showConfirmDialog(null, message, "Create Room",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
 			try {
-				return new Room(fields.get(0).getText(),Integer.parseInt(fields.get(1).getText()));
+				return new Room(fields.get(0).getText(),Integer.parseInt(fields.get(1).getText()), numPeriods);
 			} catch (NumberFormatException e) {
 				showException(e);
 				// return null;

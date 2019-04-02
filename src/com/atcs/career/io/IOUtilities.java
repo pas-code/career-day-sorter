@@ -30,7 +30,7 @@ public class IOUtilities
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
-   public static ArrayList<Room> loadRoomArray(String fileName){
+   public static ArrayList<Room> loadRoomArray(String fileName, int numPeriods){
       ArrayList<Room> rooms = new ArrayList<Room>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
 //      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
@@ -43,7 +43,7 @@ public class IOUtilities
          String roomNum = lines.get(i)[0].trim();
          int roomCap = Integer.parseInt(lines.get(i)[1].trim());
          System.out.println(roomNum + ", " + roomCap);
-         rooms.add(new Room(roomNum, roomCap));
+         rooms.add(new Room(roomNum, roomCap, numPeriods));
          if(lines.get(i)[0].equals("255"))
             break;
       }

@@ -61,7 +61,7 @@ public class Event implements Serializable {
 	}
 
 	public void selectRoomFile() {
-		rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"));
+		rooms = IOUtilities.loadRoomArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods());
 	}
 	
 

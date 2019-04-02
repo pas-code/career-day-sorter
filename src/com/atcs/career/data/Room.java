@@ -12,11 +12,11 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 	private int maxCapacity;
 	private Session[] residentSessions;
 
-	public Room(String roomNumber, int maxCapacity) {
+	public Room(String roomNumber, int maxCapacity, int numPeriods) {
 		super();
 		this.roomNumber = roomNumber;
 		this.maxCapacity = maxCapacity;
-		residentSessions = new Session[0];
+		residentSessions = new Session[numPeriods];
 	}
 
 	@Override
