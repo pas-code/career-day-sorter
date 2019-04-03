@@ -14,14 +14,11 @@ import com.atcs.career.io.importexport.CSVReader;
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = -7463051683970561540L;
-	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE
-//	public static int startYear = Calendar.getInstance().YEAR;
-//	public static int startDay = Calendar.getInstance().DAY_OF_YEAR;
+	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE TODO
 	public static int startDay = 0;
 	public static int startYear = 0;
 	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
-//	private ArrayList<Student> students = new ArrayList<Student>();
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
@@ -32,7 +29,6 @@ public class Event implements Serializable {
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
 	public Event() {
-//		students = new ArrayList<Student>();
 		rooms = new ArrayList<Room>();
 		sessions = new ArrayList<Session>();
 		masterStudents = new ArrayList<Student>();
@@ -82,10 +78,6 @@ public class Event implements Serializable {
 	public ArrayList<Session> getSessions() {
 		return sessions;
 	}
-
-//	public ArrayList<Student> getStudents() {
-//		return students;
-//	}
 
 	public ArrayList<Room> getRooms() {
 		return rooms;
@@ -168,6 +160,14 @@ public class Event implements Serializable {
    	ArrayList<Student> retval = new ArrayList<Student>();
    	for (Student s : masterStudents) 
    		if (!s.getRequests().isEmpty())
+   			retval.add(s);
+   	return retval;
+   }
+   
+   public ArrayList<Student> studentsWithoutRequests() {
+   	ArrayList<Student> retval = new ArrayList<Student>();
+   	for (Student s : masterStudents)
+   		if (s.getRequests().isEmpty())
    			retval.add(s);
    	return retval;
    }

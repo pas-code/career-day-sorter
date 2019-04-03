@@ -54,12 +54,7 @@ public class CareerDayGUI extends JPanel {
 	/**
 	 * 
 	 */
-	private static final BasicLogger mainLog;
-	public static final BasicLogger changeLog;
-	static {
-		mainLog = BasicLogger.getLogger(CareerDayGUI.class.getName());
-		changeLog = BasicLogger.getLogger("Change Log");
-	}
+	private static final BasicLogger	mainLog = BasicLogger.getLogger(CareerDayGUI.class.getName());
 
 	private Font bigFont;
 	private Font smallFont;
@@ -82,25 +77,28 @@ public class CareerDayGUI extends JPanel {
 		layoutConfig();
 	}
 
+	protected static final String REFRESH_ALL = "all";
 	protected void refresh(String title) {
-		// TODO make refresh more efficient
 		int previouslySelectedIndex = tabs.getSelectedIndex();
-		int tabIndexToRefresh = -1;
-		for (int i = 0; i < tabs.getTabCount(); i++)
-			if (tabs.getTitleAt(i).equals(title)) {
-				tabIndexToRefresh = i;
-				break;
-			}
-		ArrayList<? extends GuiListable> listInfoChanged;
-		if (tabIndexToRefresh == 0)
-			listInfoChanged = event.getSessions();
-		else if (tabIndexToRefresh == 1)
-			listInfoChanged = event.getMasterStudents();
-		else
-			listInfoChanged = event.getRooms();
-		tabs.setComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
-//		tabs.removeAll();
-//		tabConfig();
+		if (title.equals(REFRESH_ALL)) {
+			tabs.removeAll();
+			tabConfig();
+		} else {
+			int tabIndexToRefresh = -1;
+			for (int i = 0; i < tabs.getTabCount(); i++)
+				if (tabs.getTitleAt(i).equals(title)) {
+					tabIndexToRefresh = i;
+					break;
+				}
+			ArrayList<? extends GuiListable> listInfoChanged;
+			if (tabIndexToRefresh == 0)
+				listInfoChanged = event.getSessions();
+			else if (tabIndexToRefresh == 1)
+				listInfoChanged = event.getMasterStudents();
+			else
+				listInfoChanged = event.getRooms();
+			tabs.setComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
+		}
 		tabs.setSelectedIndex(previouslySelectedIndex);
 		centerSearch.setList(lists.get(tabs.getSelectedIndex()));
 		revalidate();
@@ -144,7 +142,7 @@ public class CareerDayGUI extends JPanel {
 						Session s;
 						if ((s = ElementCreator.createSession()) == null) return;
 						event.getSessions().add(s);
-						changeLog.info("Session added: " + s);
+						MainClass.changeLog.info("Session added: " + s);
 						refresh(s.getType());
 					}
 				});
@@ -157,7 +155,7 @@ public class CareerDayGUI extends JPanel {
 								.createStudent(event.getNumberOfPeriods());
 						if (add == null) return;
 						event.getMasterStudents().add(add);
-						changeLog.info("Student added: " + add);
+						MainClass.changeLog.info("Student added: " + add);
 						refresh(add.getType());
 					}
 				});
@@ -169,7 +167,7 @@ public class CareerDayGUI extends JPanel {
 						Room r;
 						if ((r = ElementCreator.createRoom(event.getNumberOfPeriods())) == null) return;
 						event.getRooms().add(r);
-						changeLog.info("Room added: " + r);
+						MainClass.changeLog.info("Room added: " + r);
 						refresh(r.getType());
 					}
 				});
@@ -284,7 +282,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public void changePeriod(byte periodIndex) {
-		changeLog.info("change period to " + periodIndex);
+		MainClass.changeLog.info("change period to " + periodIndex);
 		this.selectedPeriod = periodIndex;
 		if (infoPanel != null) infoPanel.refresh();
 	}
