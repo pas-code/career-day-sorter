@@ -18,7 +18,7 @@ os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = '1'  #not sure if needed
 google_blueprint = make_google_blueprint(
     client_id='1090068349238-kocnn1c7fvlkq8l1tt6bc501celipbpa.apps.googleusercontent.com', 
     client_secret='SbJYSWWIF1QqZ65jbB557_8t',
-    scope=['profile', 'email'],
+    # scope=['profile', 'email'],
     offline=True   #added in
 )
 
@@ -52,22 +52,26 @@ google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_use
 
 @app.route('/google')
 def google_login():
+    print("test: google login point 1")
     if not google.authorized:
+        print("not authorized. proceed to login")
         return redirect(url_for('google.login'))
     
-    account_info = google.get('/plus/v1/people/me') #change as needed (looked at bookmarked stack overflow about not getting OAuth token)
+    print("test: google login point 2")
+    account_info = google.get('/plus/v2/people/me') #change as needed (looked at bookmarked stack overflow about not getting OAuth token)
     account_info_json = account_info.json()
+    print("test: google login point 3")
 
     json_str = json.dumps(account_info_json)
 
-    username = json.loads(json.dumps(json.loads(json_str)['emails']))[0]['value']
+    email = json.loads(json.dumps(json.loads(json_str)['emails']))[0]['value']
 
-    return '<h1>Your email is {}'.format(username) #add stuf here  (email or emails)
+    return '<h1>Your email is {}'.format(email) #add stuf here  (email or emails)
 
 
 @oauth_authorized.connect_via(google_blueprint)
 def google_logged_in(blueprint, token):
-
+    print("test 2!!!!")
     account_info = blueprint.session.get('/plus/v1/people/me')
 
     if account_info.ok:
@@ -76,23 +80,81 @@ def google_logged_in(blueprint, token):
         json_str = json.dumps(account_info_json)
 
         # username = account_info_json['emails'][0]  #change email to username eventually
-        username = json.loads(json.dumps(json.loads(json_str)['emails']))[0]['value']
+        # google_user_id = json.loads(json.dumps(json.loads(json_str)['id']))  #Note sure if I will need
+        
+        google_email = json.loads(json.dumps(json.loads(json_str)['emails']))[0]['value']
+        
+        google_first_name=json.loads(json.dumps(json.loads(json_str)['name']))['givenName']
+        google_last_name=json.loads(json.dumps(json.loads(json_str)['name']))['familyName']
 
-        query = User.query.filter_by(username=username)
+        print("First Name:" + google_first_name + "Last Name: " + google_last_name)
 
+        query = User.query.filter_by(email=google_email)
+    
         try:
             user = query.one()
         except NoResultFound:
-            user = User(username=username)
+            user = User(
+                email=google_email,
+                first_name=google_first_name,
+                last_name=google_last_name
+            )
             db.session.add(user)
             db.session.commit()
 
         login_user(user)
 
+
+
+        # Disable Flask-Dance's default behavior for saving the OAuth token
+        return False
+
+
+        # print("first name: "+google_first_name)
+        # print("first name: "+google_last_name)
+
+        # # Find this OAuth token in the database, or create it
+        # query = OAuth.query.filter_by(
+        #     provider=blueprint.name,
+        #     provider_user_id=google_user_id,   #can i used email and not "user_id" here
+        # )
+        # try:
+        #     oauth = query.one()
+        # except NoResultFound:
+        #     oauth = OAuth(
+        #         provider=blueprint.name,
+        #         provider_user_id=google_user_id,
+        #         token=token,
+        #     )
+
+        # if oauth.user:
+        #     login_user(oauth.user)
+
+        # else:
+        #     # Create a new local user account for this user
+        #     user = User(
+        #         email=google_email
+        #         # first_name=google_first_name    #ADD BACK
+        #         # last_name=google_last_name
+        #     )
+
+        #     # Associate the new local user account with the OAuth token
+        #     oauth.user = user
+        #     # Save and commit our database models
+        #     db.session.add_all([user, oauth])
+        #     db.session.commit()
+        #     # Log in the new local user account
+        #     login_user(user)
+
+        # # Disable Flask-Dance's default behavior for saving the OAuth token
+        # return False
+
+        
+
 @app.route('/')
 @login_required
 def index():
-    return '<h1>You are logged in as {}'.format(current_user.username)
+    return '<h1>You are logged in as {}'.format(current_user.email)
 
 @app.route('/logout')
 @login_required
