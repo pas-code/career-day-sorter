@@ -89,10 +89,13 @@ public class CSVWriter {
 	
 	private static void writeCSV(ArrayList<ArrayList<String>> data, File destination) throws FileNotFoundException {
 		PrintStream out = new PrintStream(new FileOutputStream(destination));
+		System.out.println("WRITEE");
 		for (ArrayList<String> printRow: data) {
 			for (String s : printRow) {
 				out.print(s);
+				System.out.print(s);
 			}
+			System.out.println();
 			out.println();
 		}
 		out.close();
@@ -142,8 +145,8 @@ public class CSVWriter {
 		data.add(row);
 		for (Student s : e.studentsWithoutRequests()) {
 			row = new ArrayList<String>();
-			row.add(s.getEmail());
-			row.add(s.getfName());
+			row.add(s.getEmail() + ", ");
+			row.add(s.getfName() + ", ");
 			row.add(s.getlName());
 			data.add(row);
 		}

@@ -39,7 +39,7 @@ public class ElementCreator {
 		
 		if (JOptionPane.showConfirmDialog(null, message, "Create Student",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 
-			return new Student(fields.get(0).getText(), fields.get(1).getText(), fields.get(2).getText(), numPeriods);
+			return new Student(fields.get(1).getText(), fields.get(0).getText(), fields.get(2).getText(), numPeriods);
 		return null;
 	}
 	

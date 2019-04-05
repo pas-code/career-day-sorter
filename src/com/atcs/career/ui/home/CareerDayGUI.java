@@ -143,7 +143,7 @@ public class CareerDayGUI extends JPanel {
 						if ((s = ElementCreator.createSession()) == null) return;
 						event.getSessions().add(s);
 						MainClass.changeLog.info("Session added: " + s);
-						refresh(s.getType());
+						refresh("Sessions");
 					}
 				});
 				popupMenu.add(item);
@@ -156,7 +156,7 @@ public class CareerDayGUI extends JPanel {
 						if (add == null) return;
 						event.getMasterStudents().add(add);
 						MainClass.changeLog.info("Student added: " + add);
-						refresh(add.getType());
+						refresh("Students");
 					}
 				});
 				popupMenu.add(item);
@@ -168,7 +168,7 @@ public class CareerDayGUI extends JPanel {
 						if ((r = ElementCreator.createRoom(event.getNumberOfPeriods())) == null) return;
 						event.getRooms().add(r);
 						MainClass.changeLog.info("Room added: " + r);
-						refresh(r.getType());
+						refresh("Rooms");
 					}
 				});
 				popupMenu.add(item);

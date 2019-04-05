@@ -126,8 +126,8 @@ public class PropertiesPane extends JPanel {
 	}
 
 	public void createLabels() {
-		sessionLabel = new JLabel("Session File <Required> (.csv)");
-		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
+		sessionLabel = new JLabel("Session File (.csv)");
+		allStudentLabel = new JLabel("Master File of all students (.csv)");
 		studentLabel = new JLabel("Requests File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
 		periodLabel = new JLabel("Number of Periods");
@@ -265,7 +265,7 @@ public class PropertiesPane extends JPanel {
 			}
 		}
 		if (!requestFile.equals(event.getRequestFile())) {
-			//TODO clear requests
+			// TODO clear requests
 			// TODO should I clear the requests or just overwrite them? some might stay depending on data.
 			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
 					requestFile, event.getNumberOfPeriods()), event.getMasterStudents());
@@ -356,8 +356,9 @@ public class PropertiesPane extends JPanel {
 	}
 	
 	public boolean readyToSubmit() { //edit this
-	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
+		return !(title.getText().isBlank() || title.getText().equals(textPrompt));
+//	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
+//	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
 }

@@ -18,7 +18,8 @@ import com.atcs.career.io.importexport.ScriptInterpreter;
 public class EmailSender {
 	private static void runEmailJar(String[] args) {
 		try {
-			ScriptInterpreter.runJar(FileHandler.JAVA_EXEC, FileHandler.EMAIL_JAR, args);
+			ScriptInterpreter.printResponse(
+					ScriptInterpreter.runJar(FileHandler.JAVA_EXEC, FileHandler.EMAIL_JAR, args));
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

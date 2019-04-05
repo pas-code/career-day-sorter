@@ -56,7 +56,10 @@ public class FileHandler {
       ASSIGNMENT_TEMPLATE = EMAIL_DIR + "emailAssignmentTemplate.txt";
       REMINDER_TEMPLATE = EMAIL_DIR + "emailReminderTemplate.txt";
       
-    	JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
+      if (MainClass.isApp)
+      	JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
+      else
+      	JAVA_EXEC = null;
    }
    
    public static void createFiles() throws IOException {

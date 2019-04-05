@@ -19,13 +19,6 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	private boolean isSwitchable;
 	private boolean submitted;
 
-	public static void main(String[] args) {
-		Student s = new Student("Reineke", "Michael", "mreineke20@pascack.org",
-				null, 100, true, 3);
-		System.out.println(s.getGrade());
-		System.out.println(s);
-	}
-
 	/**
 	 * 
 	 * @param lName

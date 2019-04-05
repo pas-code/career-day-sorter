@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import javax.swing.JFrame;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.email.EmailSender;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVWriter;
 import com.atcs.career.program.ErrorManager;
@@ -100,8 +101,14 @@ public class MasterUI {
 		// Email
 		menu = new Menu("Email");
 		item = menu.add(new MenuItem("Send Student Assignments..."));
+		item.addActionListener(e -> {
+			EmailSender.sendAssignmentEmail(masterEvent);
+		});
 		
 		item = menu.add(new MenuItem("Send Submission Reminders..."));
+		item.addActionListener(e -> {
+			EmailSender.sendReminderEmail(masterEvent);
+		});
 		
 		bar.add(menu);
 		// Help
