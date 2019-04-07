@@ -12,10 +12,14 @@ public class ColorManager {
 	private static void initColorMap() {
 		colors = new HashMap<String, MutableColor>();
 		// put colors according to keys such as background, foreground, stuff like that.
-		put("welcome.background", Color.GRAY);
-		put("welcome.button.background", Color.DARK_GRAY);
-		put("welcome.foreground", Color.LIGHT_GRAY);
-		put("main.scroll.background", Color.WHITE);
+		put("text", new MutableColor(48, 52, 63));
+		put("background", new MutableColor(250 ,250, 255));
+//		put("primary", new MutableColor(21, 27, 71));
+//		put("secondary", new MutableColor(39, 52, 105));
+//		put("tertiary", new MutableColor(228, 217, 255));
+		put("primary", new MutableColor(0, 107, 166));
+		put("secondary", new MutableColor(209, 104, 0));
+		put("tertiary", new MutableColor(4, 150, 255));
 	}
 	
 	private static void put(String key, Color val) {
