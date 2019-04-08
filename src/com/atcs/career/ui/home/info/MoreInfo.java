@@ -77,7 +77,7 @@ public abstract class MoreInfo {
 		
 		protected byte getPeriod() {
 //			return 0;
-			return master.getSelectedPeriod();
+			return master.selectedPeriod;
 		}
 		
 		protected CareerDayGUI getMaster() {

@@ -356,7 +356,7 @@ public class PropertiesPane extends JPanel {
 	}
 	
 	public boolean readyToSubmit() { //edit this
-		return !(title.getText().isBlank() || title.getText().equals(textPrompt));
+		return !(title.getText().isEmpty() || title.getText().equals(textPrompt));
 //	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
 //	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}

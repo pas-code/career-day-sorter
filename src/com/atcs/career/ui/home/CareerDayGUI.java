@@ -37,28 +37,16 @@ import com.atcs.career.ui.home.info.MoreInfo.SideInfoPanel;
 
 //Jarrett Bierman & Edward Fominykh
 //9/4/18
-<<<<<<< HEAD
-//Default JPanel Class (Copy and Paste)
-=======
-
->>>>>>> origin/master
 public class CareerDayGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PREF_W = 1000;
 	public static final int PREF_H = 700;
-	private byte selectedPeriod = 0;
+	public byte selectedPeriod = 0;
 	private byte numberOfPeriods;
-<<<<<<< HEAD
-	private JPanel east, west;
-	private JLabel title;
-//	private JTextArea info;
-	private ArrayList<JButton> periods;
-=======
 	private GuiListable listed;
 	private SideInfoPanel infoPanel;
 	private ArrayList<JList<GuiListable>> lists;
 	private SearchBar<GuiListable> centerSearch;
->>>>>>> origin/master
 	private JTabbedPane tabs;
 	private JPanel eastPanel;
 
@@ -71,18 +59,6 @@ public class CareerDayGUI extends JPanel {
 	private Font smallFont;
 
 	private Event event;
-<<<<<<< HEAD
-//	private InfoPanel selectedInfoPanel
-	
-	public CareerDayGUI(Event event, byte numberOfPeriods) {
-        this.event = event;
-        this.numberOfPeriods = numberOfPeriods;
-        gui();
-    }
-	
-=======
-
->>>>>>> origin/master
 	public CareerDayGUI(Event event) {
 		this.event = event;
 		gui();
@@ -307,44 +283,4 @@ public class CareerDayGUI extends JPanel {
 		this.selectedPeriod = periodIndex;
 		if (infoPanel != null) infoPanel.refresh();
 	}
-
-	/**
-<<<<<<< HEAD
-     * @return the selectedPeriod
-     */
-    public byte getSelectedPeriod()
-    {
-        return selectedPeriod;
-    }
-
-    /**
-     * @param selectedPeriod the selectedPeriod to set
-     */
-    public void setSelectedPeriod(byte selectedPeriod)
-    {
-        this.selectedPeriod = selectedPeriod;
-    }
-
-    public static void main(String[] args) {
-        
-		CareerDayGUI program = new CareerDayGUI(Event.testEvent(), (byte) 4);
-		program.makeWindow();
-	}
-	
-=======
-	 * @return the selectedPeriod
-	 */
-	public byte getSelectedPeriod() {
-		return selectedPeriod;
-	}
-
-	/**
-	 * @param selectedPeriod
-	 *           the selectedPeriod to set
-	 */
-	public void setSelectedPeriod(byte selectedPeriod) {
-		this.selectedPeriod = selectedPeriod;
-	}
-
->>>>>>> origin/master
 }
