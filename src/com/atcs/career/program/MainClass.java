@@ -18,7 +18,7 @@ import com.atcs.career.ui.MasterUI;
 public class MainClass {
 	public static final String APP_NAME = "Career Day";
    public static final String BUILD = "0.1";
-   public static final String LAST_UPDATED = "Dec 2018";
+   public static final String LAST_UPDATED = "Apr 2019";
    public static final boolean fullRelease = false;
    public static final boolean isApp = System.getProperty("user.dir").indexOf(".app") > 0; 
    

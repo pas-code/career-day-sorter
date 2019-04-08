@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import com.atcs.career.data.Event;
-import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
@@ -20,10 +19,11 @@ import com.atcs.career.program.MainClass;
 import com.atcs.career.program.logging.BasicLogger;
 
 public class Algorithms{
-    /*Each sub ArrayList (in sessions) corresponds to a period
-    * Students who didn't submit a request will be placed into every sub array of "toBeRandomlyAssigned"
-    * Students who couldn't get a top 5 choice placed into specific sub array for that period
-    * */
+    /** 
+     * Each sub ArrayList (in sessions) corresponds to a period
+     * Students who didn't submit a request will be placed into every sub array of "toBeRandomlyAssigned"
+     * Students who couldn't get a top 5 choice placed into specific sub array for that period
+     */
    static ArrayList<ArrayList<Student>> toBeRandomlyAssigned = new ArrayList<ArrayList<Student>>();
    private static final BasicLogger log = BasicLogger.getLogger(Algorithms.class.getName());
    
@@ -33,6 +33,18 @@ public class Algorithms{
    }
    
    public static void sort(Event e) {
+   	if (!readyForSort(e)) return;
+   	
+   	if (e.isSorted()) {
+   		clearAssignments(e.studentsWithRequests(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
+   		e.setSorted(false);
+   	}
+   	
+		myBigFatGreekWethod(e);
+   	e.setSorted(true);
+   }
+   
+   private static boolean readyForSort(Event e) {
    	String thingsMissing = "";
    	if (e.getRooms().isEmpty())
    		thingsMissing += "room data.\n";
@@ -46,40 +58,37 @@ public class Algorithms{
    				 + "Please input this information and try again.", MainClass.APP_NAME + ": Cannot Sort Students",
    				 JOptionPane.WARNING_MESSAGE, null);
    		e.setSorted(false);
-   		return;
+   		return false;
    	}
-   	if (e.isSorted()) {
-   		clearAssignments(e.studentsWithRequests(), e.getRooms(), e.getSessions(), e.getNumberOfPeriods());
-   		e.setSorted(false);
-   	}
-   	
-   	myBigFatGreekWethod(e.studentsWithRequests(), e.getMasterStudents(), e.getRooms(), e.getSessions());
-   	e.setSorted(true);
+   	return true;
    }
    
-   //BIG METHOD THAT DOES EVERYTHING
-   private static void myBigFatGreekWethod(ArrayList<Student> requestStudents, ArrayList<Student> master, ArrayList<Room> rooms, ArrayList<Session> sessions){
-      assignRoomsToSessions(requestStudents, rooms, sessions);
+   /**
+    * BIG METHOD THAT DOES EVERYTHING
+    */
+   private static void myBigFatGreekWethod(Event e){
+      assignRoomsToSessions(e.studentsWithRequests(), e.getRooms(), e.getSessions());
       log.info("Method 1 Finished");
       
-      rankStudents(requestStudents, master);
+      rankStudents(e, e.getNumberOfPeriods());
       log.info("Method 2 Finished");
       
-      assignStudentsToSessions(requestStudents, sessions);
+      assignStudentsToSessions(e.getMasterStudents(), e.getSessions());
       log.info("Method 3 Finished");
       
       log.fine("Classes under Cap:");
-      for(int i = 0; i < sessions.size(); i++) {
-         for(int j = 0; j < sessions.get(i).getStudents().size(); j++) {
-            if(sessions.get(i).getStudents().get(j).size() < 10) {
-            	log.fine(sessions.get(i).getSpeaker() + " PERIOD " + j + " HAS " + sessions.get(i).getStudents().get(j).size());
-               for(int k = 0; k < sessions.get(i).getStudents().get(j).size(); k++)
-               	log.fine(sessions.get(i).getStudents().get(j).get(k) + "");
+      for(int i = 0; i < e.getSessions().size(); i++) {
+         for(int j = 0; j < e.getSessions().get(i).getStudents().size(); j++) {
+            if(e.getSessions().get(i).getStudents().get(j).size() < 10) {
+            	log.fine(e.getSessions().get(i).getSpeaker() + " PERIOD " + j 
+            			+ " HAS " + e.getSessions().get(i).getStudents().get(j).size());
+               for(int k = 0; k < e.getSessions().get(i).getStudents().get(j).size(); k++)
+               	log.fine(e.getSessions().get(i).getStudents().get(j).get(k) + "");
             }
          }
       }
       
-      log.info("Accuracy:" + getSortingAccuracyAverage(requestStudents));
+      log.info("Accuracy:" + getSortingAccuracyAverage(e.studentsWithRequests()));
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
@@ -139,32 +148,35 @@ public class Algorithms{
           
    }
    
-	//ALGORITHM 2. Gives students their priority in order for them to be rank so student assignment can be done correctly
-   private static void rankStudents(ArrayList<Student> students, ArrayList<Student> master){
+	/**
+	 * ALGORITHM 2. Gives students their priority in order for them to be rank so student assignment 
+	 * can be done correctly
+	 * @param requestStudents
+	 * @param master
+	 */
+   private static void rankStudents(Event e, int numPeriods) {
     //Creates Array Lists for Random Assignment
-      for(int i = 0; i < 3; i++)  //Change 3 later to not be a magic number
+   	
+      for(int i = 0; i < numPeriods; i++)
          toBeRandomlyAssigned.add(new ArrayList<Student>());
       
-      for(int i = 0; i < master.size(); i++) {
-         if (master.get(i).getRequests().isEmpty()) {
-            for(int j = 0; j < toBeRandomlyAssigned.size(); j++) {
-               toBeRandomlyAssigned.get(j).add(master.get(i));
-            }
-         }
-      }
+      for(int i = 0; i < e.studentsWithoutRequests().size(); i++) 
+      	for(int j = 0; j < toBeRandomlyAssigned.size(); j++) 
+      		toBeRandomlyAssigned.get(j).add(e.studentsWithoutRequests().get(i));
       
-      for(int i = 0; i < students.size(); i++) {
-         Student currentStud = students.get(i);
-         int yearEntered = (currentStud.getTimeEntered()/1000) - Event.startYear;
-         int dayEntered = ((yearEntered * 365) + (currentStud.getTimeEntered()%1000)) - Event.startDay;
-         if (currentStud.getGrade() >= Priority.classCutOff) {
-            currentStud.setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
-         }
-         else if (currentStud.getGrade() < Priority.classCutOff) {
-            currentStud.setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
-         }
-      }
-      Collections.sort(students);
+      
+//      for(int i = 0; i < e.studentsWithRequests().size(); i++) {
+//         Student currentStud = e.studentsWithRequests().get(i);
+//         int yearEntered = (currentStud.getTimeEntered()/1000) - Event.startYear;
+//         int dayEntered = ((yearEntered * 365) + (currentStud.getTimeEntered()%1000)) - Event.startDay;
+//         if (currentStud.getGrade() >= Priority.classCutOff) 
+//            currentStud.setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
+//         
+//         else if (currentStud.getGrade() < Priority.classCutOff) 
+//            currentStud.setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
+//         
+//      }
+      Collections.sort(e.getMasterStudents());
       
       //FOR TESTING
 //      for(int i = 0; i < students.size(); i++){

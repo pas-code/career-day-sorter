@@ -35,8 +35,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this.email = email;
 		this.requests = requests;
 		grade = getGradeFromEmail();
-		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
+		createAndSetStudentPriority();
 		this.assignments = new Session[numPeriods];
 		isSwitchable = true;
 		this.submitted = submitted;
@@ -178,6 +178,24 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	public Priority getStudentPriority() {
 		return priority;
+	}
+	
+	public void createAndSetStudentPriority() {
+		if (getTimeEntered() != 0) {
+			int yearEntered = (getTimeEntered()/1000) - Event.startYear;
+			int dayEntered = ((yearEntered * 365) + (getTimeEntered()%1000)) - Event.startDay;
+			if (getGrade() >= Priority.classCutOff) 
+	         setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
+	      
+	      else if (getGrade() < Priority.classCutOff) 
+	         setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
+		} else {
+			setStudentPriority(new Priority(0,
+					getGrade() >= Priority.classCutOff
+							? Priority.upperClassMagnitudeValue
+							: Priority.lowerClassMagnitudeValue));
+		}
+		
 	}
 
 	public void setStudentPriority(Priority newPriority) {
