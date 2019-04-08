@@ -17,31 +17,43 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	 * empty, its all grades.
 	 */
 	private int[] gradesAvailable;
+	private boolean[] availableThisPeriod;
 	private int popularity;
-	private int numOfPeriods;
-	private byte TYPE_NUM  = 0;
 
-	public Session(String title, String speaker,
-			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
-			int popularity) {
-		super();
-		this.title = title;
-		this.speaker = speaker;
-		this.students = students;
-		this.gradesAvailable = gradesAvailable;
-		this.popularity = popularity;
-	}
+//	public Session(String title, String speaker,
+//			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
+//			int popularity) {
+//		super();
+//		this.title = title;
+//		this.speaker = speaker;
+//		this.students = students;
+//		this.gradesAvailable = gradesAvailable;
+//		this.popularity = popularity;
+//		if(this.speaker.charAt(0) == '"') {
+//		   this.speaker = this.speaker.substring(1);
+//		}
+//		this.availableThisPeriod = new boolean[numOfPeriods];
+//      for(int i = 0; i < availableThisPeriod.length; i++) {
+//         availableThisPeriod[i] = true;
+//      }
+//	}
 
 	public Session(String title, String speaker, int numOfPeriods) {
 		this.title = title;
 		this.speaker = speaker;
-		this.numOfPeriods = numOfPeriods;
 		this.students = new ArrayList<ArrayList<Student>>();
 		for (int i = 0; i < numOfPeriods; i++) {
 			students.add(new ArrayList<Student>());
 		}
 		this.gradesAvailable = new int[]{9, 10, 11, 12};
+		this.availableThisPeriod = new boolean[numOfPeriods];
+		for(int i = 0; i < availableThisPeriod.length; i++) {
+		   availableThisPeriod[i] = true;
+		}
 		this.popularity = 0;
+		if(this.speaker.charAt(0) == '"') {
+         this.speaker = this.speaker.substring(1);
+      }
 	}
 	public Session(String title, String speaker) {
 		this(title, speaker, 3);
@@ -71,8 +83,8 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	public void setStudents(ArrayList<ArrayList<Student>> students) {
 		this.students = students;
 	}
-	public void setStudents(ArrayList<Student> students, int period){
-	   this.students.set(period, students);
+	public void setStudents(ArrayList<Student> students, int period) {
+		this.students.set(period, students);
 	}
 
 	public int[] getGradesAvailable() {
@@ -105,16 +117,22 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (!(obj instanceof Session))
+			return false;
 		Session otherSession = (Session) obj;
 		return this.speaker.equals(otherSession.getSpeaker())
 				&& this.title.equals(otherSession.getTitle());
 
 	}
 
-	@Override
+//	@Override
+//	public String toString() {
+//		return "Session [title=" + title + ", speaker=" + speaker
+//				+ ", popularity=" + popularity + "]";
+//	}
+	
 	public String toString() {
-		return "Session [title=" + title + ", speaker=" + speaker
-				+ ", popularity=" + popularity + "]";
+		return title;
 	}
 
 	@Override
@@ -133,11 +151,18 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	public String getType() {
 		return "Session";
 	}
-	
+
 	@Override
-	public byte getTypeNum()
-	{
-	    return TYPE_NUM;
+	public String getIdentifier() {
+		return title + speaker;
 	}
+
+   public boolean[] getAvailableThisPeriod(){
+      return availableThisPeriod;
+   }
+
+   public void setAvailableThisPeriod(boolean[] availableThisPeriod){
+      this.availableThisPeriod = availableThisPeriod;
+   }
 
 }

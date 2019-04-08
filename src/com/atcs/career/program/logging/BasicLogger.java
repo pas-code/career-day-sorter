@@ -48,8 +48,8 @@ public class BasicLogger {
       }
    }
    
-   public void log(Level l, String msg) {
-      log(new LogRecord(l, msg));
+   public void log(Level l, Object msg) {
+      log(new LogRecord(l, msg.toString()));
    }
    
    public void error(Throwable e, String msg) {
@@ -59,31 +59,31 @@ public class BasicLogger {
    	verbose = prevVerbose;
    }
    
-   public void severe(String msg) {
+   public void severe(Object msg) {
       log(Level.SEVERE, msg);
    }
    
-   public void warning(String msg) {
+   public void warning(Object msg) {
       log(Level.WARNING, msg);
    }
    
-   public void info(String msg) {
+   public void info(Object msg) {
       log(Level.INFO, msg);
    }
    
-   public void config(String msg) {
+   public void config(Object msg) {
       log(Level.CONFIG, msg);
    }
    
-   public void fine(String msg) {
+   public void fine(Object msg) {
       log(Level.FINE, msg);
    }
    
-   public void finer(String msg) {
+   public void finer(Object msg) {
       log(Level.FINER, msg);
    }
    
-   public void finest(String msg) {
+   public void finest(Object msg) {
       log(Level.FINEST, msg);
    }
    

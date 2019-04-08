@@ -16,7 +16,8 @@ public class FontManager
     
     public static Font finalFont(float size) {
         if (f == null)
-            f =  readOpenSans(size);
+      	  f = new Font("Gill Sans", Font.PLAIN, (int)size);
+//            f =  readOpenSans(size);
         return f.deriveFont(size);
     }
     
@@ -25,7 +26,7 @@ public class FontManager
      * @param size
      * @return
      */
-    public static Font readOpenSans(float size) {
+    private static Font readFont(float size) {
         Font x = null;
         try {
             x = Font
@@ -36,9 +37,8 @@ public class FontManager
             // register the font
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
                     ClassLoader.getSystemClassLoader().getResourceAsStream("com/atcs/career/resources/OpenSans-Light.ttf")));
-        } catch (FontFormatException | IOException e)
-        {
-            ErrorManager.processException(e, FontManager.class, "failed to create font", false);
+        } catch (FontFormatException | IOException e) {
+            ErrorManager.processException(e, "failed to create font", false, false);
         }
         return x;
     }

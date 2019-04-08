@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import com.atcs.career.program.ErrorManager;
+
 public class CSVReader {
 
 	public static void main(String[] args) {
@@ -42,12 +44,11 @@ public class CSVReader {
 			            line = line.substring(0, i) + "/" + line.substring(i+1);
 			   }
 				String[] lineArr = line.split(",");
-//				System.out.println(Arrays.asList(lineArr));
 				lines.add(lineArr);
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println("File not found");
+			ErrorManager.processException(e, "Cannot Find File.\nPlease try again.", "readCSV FNF", false, true);
 		}
 		return lines;
 

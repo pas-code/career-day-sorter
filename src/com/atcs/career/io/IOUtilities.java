@@ -4,18 +4,16 @@
 
 package com.atcs.career.io;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
-import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.io.importexport.ScriptInterpreter;
 
 public class IOUtilities
 {
@@ -25,14 +23,14 @@ public class IOUtilities
 //      ArrayList<Room> arr = loadRoomArray(importCSV());
 //      ArrayList<Session> arr2 = loadSessionArray(importCSV());
 //      System.out.println(arr);
-      loadStudentArray(CSVReader.getFileLocation(".csv"));
+      loadStudentArray(CSVReader.getFileLocation(".csv"), 3);
    }
    
    /**
     * Loads ArrayList with Room objects from local .csv file
     * @return ArrayList of Room objects
     */
-   public static ArrayList<Room> loadRoomArray(String fileName){
+   public static ArrayList<Room> loadRoomArray(String fileName, int numPeriods){
       ArrayList<Room> rooms = new ArrayList<Room>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
 //      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
@@ -45,7 +43,7 @@ public class IOUtilities
          String roomNum = lines.get(i)[0].trim();
          int roomCap = Integer.parseInt(lines.get(i)[1].trim());
          System.out.println(roomNum + ", " + roomCap);
-         rooms.add(new Room(roomNum, roomCap));
+         rooms.add(new Room(roomNum, roomCap, numPeriods));
          if(lines.get(i)[0].equals("255"))
             break;
       }
@@ -63,7 +61,6 @@ public class IOUtilities
          String speaker = lines.get(i)[0].substring(0, lines.get(i)[0].indexOf(" - "));
          String title = lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3);
          sessions.add(new Session(title, speaker));
-         System.out.println(sessions.get(i));
       }
       return sessions;
    }
@@ -73,7 +70,7 @@ public class IOUtilities
     * @param fileName the file name of the .csv file, including suffix and path
     * @return ArrayList of Student objects who submitted a form
     */
-   public static ArrayList<Student> loadStudentArray(String fileName){
+   public static ArrayList<Student> loadStudentArray(String fileName, int numPeriods){
       ArrayList<Student> students = new ArrayList<Student>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
       for(int i = 1; i < lines.size(); i++){
@@ -92,8 +89,7 @@ public class IOUtilities
             sessionRequests.add(new Session(lines.get(i)[k].substring(lines.get(i)[k].indexOf("-")+2), lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-")-1)));         
          
          //Adds Student object to the ArrayList to be returned
-         students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true));
-         System.out.println(students.get(i-1));
+         students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true, numPeriods));
       }
       return students;
    }
@@ -102,7 +98,7 @@ public class IOUtilities
     * @param fileName
     * @return ArrayList of every student
     */
-   public static ArrayList<Student> loadMasterStudentArray(String fileName){
+   public static ArrayList<Student> loadMasterStudentArray(String fileName, int numPeriods){
       ArrayList<Student> masterStudents = new ArrayList<Student>();
       ArrayList<String[]> lines = CSVReader.readCSV(fileName);
       for(int i = 1; i < lines.size(); i++){
@@ -112,9 +108,46 @@ public class IOUtilities
          String email = lines.get(i)[2].trim().replace("\"", "");
          
          //Adds Student object to the ArrayList to be returned
-         masterStudents.add(new Student(lastName, firstName, email));
-         System.out.println(masterStudents.get(i-1));
+         masterStudents.add(new Student(lastName, firstName, email, numPeriods));
       }
       return masterStudents;
    }
+   
+   // combine the requests student array and master array
+   public static void combineStudentArrays(ArrayList<Student> requests, ArrayList<Student> master) {
+   	// sort the student array using names
+   	Collections.sort(requests, new Comparator<Student>() {
+			@Override
+			public int compare(Student o1, Student o2) {
+				return o1.compareToEmail(o2);
+			}	
+   	});
+   	int index = -1;
+   	for (int i = 0; i < master.size(); i++) 
+   		if ((index = indexOf(master.get(i), requests)) != -1) 
+   			master.set(i, requests.get(index));
+   		
+   }
+   
+   /**
+    * binary search of the requests for a student. assumes the array is sorted
+    */
+   private static int indexOf(Student target, ArrayList<Student> requests) {
+   	return binarySearch(requests, 0, requests.size(), target);
+   }
+   
+   private static int binarySearch(ArrayList<Student> arr, int l, int r, Student target) { 
+//   	System.out.println("SEARCH FROM " + l + " to " + r + " from "+arr.size());
+       if (r > l) { 
+           int mid = l + (r - l) / 2; 
+ 
+           if (arr.get(mid).equals(target)) 
+               return mid; 
+           if (arr.get(mid).compareToEmail(target) > 0) 
+               return binarySearch(arr, l, mid - 1, target); 
+           return binarySearch(arr, mid + 1, r, target); 
+       } 
+ 
+       return -1; 
+   } 
 }

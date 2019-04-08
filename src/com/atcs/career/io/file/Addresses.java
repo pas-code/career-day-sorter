@@ -20,7 +20,7 @@ public class Addresses {
    public static final String getHome() {
       if (MainClass.isApp)
          return getExecutiveDir() + "/Contents/Data/";
-      return System.getProperty("user.home") + "/Applications/" + MainClass.APP_NAME + "/Data/";
+      return System.getProperty("user.home") + "/Applications/ofCourse/Data/";
    }
    
    public static final URL githubHome() {

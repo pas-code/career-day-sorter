@@ -12,6 +12,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.time.LocalDate;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,10 +24,12 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.importexport.CSVReader;
+import com.atcs.career.program.MainClass;
 
 //Jarrett Bierman
 //11/18/18
@@ -36,32 +40,35 @@ public class PropertiesPane extends JPanel {
 	public static final int PREF_H = 300;
 	public static final int BORDER_SIZE = 50;
 
+	
+	//note for future... not nuts about having every single element as an instance variable...
 	private JPanel gridPanel;
 	private JLabel sessionLabel, studentLabel, classroomLabel, periodLabel,
 			allStudentLabel;
-	private JButton sessionButton, studentButton, classroomButton,
+	private JButton sessionButton, requestButton, classroomButton,
 			allStudentButton;
-	private String sessionFile, studentFile, classroomFile, allStudentFile;
+	private String sessionFile, requestFile, classroomFile, allStudentFile;
 	private JButton submit, cancel;
 	private JTextField title;
-	private final String textPrompt = "Enter Project Name Here";
+	private static final String textPrompt = "Enter Project Name Here";
 	private Event event;
 
 	private WelcomeScreen welc;
 	private JSpinner periodCount;
 
-	private final String BUTTON_DEFAULT_TEXT = "Choose File";
+	private static final String BUTTON_DEFAULT_TEXT = "Choose File";
 
 	/**
-	 * master can be none. will bring a popup if not.
+	 * welc can be none. will bring a popup if not.
+	 * @param welc welcome screen calling the props pane. 
+	 * @param e the event being edited
 	 */
 	public PropertiesPane(WelcomeScreen welc, Event e) {
 		setFocusable(true);
 		this.welc = welc;
-		if (e == null)
-			this.event = new Event();
-		else
-			this.event = e;
+		this.event = (e == null) ? new Event() : e;
+
+		setFilesInAccordanceToEvent();
 
 		this.setLayout(new BorderLayout());
 		this.setBorder(
@@ -85,6 +92,15 @@ public class PropertiesPane extends JPanel {
 		revalidate();
 	}
 
+	private void setFilesInAccordanceToEvent() {
+		sessionFile = event.getSessionFile();
+		requestFile = event.getRequestFile();
+		classroomFile = event.getRoomFile();
+		allStudentFile = event.getStudentFile();
+	}
+	
+	
+	
 	// -----------------------------------CONFIG GUI--------------------------------------------
 
 	private JFrame createFrame() {
@@ -92,78 +108,82 @@ public class PropertiesPane extends JPanel {
 	}
 
 	private void configFrame() {
+		//make a frame. if welc is given, remove welc from its frame and use it.
 		JFrame container = welc == null ? createFrame() : welc.parentFrame;
 		if (welc != null) {
 			container.getContentPane().remove(0);
 		}
 		container.getContentPane().add(this);
 		container.pack();
-		// container.setResizable(true)
 		container.setLocationRelativeTo(null);
 		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// notify that data has been lost
+				// TODO notify that data has been lost
 			}
 		});
 		container.setVisible(true);
 	}
 
 	public void createLabels() {
-		sessionLabel = new JLabel("Session File <Required> (.csv)");
-		allStudentLabel = new JLabel("Master File of all students <Required> (.csv)");
-		studentLabel = new JLabel("Student Requests File (.csv)");
+		sessionLabel = new JLabel("Session File (.csv)");
+		allStudentLabel = new JLabel("Master File of all students (.csv)");
+		studentLabel = new JLabel("Requests File (.csv)");
 		classroomLabel = new JLabel("Classroom File (.csv)");
 		periodLabel = new JLabel("Number of Periods");
 	}
 
 	private void createButtons() {
+		final int homeDirLength = System.getProperty("user.home").length();
 		sessionButton = new JButton(event.getSessionFile() == null
 				? BUTTON_DEFAULT_TEXT
-				: event.getSessionFile());
+				: event.getSessionFile().substring(homeDirLength));
 		sessionButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				sessionFile = selectFile(sessionButton);
-				event.setRequestFile(sessionFile);
+				sessionButton.setText(sessionFile == null ?
+						BUTTON_DEFAULT_TEXT : sessionFile.substring(homeDirLength));
 			}
 		});
 
-		allStudentButton = new JButton(event.getRequestFile() == null
+		allStudentButton = new JButton(allStudentFile == null
 				? BUTTON_DEFAULT_TEXT
-				: event.getRequestFile());
+				: allStudentFile.substring(homeDirLength));
 		allStudentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				allStudentFile = selectFile(allStudentButton);
-				event.setRequestFile(allStudentFile);
-
+				allStudentButton.setText(allStudentFile == null ?
+						BUTTON_DEFAULT_TEXT : allStudentFile.substring(homeDirLength));
 			}
 		});
 
-		studentButton = new JButton(event.getRequestFile() == null
+		requestButton = new JButton(requestFile == null
 				? BUTTON_DEFAULT_TEXT
-				: event.getRequestFile());
-		studentButton.addActionListener(new ActionListener() {
+				: requestFile.substring(homeDirLength));
+		requestButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				studentFile = selectFile(studentButton);
-				event.setRequestFile(studentFile);
+				requestFile = selectFile(requestButton);
+				requestButton.setText(requestFile == null ?
+						BUTTON_DEFAULT_TEXT : requestFile.substring(homeDirLength));
 			}
 		});
 
-		classroomButton = new JButton(event.getRoomFile() == null
+		classroomButton = new JButton(classroomFile == null
 				? BUTTON_DEFAULT_TEXT
-				: event.getRoomFile());
+				: classroomFile.substring(homeDirLength));
 
 		classroomButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				classroomFile = selectFile(classroomButton);
-				event.setRequestFile(classroomFile);
+				classroomButton.setText(classroomFile == null ?
+						BUTTON_DEFAULT_TEXT : classroomFile.substring(homeDirLength));
 			}
 		});
 
@@ -173,14 +193,10 @@ public class PropertiesPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (readyToSubmit()) {
-					// Do all of the important info work here
-					System.out.println("Title: " + title.getText());
-					System.out.println(sessionFile);
-					System.out.println(studentFile);
-					System.out.println(classroomFile);
-					System.out.println("Periods: " + (int) periodCount.getValue());
 					if (welc != null)
 						welc.sendEventAndClose(createEvent());
+					else 
+						updateEventData();
 				} else
 					JOptionPane.showMessageDialog(null,
 							"You did not select all of the needed files. Please select all options.");
@@ -194,18 +210,75 @@ public class PropertiesPane extends JPanel {
 	
 	private Event createEvent() {
 		Event ret = new Event();
+		ret.setNumberOfPeriods((byte) (int) periodCount.getValue());
+
 		ret.changeName(title.getText());
-		if (checkNullPassed(sessionFile))
+		if (checkNullPassed(sessionFile)) {
 			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
-		if (checkNullPassed(allStudentFile))
-			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(allStudentFile));
-		if (checkNullPassed(studentFile))
-			ret.setStudents(IOUtilities.loadStudentArray(studentFile));
-		if (checkNullPassed(classroomFile))
-			ret.setRooms(IOUtilities.loadRoomArray(classroomFile));
+			ret.setSessionFile(sessionFile);
+		}
+		if (checkNullPassed(allStudentFile)) {
+			ret.setMasterStudents(IOUtilities.loadMasterStudentArray(
+					allStudentFile, ret.getNumberOfPeriods()));
+			ret.setStudentFile(allStudentFile);
+		}
+		if (checkNullPassed(requestFile)) {
+			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
+					requestFile, ret.getNumberOfPeriods()), ret.getMasterStudents());
+			ret.setRequestFile(requestFile);
+		}
+		if (checkNullPassed(classroomFile)) {
+			ret.setRooms(IOUtilities.loadRoomArray(classroomFile,
+					ret.getNumberOfPeriods()));
+			ret.setRoomFile(classroomFile);
+		}
 		
-		ret.setNumberOfPeriods((byte)(int)periodCount.getValue());
+		
+		ret.setLastModified(LocalDate.now());
+		MainClass.changeLog.info("Event Created:\n" + ret.infoString());
 		return ret;
+	}
+	
+	private void updateEventData() {
+		if (!sessionFile.equals(event.getSessionFile())) {
+			event.setSessionFile(sessionFile);
+			
+		}
+		
+		event.changeName(title.getText());
+		if (!sessionFile.equals(event.getSessionFile())) {
+			event.setSessions(IOUtilities.loadSessionArray(sessionFile));
+			event.setSessionFile(sessionFile);
+			MainClass.changeLog.info("sessions file changed to " + sessionFile);
+		}
+		if (!allStudentFile.equals(event.getStudentFile())) {
+			event.setMasterStudents(IOUtilities.loadMasterStudentArray(
+					allStudentFile, event.getNumberOfPeriods()));
+			event.setStudentFile(allStudentFile);
+			MainClass.changeLog.info("students file changed to " + allStudentFile);
+			// add in the requests.
+			if (event.getRequestFile() != null) {
+				IOUtilities
+						.combineStudentArrays(
+								IOUtilities.loadStudentArray(requestFile,
+										event.getNumberOfPeriods()), event.getMasterStudents());
+			}
+		}
+		if (!requestFile.equals(event.getRequestFile())) {
+			// TODO clear requests
+			// TODO should I clear the requests or just overwrite them? some might stay depending on data.
+			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
+					requestFile, event.getNumberOfPeriods()), event.getMasterStudents());
+			event.setRequestFile(requestFile);
+			MainClass.changeLog.info("requests file changed to " + requestFile);
+		}
+		if (!classroomFile.equals(event.getRoomFile())) {
+			event.setRooms(IOUtilities.loadRoomArray(classroomFile,
+					event.getNumberOfPeriods()));
+			event.setRoomFile(classroomFile);
+			MainClass.changeLog.info("room file changed to " + classroomFile);
+		}
+			
 	}
 
 	private boolean checkNullPassed(String path) {
@@ -213,8 +286,8 @@ public class PropertiesPane extends JPanel {
 	}
 	
 	private void createFieldAndSpinner() {
-		title = new JTextField(textPrompt);
-		title.setForeground(Color.GRAY);
+		title = new JTextField(event.getEventName()== null ? textPrompt : event.getEventName());
+		title.setForeground(title.getText().equals(textPrompt) ? Color.GRAY : Color.BLACK);
 		title.setFont(new Font("Ariel", Font.PLAIN, 40));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.addFocusListener(new FocusListener() {
@@ -235,7 +308,8 @@ public class PropertiesPane extends JPanel {
 
 		});
 
-		periodCount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
+		periodCount = new JSpinner(new SpinnerNumberModel(
+				event.getNumberOfPeriods() == 0 ? 1 : event.getNumberOfPeriods(), 1, 99, 1));
 		periodCount.setFont(new Font("Ariel", Font.PLAIN, 30));
 		periodCount.setBorder(BorderFactory.createEmptyBorder(0, 170, 0, 50));
 		((JSpinner.DefaultEditor) periodCount.getEditor()).getTextField().setEditable(false);
@@ -247,7 +321,7 @@ public class PropertiesPane extends JPanel {
 		gridPanel.add(allStudentLabel);
 		gridPanel.add(allStudentButton);
 		gridPanel.add(studentLabel);
-		gridPanel.add(studentButton);
+		gridPanel.add(requestButton);
 		gridPanel.add(classroomLabel);
 		gridPanel.add(classroomButton);
 		gridPanel.add(periodLabel);
@@ -277,11 +351,14 @@ public class PropertiesPane extends JPanel {
 	private void cancel() {
 		if (welc != null) 
 			welc.cancelProps();
+		else
+			((JFrame) SwingUtilities.getWindowAncestor(this)).dispose();
 	}
 	
 	public boolean readyToSubmit() { //edit this
-	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
+		return !(title.getText().isBlank() || title.getText().equals(textPrompt));
+//	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
+//	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
 }

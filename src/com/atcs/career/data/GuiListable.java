@@ -4,8 +4,10 @@
 
 package com.atcs.career.data;
 
+import com.atcs.career.ui.home.Searchable;
+
 /**Ensures that class contains all necessary values to be listed in the gui list*/
-public interface GuiListable
+public interface GuiListable extends Searchable
 {
     public String getTitle();
     
@@ -14,5 +16,4 @@ public interface GuiListable
      */
     public String getInfo(int i);
     public String getType();
-    public byte getTypeNum();
 }

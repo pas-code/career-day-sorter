@@ -38,7 +38,11 @@ public class ScriptInterpreter {
 		for (int i = 0; i < args.length; i++) {
 			commands[i + 3] = args[i];
 		}
-		ProcessBuilder pb = new ProcessBuilder(args);
+		
+		System.out.println("ARG");
+		for (String s : commands)
+			System.out.print(s + " ");
+		ProcessBuilder pb = new ProcessBuilder(commands);
 		return getProcessValues(pb);
 	}
 	
@@ -64,11 +68,18 @@ public class ScriptInterpreter {
 		br = new BufferedReader(
 				new InputStreamReader(p.getErrorStream()));
 		while ((s = br.readLine()) != null) {
-			System.out.println(s);
+			System.err.println(s);
 		}
 		
 		p.waitFor();
 		log.log(Level.INFO, "Script input exit at "+p.exitValue());
 		return sb.toArray(new String[sb.size()]);
+	}
+	
+	public static void printResponse(String[] args) {
+		for (String s : args) {
+			System.out.println(s);
+		}
+		System.out.println();
 	}
 }
