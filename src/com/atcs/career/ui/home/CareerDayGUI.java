@@ -290,7 +290,7 @@ public class CareerDayGUI extends JPanel {
 	/**
 	 * @return the selectedPeriod
 	 */
-	public byte getSelectedPeriod() {
+	public byte getCurrentPeriod() {
 		return selectedPeriod;
 	}
 
@@ -300,6 +300,14 @@ public class CareerDayGUI extends JPanel {
 	 */
 	public void setSelectedPeriod(byte selectedPeriod) {
 		this.selectedPeriod = selectedPeriod;
+	}
+	
+	public JTabbedPane getTabs() {
+		return tabs;
+	}
+	
+	public ArrayList<JList<GuiListable>> getLists() {
+		return lists;
 	}
 
 }

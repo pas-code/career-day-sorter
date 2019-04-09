@@ -17,7 +17,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	 * empty, its all grades.
 	 */
 	private int[] gradesAvailable;
-	private boolean[] availableThisPeriod;
+	private boolean[] periodAvailability;
 	private int popularity;
 
 //	public Session(String title, String speaker,
@@ -46,9 +46,9 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 			students.add(new ArrayList<Student>());
 		}
 		this.gradesAvailable = new int[]{9, 10, 11, 12};
-		this.availableThisPeriod = new boolean[numOfPeriods];
-		for(int i = 0; i < availableThisPeriod.length; i++) {
-		   availableThisPeriod[i] = true;
+		this.periodAvailability = new boolean[numOfPeriods];
+		for(int i = 0; i < periodAvailability.length; i++) {
+		   periodAvailability[i] = true;
 		}
 		this.popularity = 0;
 		if(this.speaker.charAt(0) == '"') {
@@ -157,12 +157,12 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		return title + speaker;
 	}
 
-   public boolean[] getAvailableThisPeriod(){
-      return availableThisPeriod;
+   public boolean[] getPeriodAvailability(){
+      return periodAvailability;
    }
 
-   public void setAvailableThisPeriod(boolean[] availableThisPeriod){
-      this.availableThisPeriod = availableThisPeriod;
+   public void setPeriodAvailability(boolean[] availableThisPeriod){
+      this.periodAvailability = availableThisPeriod;
    }
 
 }

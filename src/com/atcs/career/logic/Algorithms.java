@@ -96,13 +96,14 @@ public class Algorithms{
       }
       
       // students with duplicate assignments
-      System.out.println("\n\nDuplicate Students:");
+      System.out.println("\nDuplicate Students:");
       for (Student s : e.getMasterStudents())
       	for (int i = 1; i < s.getAssignments().length; i++)
       		if (s.getAssignment(i - 1).equals(s.getAssignment(i))) {
       			System.out.println(s.getFullName() + " in "+s.getAssignments());
       			break;
       		}
+      System.out.println();
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
@@ -219,7 +220,7 @@ public class Algorithms{
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
-            if(sessions.get(i).getAvailableThisPeriod()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesn't have enough during that period...
+            if(sessions.get(i).getPeriodAvailability()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesn't have enough during that period...
                do {
                   for(int k = master.size() - 1; k >= 0; k--) { //Look at every student.
                      Student currentStud = master.get(k);
@@ -252,7 +253,7 @@ public class Algorithms{
          if(sessionIndex >= 0) desiredSession = sessions.get(sessionIndex);
 
          log.finer("FOUND SESSION: " + desiredSession);
-			if (desiredSession.getAvailableThisPeriod()[period]
+			if (desiredSession.getPeriodAvailability()[period]
 					&& desiredSession.getStudents().get(period)
 							.size() < desiredSession.getRoom().getMaxCapacity()
 					&& !currentStud.assignmentsContain(desiredSession)) {
@@ -311,7 +312,7 @@ public class Algorithms{
    private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
-         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size() && sessions.get(i).getAvailableThisPeriod()[period]){
+         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size() && sessions.get(i).getPeriodAvailability()[period]){
             min = sessions.get(i);
          }
       }
@@ -329,7 +330,7 @@ public class Algorithms{
       		else 
       			continue;
       	else if(current.getStudents().get(period).size() < min.getStudents().get(period).size()
-               && current.getAvailableThisPeriod()[period] && !stud.assignmentsContain(current)){
+               && current.getPeriodAvailability()[period] && !stud.assignmentsContain(current)){
             min = sessions.get(i);
          }
       }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -77,7 +78,7 @@ public abstract class MoreInfo {
 		
 		protected byte getPeriod() {
 //			return 0;
-			return master.getSelectedPeriod();
+			return master.getCurrentPeriod();
 		}
 		
 		protected CareerDayGUI getMaster() {
@@ -461,7 +462,7 @@ public abstract class MoreInfo {
 			super(master);
 			this.session = session;
 
-			speakerName = createInfoField("Speaker:", session.getSpeaker(), new EditingAction() {
+			speakerName = createInfoField("Speaker", session.getSpeaker(), new EditingAction() {
 				@Override
 				public void edit(AWTEvent e) {
 					session.setSpeaker(((JTextField)e.getSource()).getText());
@@ -485,26 +486,6 @@ public abstract class MoreInfo {
 			editField.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 			classroomNumber.add(editField, BorderLayout.CENTER);
 			
-//			classroomNumber = createInfoField("Room No",
-//					session.getRoom() == null
-//							? "" : session.getRoom().getRoomNumber(),
-//					new EditingAction() {
-//						@Override
-//						public void edit(AWTEvent e) {
-//							try {
-//								// TODO search rooms and parse namess
-//								// session.setRoom(((JTextField)e.getSource()).getText());
-//								((JTextField) e.getSource()).addActionListener(e1 -> {
-//									session.setRoom(((JTextField) e1.getSource()).getText());
-//								});
-//							} catch (NumberFormatException err) {
-//								System.out.println("oops");
-//								((JTextField) e.getSource()).setText(session.getRoom().getRoomNumber());
-//							}
-//						}
-//					});
-
-			
 
 			setLayout(new BorderLayout());
 
@@ -518,6 +499,7 @@ public abstract class MoreInfo {
 			listStudents = new JList<Student>();
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
+			scrollPane.setBorder(BorderFactory.createTitledBorder("Resident Students"));
 			populateList(getPeriod());
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
@@ -527,13 +509,13 @@ public abstract class MoreInfo {
 			center.add(scrollPane);
 
 			add(north, BorderLayout.NORTH);
-			north.setLayout(new GridLayout(3, 0));
+			north.setLayout(new GridLayout(2, 0));
 			north.add(speakerName);
 			north.add(classroomNumber);
 
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
-			south.setLayout(new GridLayout(5, 1));
+			south.setLayout(new GridLayout(0, 1));
 			
 			JButton button = new JButton("Add Student");
 			button.addActionListener(e -> {
@@ -552,19 +534,44 @@ public abstract class MoreInfo {
 			
 			south.add(button);
 			
-			button = new JButton("Show Student Info");
-			button.addActionListener(e -> {
-				
+			JButton studentInfo = new JButton("Show Student Info");
+			studentInfo.addActionListener(e -> {
+				master.getTabs().setSelectedIndex(1);
+				master.getLists().get(1).setSelectedValue(listStudents.getSelectedValue(), true);
 			});
+			south.add(studentInfo);
+			studentInfo.setEnabled(false);
 			
-			button = new JButton("Remove from Session");
-			button.addActionListener(e -> {
+			JButton remove = new JButton("Remove from Session");
+			remove.addActionListener(e -> {
 				Student selected = listStudents.getSelectedValue();
+				if (selected == null) return;
 				session.getStudents().get(getPeriod()).remove(selected);
 				selected.getAssignments()[getPeriod()] = null;
 				refresh();
 			});
-
+			remove.setEnabled(false);
+			
+			listStudents.addListSelectionListener(e -> {
+				remove.setEnabled(true);
+				studentInfo.setEnabled(true);
+			});
+			south.add(remove);
+			
+			south.add(new JLabel("Available in: "));
+			
+			for (int i = 0; i < master.getEvent().getNumberOfPeriods(); i++)
+				south.add(availableInPeriod(i));
+//			south.add(availability);
+		}
+		
+		private JCheckBox availableInPeriod(int period) {
+			JCheckBox ret = new JCheckBox("Period " + (period + 1));
+			ret.addActionListener(e -> {
+				session.getPeriodAvailability()[period] = ret.isSelected();
+			});
+			ret.setSelected(session.getPeriodAvailability()[period]);
+			return ret;
 		}
 		
 		private JTextField roomSearchField(ActionListener action) {
