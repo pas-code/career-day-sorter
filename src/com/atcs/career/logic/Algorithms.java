@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
@@ -70,32 +71,45 @@ public class Algorithms{
       assignRoomsToSessions(e.studentsWithRequests(), e.getRooms(), e.getSessions());
       log.info("Method 1 Finished");
       
-      rankStudents(e, e.getNumberOfPeriods());
+      ArrayList<Student> ranked = rankStudents(e, e.getNumberOfPeriods());
       log.info("Method 2 Finished");
       
-      assignStudentsToSessions(e.getMasterStudents(), e.getSessions());
+      
+      assignStudentsToSessions(ranked, e.getMasterStudents(), e.getSessions());
       log.info("Method 3 Finished");
       
-      log.fine("Classes under Cap:");
+      log.info("Accuracy:" + getSortingAccuracyAverage(e.studentsWithRequests()));
+      
+      // prints for things happenning wrong. if something is printed below here, there is a problem.
+      
+      // sessions under the min amount of students
+      log.fine("Sessions under Cap:");
       for(int i = 0; i < e.getSessions().size(); i++) {
-         for(int j = 0; j < e.getSessions().get(i).getStudents().size(); j++) {
-            if(e.getSessions().get(i).getStudents().get(j).size() < 10) {
-            	log.fine(e.getSessions().get(i).getSpeaker() + " PERIOD " + j 
-            			+ " HAS " + e.getSessions().get(i).getStudents().get(j).size());
-               for(int k = 0; k < e.getSessions().get(i).getStudents().get(j).size(); k++)
-               	log.fine(e.getSessions().get(i).getStudents().get(j).get(k) + "");
-            }
-         }
+      	for(int j = 0; j < e.getSessions().get(i).getStudents().size(); j++) {
+      		if(e.getSessions().get(i).getStudents().get(j).size() < 10) {
+      			log.fine(e.getSessions().get(i).getSpeaker() + " PERIOD " + j 
+      					+ " HAS " + e.getSessions().get(i).getStudents().get(j).size());
+      			for(int k = 0; k < e.getSessions().get(i).getStudents().get(j).size(); k++)
+      				log.fine(e.getSessions().get(i).getStudents().get(j).get(k) + "");
+      		}
+      	}
       }
       
-      log.info("Accuracy:" + getSortingAccuracyAverage(e.studentsWithRequests()));
+      // students with duplicate assignments
+      System.out.println("\n\nDuplicate Students:");
+      for (Student s : e.getMasterStudents())
+      	for (int i = 1; i < s.getAssignments().length; i++)
+      		if (s.getAssignment(i - 1).equals(s.getAssignment(i))) {
+      			System.out.println(s.getFullName() + " in "+s.getAssignments());
+      			break;
+      		}
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness
       double totalCont = 0;
       for(int i = 0; i < students.size(); i++){
 //         System.out.println("Contentness: " + students.get(i).getStudentPriority().getContentness()/50);
-         totalCont += ((students.get(i).getStudentPriority().getContentness())/50); //50 is the contentness weight we gave
+         totalCont += ((students.get(i).getStudentPriority().getContentness())/Priority.contentnessWeightValue);
       }
       return totalCont/students.size();
    }
@@ -108,30 +122,24 @@ public class Algorithms{
       HashMap<String, Session> sessionHash = new HashMap<String, Session>();
     
       for(int i=0; i<sessions.size(); i++){
-         if(sessions.get(i).getSpeaker().charAt(0) == '"') //TEMP FIX FIX IT INFO
+         if(sessions.get(i).getSpeaker().charAt(0) == '"') //TODO TEMP FIX FIX IT INFO
             sessionHash.put(sessions.get(i).getSpeaker().substring(1), sessions.get(i));
          else //^^^
             sessionHash.put(sessions.get(i).getSpeaker(), sessions.get(i));
       }
-      
-//      for(int i=0; i< sessionHash.size(); i++){      //for testing
-//         System.out.println("testing: "+i);
-//         System.out.println(sessionHash.get(sessions.get(i).getSpeaker()).getSpeaker());
-//      }
         
       for(Student stud: students){
          ArrayList<Session> requests = stud.getRequests();
-//         System.out.println(stud.toString());
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
             sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);   //come back to fix "5-i" if needed
          }
-//         System.out.println("Next Student \n");
       }
       
       sessions.clear();
       sessions.addAll(sessionHash.values());
       Collections.sort(sessions);
+      System.out.println("LEAST POPULAR: " + sessions.get(0));
       
       for(int i = sessions.size() - 1; i >= 0; i--){
          if(rooms.size() > i) { //COME BACK WITH ERROR MANAGER STUFF
@@ -153,8 +161,9 @@ public class Algorithms{
 	 * can be done correctly
 	 * @param requestStudents
 	 * @param master
+	 * @return 
 	 */
-   private static void rankStudents(Event e, int numPeriods) {
+   private static ArrayList<Student> rankStudents(Event e, int numPeriods) {
     //Creates Array Lists for Random Assignment
    	
       for(int i = 0; i < numPeriods; i++)
@@ -176,7 +185,11 @@ public class Algorithms{
 //            currentStud.setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
 //         
 //      }
+      ArrayList<Student> ret = new ArrayList<Student>();
       Collections.sort(e.getMasterStudents());
+      ret.addAll(e.studentsWithRequests());
+      
+      return ret;
       
       //FOR TESTING
 //      for(int i = 0; i < students.size(); i++){
@@ -186,14 +199,14 @@ public class Algorithms{
    }
    
 	//ALGORITHM 3. With students sorted, we assign them to sessions–trying to give them their highest choices first. We assign by period by period.
-   private static void assignStudentsToSessions(ArrayList<Student> students, ArrayList<Session> sessions){
-      int numOfPeriods = 3;
+   private static void assignStudentsToSessions(ArrayList<Student> studentsWithRequests, ArrayList<Student> master, ArrayList<Session> sessions){
+      int numOfPeriods = 3; //TODO this is a magic number
       for(int j = 0; j < numOfPeriods; j++) { //For each period
-         for(int i = 0; i < students.size(); i++) { //Go through every student
-            Student currentStud = students.get(i); //Makes it easier to refer to current students
+         for(int i = 0; i < studentsWithRequests.size(); i++) { //Go through every student
+            Student currentStud = studentsWithRequests.get(i); //Makes it easier to refer to current students
             assignBasedOnChoice(currentStud, sessions, j);
          }
-         Collections.sort(students);  //reranks students
+         Collections.sort(studentsWithRequests);  //reranks students
       } 
       
       
@@ -201,14 +214,15 @@ public class Algorithms{
       
       // Backfill: remove students from populated sessions and add them to unpopular sessions
       //COMMENT BELOW HERE TO STOP BACKFILL
+      
       int minCap = 10;
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
             if(sessions.get(i).getAvailableThisPeriod()[j] && sessions.get(i).getStudents().get(j).size() < minCap) { //If that session doesn't have enough during that period...
                do {
-                  for(int k = students.size() - 1; k >= 0; k--) { //Look at every student.
-                     Student currentStud = students.get(k);
+                  for(int k = master.size() - 1; k >= 0; k--) { //Look at every student.
+                     Student currentStud = master.get(k);
                      if(currentStud.isSwitchable()) { //If they haven't already been moved during the backfill...
                         if(sessions.indexOf(currentStud.getAssignment(j)) != -1) //This is just because of the issue with quotes before speaker name. shouldn't be an issue otherwise
                            sessions.get(sessions.indexOf(currentStud.getAssignment(j))).getStudents().get(j).remove(currentStud); //Take them out of their old session at that period
@@ -293,6 +307,7 @@ public class Algorithms{
    }
    
    //When gives period and all sessions, reutnrs the leas populated session from that period
+   @Deprecated
    private static Session getLeastPopulatedSessionPerPeriod(ArrayList<Session> sessions, int period) {
       Session min = sessions.get(0);
       for(int i = 1; i < sessions.size(); i++){
@@ -305,10 +320,16 @@ public class Algorithms{
    
    //Same as above, but won't return a session the student already has
    private static Session getLeastPopulatedSessionPerPeriodStudentConscious(ArrayList<Session> sessions, int period, Student stud) {
-      Session min = sessions.get(0);
-      for(int i = 1; i < sessions.size(); i++){
-         if(sessions.get(i).getStudents().get(period).size() < min.getStudents().get(period).size()
-               && sessions.get(i).getAvailableThisPeriod()[period] && !stud.assignmentsContain(sessions.get(i))){
+      Session min = null;
+      for(int i = 1; i < sessions.size(); i++) {
+      	Session current = sessions.get(i);
+      	if (min == null) 
+      		if (!stud.assignmentsContain(current))
+      			min = sessions.get(i);
+      		else 
+      			continue;
+      	else if(current.getStudents().get(period).size() < min.getStudents().get(period).size()
+               && current.getAvailableThisPeriod()[period] && !stud.assignmentsContain(current)){
             min = sessions.get(i);
          }
       }

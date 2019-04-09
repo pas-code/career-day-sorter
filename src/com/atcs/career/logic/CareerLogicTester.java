@@ -8,6 +8,7 @@ import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 
+@Deprecated
 public class CareerLogicTester
 {
    private ArrayList<Student> students;

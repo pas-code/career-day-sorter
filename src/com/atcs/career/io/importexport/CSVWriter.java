@@ -108,7 +108,7 @@ public class CSVWriter {
 		// header, row 1
 		ArrayList<String> row = new ArrayList<String>();
 		row.add("email");
-		row.add("firstName, lastName");
+		row.add("firstname, lastname");
 		for (byte i = 0; i < e.getNumberOfPeriods(); i++) {
 			row.add("session" + (i + 1) + ", ");
 			row.add("room" + (i + 1) + ", ");
@@ -141,7 +141,7 @@ public class CSVWriter {
 	public static void exportEventToEmailReminder(Event e) {
 		ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 		ArrayList<String> row = new ArrayList<String>();
-		row.add("email, firstName, lastName");
+		row.add("email, firstname, lastname");
 		data.add(row);
 		for (Student s : e.studentsWithoutRequests()) {
 			row = new ArrayList<String>();

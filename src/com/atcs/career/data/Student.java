@@ -189,12 +189,13 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	      
 	      else if (getGrade() < Priority.classCutOff) 
 	         setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
-		} else {
-			setStudentPriority(new Priority(0,
-					getGrade() >= Priority.classCutOff
-							? Priority.upperClassMagnitudeValue
-							: Priority.lowerClassMagnitudeValue));
-		}
+		} 
+//		else {
+//			setStudentPriority(new Priority(0,
+//					getGrade() >= Priority.classCutOff
+//					? Priority.upperClassMagnitudeValue
+//							: Priority.lowerClassMagnitudeValue));
+//		}
 		
 	}
 
@@ -223,6 +224,9 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	@Override
 	public int compareTo(Student o) {
+		if (this.getStudentPriority() == null && o.getStudentPriority() == null) return 0;
+		if (this.getStudentPriority() == null) return -1;
+		if (o.getStudentPriority() == null) return 1;
 		return (int) (this.getStudentPriority().getPriority()
 				- o.getStudentPriority().getPriority());
 	}
