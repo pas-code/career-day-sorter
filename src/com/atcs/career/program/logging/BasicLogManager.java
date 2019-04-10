@@ -3,8 +3,14 @@
 
 package com.atcs.career.program.logging;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.logging.Level;
+
+import com.atcs.career.io.file.FileHandler;
 
 public class BasicLogManager {
    public static final String GLOBAL_NAME = "global";
@@ -16,7 +22,12 @@ public class BasicLogManager {
       
       //configure the universal logger level
       manager.setFilter(new BasicLogger.Filter(Level.ALL));
-      manager.master.setOut(System.out);
+//      manager.master.setOut(System.out);
+      try {
+			manager.master.setOut(new PrintStream(new FileOutputStream(new File(FileHandler.GEN_LOG))));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
    }
    
    public static BasicLogger getGlobal() {

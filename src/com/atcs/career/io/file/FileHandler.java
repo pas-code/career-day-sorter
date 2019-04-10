@@ -56,6 +56,8 @@ public class FileHandler {
       ASSIGNMENT_TEMPLATE = EMAIL_DIR + "emailAssignmentTemplate.txt";
       REMINDER_TEMPLATE = EMAIL_DIR + "emailReminderTemplate.txt";
       
+      GEN_LOG = LOG_DIR + "generalLog.txt";
+      
       if (MainClass.isApp)
       	JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
       else
@@ -74,6 +76,8 @@ public class FileHandler {
       ResourceAccess.transfer("assignmentEmailTemplate.txt", new File(ASSIGNMENT_TEMPLATE), 0);
       ResourceAccess.transfer("reminderEmailTemplate.txt", new File(REMINDER_TEMPLATE), 0);
       ResourceAccess.transfer("emailer.jar", new File(EMAIL_JAR), 0);
+      
+      new File(GEN_LOG).createNewFile();
       
 //      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/").mkdir();
       if (MainClass.isApp) 

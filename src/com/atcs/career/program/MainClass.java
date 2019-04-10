@@ -26,9 +26,11 @@ public class MainClass {
 
 
 	public static void main(String[] args) {
+		BasicLogger.getLogger("help").severe("HELP");;
 		new Thread(new Runnable() {
 			public void run() {
-				initialize(concatArgs(args));
+//				initialize(concatArgs(args));
+				initialize(null);
 			}
 		}).start();
 	}
@@ -42,17 +44,19 @@ public class MainClass {
 	}
 	
 	private static void initialize(String eventPathToOpen) {
+		MasterUI master = new MasterUI();
 		if (eventPathToOpen == null || eventPathToOpen == "") {
 			//open the welcome screen
-			new MasterUI().openWelcome();
+			master.openWelcome();
 		}
 		else {
 			try {
 				Event e = FileHandler.load(eventPathToOpen);
-				new MasterUI().openEventFromWelcome(e);
+				master.openEventFromWelcome(e);
 			} catch (ClassNotFoundException | IOException e) {
 				//open the main screen with said event
 				e.printStackTrace();
+				master.openWelcome();
 			}
 		}
 	}
