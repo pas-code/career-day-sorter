@@ -49,11 +49,13 @@ public class Algorithms{
    private static boolean readyForSort(Event e) {
    	String thingsMissing = "";
    	if (e.getRooms().isEmpty())
-   		thingsMissing += "room data.\n";
+   		thingsMissing += "no room data.\n";
+   	else if (e.getRooms().size() < e.getSessions().size())
+   		thingsMissing += "not enough rooms for sessions.\n";
    	if (e.getSessions().isEmpty())
-   		thingsMissing += "session data.\n";
+   		thingsMissing += "no session data.\n";
    	if (e.getMasterStudents().isEmpty())
-   		thingsMissing  += "master student array\n";
+   		thingsMissing  += "no master student array\n";
    		
    	if (!thingsMissing.equals("")) {
    		JOptionPane.showMessageDialog(null, "You are missing important data:\n" + thingsMissing

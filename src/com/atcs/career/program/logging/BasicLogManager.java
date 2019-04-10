@@ -24,7 +24,10 @@ public class BasicLogManager {
       manager.setFilter(new BasicLogger.Filter(Level.ALL));
 //      manager.master.setOut(System.out);
       try {
-			manager.master.setOut(new PrintStream(new FileOutputStream(new File(FileHandler.GEN_LOG))));
+      	PrintStream out = new PrintStream(new FileOutputStream(new File(FileHandler.GEN_LOG))); 
+			manager.master.setOut(out);
+			System.setOut(out);
+			System.setErr(out);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
