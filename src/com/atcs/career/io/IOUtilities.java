@@ -85,8 +85,10 @@ public class IOUtilities
          int yearSubmitted = Integer.parseInt(lines.get(i)[0].substring(0, 4)) * 1000;
          //Populates an ArrayList of Session objects with each Student's requests
          ArrayList<Session> sessionRequests = new ArrayList<Session>();
-         for(int k = 4; k < lines.get(i).length; k++) 
+         for(int k = 4; k < lines.get(i).length; k++)  {
+         	System.out.println(lines.get(i)[k]);
             sessionRequests.add(new Session(lines.get(i)[k].substring(lines.get(i)[k].indexOf("-")+2), lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-")-1)));         
+         }
          
          //Adds Student object to the ArrayList to be returned
          students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true, numPeriods));

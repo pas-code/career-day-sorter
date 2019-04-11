@@ -132,14 +132,24 @@ public class Algorithms{
       for(int i=0; i<sessions.size(); i++){
          if(sessions.get(i).getSpeaker().charAt(0) == '"') //TODO TEMP FIX FIX IT INFO
             sessionHash.put(sessions.get(i).getSpeaker().substring(1), sessions.get(i));
-         else //^^^
+         else //^^^ 
+         	{
             sessionHash.put(sessions.get(i).getSpeaker(), sessions.get(i));
+            System.out.println("putting with |" + sessions.get(i).getSpeaker() + "|");
+         	}
       }
-        
+        System.out.println("DONE PUTTING");
+        try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
       for(Student stud: students){
          ArrayList<Session> requests = stud.getRequests();
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
+         	System.out.print("getting with: |");
+         	System.out.println(requests.get(i).getSpeaker() + "| as " + sessionHash.get(requests.get(i).getSpeaker()));
             sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);
          }
       }
