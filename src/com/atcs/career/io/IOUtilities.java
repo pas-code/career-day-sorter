@@ -32,19 +32,13 @@ public class IOUtilities
     */
    public static ArrayList<Room> loadRoomArray(String fileName, int numPeriods){
       ArrayList<Room> rooms = new ArrayList<Room>();
-      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
-//      ArrayList<String[]> lines = CSVReader.readCSV("src/com/atcs/career/data/DeskCount.csv");
-      System.out.println(lines.size());
-//      int size = 0;
-//      for(String[] l : lines)
-//         if(l[0] != null)
-//            size++;
-      for(int i = 0; i < lines.size(); i++){
-         String roomNum = lines.get(i)[0].trim();
-         int roomCap = Integer.parseInt(lines.get(i)[1].trim());
+      String[][] lines = CSVReader.readCSV(fileName);
+      for(int i = 0; i < lines.length; i++){
+         String roomNum = lines[i][0].trim();
+         int roomCap = Integer.parseInt(lines[i][1].trim());
          System.out.println(roomNum + ", " + roomCap);
          rooms.add(new Room(roomNum, roomCap, numPeriods));
-         if(lines.get(i)[0].equals("255"))
+         if(lines[i][0].equals("255"))
             break;
       }
       return rooms;
@@ -56,10 +50,10 @@ public class IOUtilities
     */
    public static ArrayList<Session> loadSessionArray(String fileName){
       ArrayList<Session> sessions = new ArrayList<Session>();
-      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
-      for(int i = 0; i < lines.size(); i++){
-         String speaker = lines.get(i)[0].substring(0, lines.get(i)[0].indexOf(" - "));
-         String title = lines.get(i)[0].substring(lines.get(i)[0].indexOf(" - ") + 3);
+      String[][] lines = CSVReader.readCSV(fileName);
+      for(int i = 0; i < lines.length; i++){
+         String speaker = lines[i][0].substring(0, lines[i][0].indexOf(" - "));
+         String title = lines[i][0].substring(lines[i][0].indexOf(" - ") + 3);
          sessions.add(new Session(title, speaker));
       }
       return sessions;
@@ -72,22 +66,22 @@ public class IOUtilities
     */
    public static ArrayList<Student> loadStudentArray(String fileName, int numPeriods){
       ArrayList<Student> students = new ArrayList<Student>();
-      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
-      for(int i = 1; i < lines.size(); i++){
+      String[][] lines = CSVReader.readCSV(fileName);
+      for(int i = 1; i < lines.length; i++){
          //Stores each element of the line as an appropriately name variable
-         String lastName = lines.get(i)[3].trim().replace("\"", "");
+         String lastName = lines[i][3].trim().replace("\"", "");
          lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
-         String firstName = lines.get(i)[2].trim().replace("\"", "");
+         String firstName = lines[i][2].trim().replace("\"", "");
          firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1);
-         String email = lines.get(i)[1].trim().replace("\"", "");
-         String date = lines.get(i)[0].replace("\"", "");
+         String email = lines[i][1].trim().replace("\"", "");
+         String date = lines[i][0].replace("\"", "");
          Calendar daySubmitted = new GregorianCalendar(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date.substring(5,7)), Integer.parseInt(date.substring(8,10)));
-         int yearSubmitted = Integer.parseInt(lines.get(i)[0].substring(0, 4)) * 1000;
+         int yearSubmitted = Integer.parseInt(lines[i][0].substring(0, 4)) * 1000;
          //Populates an ArrayList of Session objects with each Student's requests
          ArrayList<Session> sessionRequests = new ArrayList<Session>();
-         for(int k = 4; k < lines.get(i).length; k++)  {
-         	System.out.println(lines.get(i)[k]);
-            sessionRequests.add(new Session(lines.get(i)[k].substring(lines.get(i)[k].indexOf("-")+2), lines.get(i)[k].substring(0, lines.get(i)[k].indexOf("-")-1)));         
+         for(int k = 4; k < lines[i].length; k++)  {
+         	System.out.println(lines[i][k]);
+            sessionRequests.add(new Session(lines[i][k].substring(lines[i][k].indexOf("-")+2), lines[i][k].substring(0, lines[i][k].indexOf("-")-1)));         
          }
          
          //Adds Student object to the ArrayList to be returned
@@ -102,12 +96,12 @@ public class IOUtilities
     */
    public static ArrayList<Student> loadMasterStudentArray(String fileName, int numPeriods){
       ArrayList<Student> masterStudents = new ArrayList<Student>();
-      ArrayList<String[]> lines = CSVReader.readCSV(fileName);
-      for(int i = 1; i < lines.size(); i++){
+      String[][] lines = CSVReader.readCSV(fileName);
+      for(int i = 1; i < lines.length; i++){
          //Stores each element of the line as an appropriately name variable
-         String lastName = lines.get(i)[0].trim().substring(lines.get(i)[0].trim().indexOf(" ")+1).replace("\"", "");
-         String firstName = lines.get(i)[0].trim().substring(0,lines.get(i)[0].trim().indexOf(" ")).replace("\"", "");
-         String email = lines.get(i)[2].trim().replace("\"", "");
+         String lastName = lines[i][0].trim().substring(lines[i][0].trim().indexOf(" ")+1).replace("\"", "");
+         String firstName = lines[i][0].trim().substring(0,lines[i][0].trim().indexOf(" ")).replace("\"", "");
+         String email = lines[i][2].trim().replace("\"", "");
          
          //Adds Student object to the ArrayList to be returned
          masterStudents.add(new Student(lastName, firstName, email, numPeriods));
