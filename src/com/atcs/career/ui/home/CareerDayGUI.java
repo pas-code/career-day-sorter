@@ -20,6 +20,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -126,6 +127,7 @@ public class CareerDayGUI extends JPanel {
 		sort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sort();
+				System.out.println("done");
 			}
 		});
 		north.add(sort, BorderLayout.EAST);

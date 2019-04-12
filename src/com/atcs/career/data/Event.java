@@ -51,7 +51,7 @@ public class Event implements Serializable {
 
 	public void selectStudentFile() {
 		IOUtilities.combineStudentArrays(
-				IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods()),
+				IOUtilities.loadRequestsArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods()),
 				getMasterStudents());
 		amountOfSessions = sessions.size();
 	}

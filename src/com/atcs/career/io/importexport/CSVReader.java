@@ -61,9 +61,11 @@ public class CSVReader {
 		try {
 			br = new BufferedReader(new FileReader(fileName));
 			String totalData = "";
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				totalData += line + "\n";
+			String line = br.readLine();
+			while (line != null) {
+				String nextLine = br.readLine();
+				totalData += line + (nextLine == null ? "" : "\n");
+				line = nextLine;
 			}
 			br.close();
 			return expandTable(totalData);
@@ -80,12 +82,12 @@ public class CSVReader {
 		do {
 			lastIndex = compressed.indexOf('\n', lastIndex+1);
 			numLines++;
-			} while (lastIndex != -1);
+		} while (lastIndex != -1);
 		String firstLine = compressed.substring(0,compressed.indexOf('\n'));
 		do {
 			lastIndex = firstLine.indexOf(',', lastIndex+1);
 			numColumns++;
-			} while (lastIndex != -1);
+		} while (lastIndex != -1);
 		String[][] table = new String[numLines][numColumns];
 		int lineNum = 0;
 		int colNum = 0;
@@ -110,6 +112,7 @@ public class CSVReader {
 	public static String getFileLocation(String acceptableSuffix, String startDirectory) {
 		JFrame parent = new JFrame();
 		FileDialog fd = new FileDialog(parent, "Choose a file", FileDialog.LOAD);
+		startDirectory = startDirectory == null ? System.getProperty("user.home") : startDirectory;
 		fd.setDirectory(startDirectory);
 		fd.setFile("*."+acceptableSuffix);
 		fd.setFilenameFilter((dir, name) -> name.endsWith(acceptableSuffix));

@@ -130,26 +130,12 @@ public class Algorithms{
       HashMap<String, Session> sessionHash = new HashMap<String, Session>();
     
       for(int i=0; i<sessions.size(); i++){
-         if(sessions.get(i).getSpeaker().charAt(0) == '"') //TODO TEMP FIX FIX IT INFO
-            sessionHash.put(sessions.get(i).getSpeaker().substring(1), sessions.get(i));
-         else //^^^ 
-         	{
-            sessionHash.put(sessions.get(i).getSpeaker(), sessions.get(i));
-            System.out.println("putting with |" + sessions.get(i).getSpeaker() + "|");
-         	}
+      	sessionHash.put(sessions.get(i).getSpeaker().trim(), sessions.get(i));
       }
-        System.out.println("DONE PUTTING");
-        try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
       for(Student stud: students){
          ArrayList<Session> requests = stud.getRequests();
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
-         	System.out.print("getting with: |");
-         	System.out.println(requests.get(i).getSpeaker() + "| as " + sessionHash.get(requests.get(i).getSpeaker()));
             sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);
          }
       }
@@ -209,7 +195,7 @@ public class Algorithms{
       // Backfill: remove students from populated sessions and add them to unpopular sessions
       //COMMENT BELOW HERE TO STOP BACKFILL
       
-      int minCap = 10; //TODO fix this poss
+      int minCap = 5; //TODO notify if this isn't able to be fulfilled
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
