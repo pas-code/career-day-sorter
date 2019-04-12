@@ -127,6 +127,7 @@ public class CareerDayGUI extends JPanel {
 		sort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sort();
+				SwingUtilities.getWindowAncestor(eastPanel).requestFocus();
 				System.out.println("done");
 			}
 		});

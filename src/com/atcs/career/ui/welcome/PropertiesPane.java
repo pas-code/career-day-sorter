@@ -208,8 +208,11 @@ public class PropertiesPane extends JPanel {
 				if (readyToSubmit()) {
 					if (welc != null)
 						welc.sendEventAndClose(createEvent());
-					else 
+					else {
 						updateEventData();
+						close();
+						
+					}
 				} else
 					JOptionPane.showMessageDialog(null,
 							"You did not select all of the needed files. Please select all options.");
@@ -217,7 +220,7 @@ public class PropertiesPane extends JPanel {
 		});
 		cancel = new JButton("Cancel");
 		cancel.addActionListener(e -> {
-			cancel();
+			close();
 		});
 	}
 	
@@ -361,7 +364,7 @@ public class PropertiesPane extends JPanel {
 
 	// ------------------------------------------END GUI CONFIGURATION----------------------------------------
 
-	private void cancel() {
+	private void close() {
 		if (welc != null) 
 			welc.cancelProps();
 		else

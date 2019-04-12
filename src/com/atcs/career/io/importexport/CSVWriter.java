@@ -79,8 +79,10 @@ public class CSVWriter {
 			row.add(current.getfName() + ", ");
 			row.add(current.getlName() + ", ");
 			for (byte p = 0; p < e.getNumberOfPeriods(); p++) {
-				row.add(current.getAssignment(p).getTitle() + ", ");
-				row.add(current.getAssignment(p).getRoom().getRoomNumber() + ", ");
+				if (current.getAssignment(p) != null) {
+					row.add(current.getAssignment(p).getTitle() + ", ");
+					row.add(current.getAssignment(p).getRoom().getRoomNumber() + ", ");
+				}
 			}
 			values.add(row);
 		}
