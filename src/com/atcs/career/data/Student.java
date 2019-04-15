@@ -235,6 +235,16 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		return getEmail().compareTo(o.getEmail());
 	}
 	
+	public int compareToList(GuiListable o) {
+		if (!(o instanceof Student)) return -1;
+		Student s = (Student) o;
+		if (s.grade != grade)
+			return grade - s.grade;
+		if (s.lName != lName)
+			return lName.compareTo(s.lName);
+		return fName.compareTo(fName);
+	}
+	
 	@Override
 	public String getTitle() {
 		return fName + " " + lName;
@@ -243,16 +253,18 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	@Override
 	public String getInfo(int i) {
 		switch (i) {
-			case 0 :
-				return getGrade() + "";
-			case 1 :
-				return "";
-			case 2 :
-				return getEmail();
-			default :
-				return lName;
+			case 0 : return getGrade() + "";
+			case 1 : return getEmail();
+			default : return "";
 		}
-
+	}
+	
+	public String getInfoTitle(int i) {
+		switch (i) {
+			case 0 : return "Grade";
+			case 1 : return "Email";
+			default : return "";
+		}
 	}
 
 	public Session getAssignment(int period) {
@@ -295,5 +307,4 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		
 		return -1;
 	}
-
 }

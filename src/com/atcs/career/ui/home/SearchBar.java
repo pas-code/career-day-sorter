@@ -95,7 +95,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	private void setListData(ArrayList<Searchable> values) {
 		if (values.isEmpty())
 			list.setListData((T[]) new Searchable[0]);
-		list.setListData((T[]) values.toArray(new Searchable[values.size()]));
+		list.setListData((T[]) (values.toArray(new Searchable[values.size()])));
 	}
 	
 	private void close() {
@@ -149,7 +149,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	}
 	
 	private void enterGhostText() {
-		if (field.getText().equals("")) {
+		if (field.getText().isEmpty()) {
 			field.setForeground(Color.GRAY);
 			field.setText("Search...");
 			hasGhostText = true;

@@ -3,6 +3,7 @@
 
 package com.atcs.career.ui.home;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
@@ -22,6 +23,7 @@ public class ListableRenderer extends JPanel implements ListCellRenderer<GuiList
 	private CareerDayGUI master;
 	
 	public ListableRenderer(CareerDayGUI master) {
+		super(new BorderLayout());
 		this.master = master;
 	}
 	
@@ -29,8 +31,8 @@ public class ListableRenderer extends JPanel implements ListCellRenderer<GuiList
 		Border line = BorderFactory.createLineBorder(isSelected ? Color.BLACK : Color.GRAY, isSelected ? 5 : 1);
 		this.setBorder(BorderFactory.createTitledBorder(line, g.getTitle()));
 		this.removeAll();
-		this.add(new JLabel(g.getInfo(0)));
-		this.add(new JLabel("Students: " + g.getInfo(1)));
+		this.add(new JLabel(g.getInfoTitle(0) + ": " + g.getInfo(0)), BorderLayout.WEST);
+		this.add(new JLabel(g.getInfoTitle(1) + ": " + g.getInfo(1)), BorderLayout.EAST);
 		if (isSelected)
 			master.setMoreInfo(g);
 	}

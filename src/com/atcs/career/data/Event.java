@@ -23,7 +23,7 @@ public class Event implements Serializable {
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
 	private LocalDate dateLastModified;
-	private byte numberOfPeriods;
+	private byte numberOfPeriods, currentPeriod;
 	private boolean sorted;
 	
 	private String studentFile, sessionFile, requestFile, roomFile;
@@ -51,7 +51,7 @@ public class Event implements Serializable {
 
 	public void selectStudentFile() {
 		IOUtilities.combineStudentArrays(
-				IOUtilities.loadRequestsArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods()),
+				IOUtilities.loadRequestsArray(CSVReader.getFileLocation(".csv"), this),
 				getMasterStudents());
 		amountOfSessions = sessions.size();
 	}
@@ -62,7 +62,7 @@ public class Event implements Serializable {
 	
 
 	public void selectSessionFile() {
-		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
+		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"), this);
 		amountOfSessions = sessions.size();
 	}
 	
@@ -195,6 +195,16 @@ public class Event implements Serializable {
 	public void setNumberOfPeriods(byte numberOfPeriods) {
 		this.numberOfPeriods = numberOfPeriods;
 	}
+
+	public byte getCurrentPeriod() {
+		return currentPeriod;
+	}
+
+
+	public void setCurrentPeriod(byte currentPeriod) {
+		this.currentPeriod = currentPeriod;
+	}
+
 
 	public boolean isSorted() {
 		return sorted;

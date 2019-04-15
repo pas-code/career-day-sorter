@@ -8,6 +8,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -36,7 +39,7 @@ import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.info.MoreInfo;
 import com.atcs.career.ui.home.info.MoreInfo.SideInfoPanel;
 
-//Jarrett Bierman & Edward Fominykh
+//Jarrett Bierman & Edward Fominykh & Thomas Varano
 //9/4/18
 
 public class CareerDayGUI extends JPanel {
@@ -51,10 +54,7 @@ public class CareerDayGUI extends JPanel {
 	private SearchBar<GuiListable> centerSearch;
 	private JTabbedPane tabs;
 	private JPanel eastPanel;
-
-	/**
-	 * 
-	 */
+ 
 	private static final BasicLogger	mainLog = BasicLogger.getLogger(CareerDayGUI.class.getName());
 
 	private Font bigFont;
@@ -143,7 +143,7 @@ public class CareerDayGUI extends JPanel {
 				item.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Session s;
-						if ((s = ElementCreator.createSession()) == null) return;
+						if ((s = ElementCreator.createSession(event)) == null) return;
 						event.getSessions().add(s);
 						MainClass.changeLog.info("Session added: " + s);
 						refresh("Sessions");
@@ -238,9 +238,11 @@ public class CareerDayGUI extends JPanel {
 		JPanel scrollBackPanel = new JPanel();
 		scrollBackPanel.setLayout(new BorderLayout());
 		scrollBackPanel.setBackground(Color.white);
-
-		JList<GuiListable> infoList = new JList<GuiListable>(
-				eventData.toArray(new GuiListable[eventData.size()]));
+		
+		GuiListable[] listData = eventData.toArray(new GuiListable[eventData.size()]);
+		Arrays.sort(listData, GuiListable.listSorter());
+		
+		JList<GuiListable> infoList = new JList<GuiListable>(listData);
 		infoList.setCellRenderer(new ListableRenderer(this));
 		lists.add(infoList);
 
@@ -287,7 +289,9 @@ public class CareerDayGUI extends JPanel {
 	public void changePeriod(byte periodIndex) {
 		MainClass.changeLog.info("change period to " + periodIndex);
 		this.selectedPeriod = periodIndex;
+		event.setCurrentPeriod(selectedPeriod);
 		if (infoPanel != null) infoPanel.refresh();
+		refresh(tabs.getTitleAt(tabs.getSelectedIndex()));
 	}
 
 	/**

@@ -230,7 +230,7 @@ public class PropertiesPane extends JPanel {
 
 		ret.changeName(title.getText());
 		if (checkNullPassed(sessionFile)) {
-			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
+			ret.setSessions(IOUtilities.loadSessionArray(sessionFile, ret));
 			ret.setSessionFile(sessionFile);
 		}
 		if (checkNullPassed(allStudentFile)) {
@@ -240,7 +240,7 @@ public class PropertiesPane extends JPanel {
 		}
 		if (checkNullPassed(requestFile)) {
 			IOUtilities.combineStudentArrays(IOUtilities.loadRequestsArray(
-					requestFile, ret.getNumberOfPeriods()), ret.getMasterStudents());
+					requestFile, ret), ret.getMasterStudents());
 			ret.setRequestFile(requestFile);
 		}
 		if (checkNullPassed(classroomFile)) {
@@ -263,7 +263,7 @@ public class PropertiesPane extends JPanel {
 		
 		event.changeName(title.getText());
 		if (!sessionFile.equals(event.getSessionFile())) {
-			event.setSessions(IOUtilities.loadSessionArray(sessionFile));
+			event.setSessions(IOUtilities.loadSessionArray(sessionFile, event));
 			event.setSessionFile(sessionFile);
 			MainClass.changeLog.info("sessions file changed to " + sessionFile);
 		}
@@ -277,14 +277,14 @@ public class PropertiesPane extends JPanel {
 				IOUtilities
 						.combineStudentArrays(
 								IOUtilities.loadRequestsArray(requestFile,
-										event.getNumberOfPeriods()), event.getMasterStudents());
+										event), event.getMasterStudents());
 			}
 		}
 		if (!requestFile.equals(event.getRequestFile())) {
 			// TODO clear requests
 			// TODO should I clear the requests or just overwrite them? some might stay depending on data.
 			IOUtilities.combineStudentArrays(IOUtilities.loadRequestsArray(
-					requestFile, event.getNumberOfPeriods()), event.getMasterStudents());
+					requestFile, event), event.getMasterStudents());
 			event.setRequestFile(requestFile);
 			MainClass.changeLog.info("requests file changed to " + requestFile);
 		}

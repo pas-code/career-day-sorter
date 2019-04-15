@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
@@ -39,13 +40,13 @@ public class IOUtilities
     * Loads ArrayList with Session objects from local .csv file
     * @return ArrayList of Session objects
     */
-   public static ArrayList<Session> loadSessionArray(String fileName){
+   public static ArrayList<Session> loadSessionArray(String fileName, Event masterEvent){
       ArrayList<Session> sessions = new ArrayList<Session>();
       String[][] lines = CSVReader.readCSV(fileName);
       for(int i = 0; i < lines.length; i++){
          String speaker = lines[i][0].substring(0, lines[i][0].indexOf(" - "));
          String title = lines[i][0].substring(lines[i][0].indexOf(" - ") + 3);
-         sessions.add(new Session(fixExtraneousCharacters(title), fixExtraneousCharacters(speaker)));
+         sessions.add(new Session(fixExtraneousCharacters(title), fixExtraneousCharacters(speaker), masterEvent));
       }
       return sessions;
    }
@@ -62,7 +63,7 @@ public class IOUtilities
     * @param fileName the file name of the .csv file, including suffix and path
     * @return ArrayList of Student objects who submitted a form
     */
-   public static ArrayList<Student> loadRequestsArray(String fileName, int numPeriods){
+   public static ArrayList<Student> loadRequestsArray(String fileName, Event masterEvent){
       ArrayList<Student> students = new ArrayList<Student>();
       String[][] lines = CSVReader.readCSV(fileName);
       for(int i = 1; i < lines.length; i++){
@@ -86,11 +87,14 @@ public class IOUtilities
          for(int k = 4; k < lines[i].length; k++)  {
             sessionRequests.add(new Session(
             		fixExtraneousCharacters(lines[i][k].substring(lines[i][k].indexOf("-")+2)), 
-            		fixExtraneousCharacters(lines[i][k].substring(0, lines[i][k].indexOf("-")-1))));         
+            		fixExtraneousCharacters(lines[i][k].substring(0, lines[i][k].indexOf("-")-1)), masterEvent));         
          }
          
          //Adds Student object to the ArrayList to be returned
-         students.add(new Student(lastName, firstName, email, sessionRequests, yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR), true, numPeriods));
+         students.add(new Student(
+         		lastName, firstName, email, sessionRequests,
+         		yearSubmitted + daySubmitted.get(Calendar.DAY_OF_YEAR),
+         		true, masterEvent.getNumberOfPeriods()));
       }
       return students;
    }

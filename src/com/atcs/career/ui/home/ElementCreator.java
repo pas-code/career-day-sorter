@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.atcs.career.data.Event;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 
 public class ElementCreator {
-	public static Session createSession() {
+	public static Session createSession(Event masterEvent) {
 		JPanel message = new JPanel(new GridLayout(0,1));
 		ArrayList<JTextField> fields = new ArrayList<JTextField>();
 		message.add(createInfoField("Title", fields));
@@ -25,7 +26,7 @@ public class ElementCreator {
 		
 		if (JOptionPane.showConfirmDialog(null, message, "Create Session",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) 
-			return new Session(fields.get(0).getText(), fields.get(1).getText());
+			return new Session(fields.get(0).getText(), fields.get(1).getText(), masterEvent);
 		return null;
 	}
 	

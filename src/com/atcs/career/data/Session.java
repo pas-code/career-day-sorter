@@ -19,34 +19,17 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	private int[] gradesAvailable;
 	private boolean[] periodAvailability;
 	private int popularity;
+	private Event masterEvent;
 
-//	public Session(String title, String speaker,
-//			ArrayList<ArrayList<Student>> students, int[] gradesAvailable,
-//			int popularity) {
-//		super();
-//		this.title = title;
-//		this.speaker = speaker;
-//		this.students = students;
-//		this.gradesAvailable = gradesAvailable;
-//		this.popularity = popularity;
-//		if(this.speaker.charAt(0) == '"') {
-//		   this.speaker = this.speaker.substring(1);
-//		}
-//		this.availableThisPeriod = new boolean[numOfPeriods];
-//      for(int i = 0; i < availableThisPeriod.length; i++) {
-//         availableThisPeriod[i] = true;
-//      }
-//	}
-
-	public Session(String title, String speaker, int numOfPeriods) {
+	public Session(String title, String speaker, Event masterEvent) {
 		this.title = title;
 		this.speaker = speaker;
 		this.students = new ArrayList<ArrayList<Student>>();
-		for (int i = 0; i < numOfPeriods; i++) {
+		for (int i = 0; i < masterEvent.getNumberOfPeriods(); i++) {
 			students.add(new ArrayList<Student>());
 		}
 		this.gradesAvailable = new int[]{9, 10, 11, 12};
-		this.periodAvailability = new boolean[numOfPeriods];
+		this.periodAvailability = new boolean[masterEvent.getNumberOfPeriods()];
 		for(int i = 0; i < periodAvailability.length; i++) {
 		   periodAvailability[i] = true;
 		}
@@ -54,13 +37,15 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		if(this.speaker.charAt(0) == '"') {
          this.speaker = this.speaker.substring(1);
       }
+		this.masterEvent = masterEvent;
 	}
-	public Session(String title, String speaker) {
-		this(title, speaker, 3);
-	}
+//	public Session(String title, String speaker) {
+//		this(title, speaker, 3, null);
+//	}
 
 	public Session() {
-		this("New Session", "New Speaker", 3);
+		this("New Session", "New Speaker", null);
+		System.out.println(" WARNING WARNING UH OH ROOM CREATON");
 	}
 
 	public String getTitle() {
@@ -110,7 +95,6 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		this.room = room;
 	}
 
-	@Override
 	public int compareTo(Session o) {
 		return this.popularity - o.getPopularity();
 	}
@@ -138,12 +122,21 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 	@Override
 	public String getInfo(int i) {
 		switch (i) {
-			case 0 :
-				return speaker;
+			case 0 : return speaker;
 			case 1 :
-				return students.size() + "";
-			default :
-				return getTitle();
+				return students.isEmpty() || students.get(masterEvent.getCurrentPeriod()) == null
+								? ""
+								: students.get(masterEvent.getCurrentPeriod()).size() + "";
+			default : return getTitle();
+		}
+	}
+	
+	public String getInfoTitle(int i) {
+		switch (i) {
+			case 0 : return "Speaker";
+			case 1 : return "Resident Students";
+			default : return "";
+			
 		}
 	}
 

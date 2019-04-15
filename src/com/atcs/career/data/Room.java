@@ -61,10 +61,15 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 	@Override
 	public String getInfo(int i) {
 		switch (i) {
-			case 0 :
-				return maxCapacity + "";
-			default :
-				return roomNumber + "";
+			case 0 : return maxCapacity + "";
+			default : return roomNumber + "";
+		}
+	}
+	
+	public String getInfoTitle(int i) {
+		switch (i) {
+			case 0 : return "Capacity";
+			default : return "Room Name";
 		}
 	}
 
