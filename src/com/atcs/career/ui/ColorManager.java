@@ -35,4 +35,13 @@ public class ColorManager {
 			initColorMap();
 		return colors.get(key);
 	}
+	
+	public static MutableColor get(HashMap<String, MutableColor> colors, String key) {
+	    assert (key!=null && colors!=null);
+	    assert (colors.containsKey(key));
+	    System.out.println(colors.size());
+        Object ret = colors.get(key);
+        assert (ret!=null);
+        return (MutableColor) ret;
+    }
 }

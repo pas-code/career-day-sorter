@@ -36,6 +36,7 @@ import com.atcs.career.program.MainClass;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.ColorManager;
+import com.atcs.career.ui.Themes;
 import com.atcs.career.ui.MasterUI;
 
 public class WelcomeScreen extends JPanel {
@@ -58,6 +59,8 @@ public class WelcomeScreen extends JPanel {
 		log.config("construct welcome screen with master "+master);
 		this.master = master;
 		
+		Themes.initializeColors();
+		Themes.setCurrentTheme(Themes.whiteBlue);
 		// configure frame
 		this.parentFrame = parentFrame;
 	
@@ -72,12 +75,18 @@ public class WelcomeScreen extends JPanel {
 		return new java.awt.Dimension(PREF_W, PREF_H);
 	}
 
-	private JButton configureButton(JButton b) {
+	public JButton configureButton(JButton b) {
+	    b.setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 		b.setFont(getFont());
-		b.setBorderPainted(false);
+//		b.setBorderPainted(true);
 //		b.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		b.setFocusable(false);
 		b.addMouseListener(buttonListener());
+		b.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, ColorManager.get(Themes.getCurrentTheme(), "primary")));
+//		b.setOpaque(false);
+//		b.setContentAreaFilled(false);
+//		b.setBorderPainted(false);
+		
 		return configButtonLaf(b);
 	}
 	
@@ -91,22 +100,22 @@ public class WelcomeScreen extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// indent
-				((AbstractButton) e.getSource()).setBorder(BorderFactory.createLoweredBevelBorder());
+		//	((AbstractButton) e.getSource()).setBorder(BorderFactory.createLoweredBevelBorder());
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {				
-				((AbstractButton) e.getSource()).setBorder(UIManager.getBorder("Button.border"));
+			
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				((AbstractButton) e.getSource()).setBorderPainted(true);
+				((AbstractButton) e.getSource()).setBackground(Color.white);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				((AbstractButton) e.getSource()).setBorderPainted(false);
+				((AbstractButton) e.getSource()).setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 				
 			}
 		};
@@ -122,7 +131,8 @@ public class WelcomeScreen extends JPanel {
 		parentFrame.getContentPane().add(this);
 		parentFrame.pack();
 		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
+		//Resize set to true only for testing
+		parentFrame.setResizable(true);
 		parentFrame.setVisible(true);
 	}
 	
@@ -136,13 +146,18 @@ public class WelcomeScreen extends JPanel {
 	private void configGui() {
 		// initialize gui
 		setForeground(ColorManager.get("text"));
-		title = new JLabel(MainClass.APP_NAME);
+		title = new JLabel("    " + MainClass.APP_NAME + "    ");
 		setFont(FontManager.finalFont(25f));
 		topPanel = topPanelConfig();
+		
+		topPanel.setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 
 		newButton = configureButton(new JButton("New"));
 		openButton = configureButton(new JButton("Open"));
 
+		newButton.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, ColorManager.get(Themes.getCurrentTheme(), "primary")));
+		openButton.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, ColorManager.get(Themes.getCurrentTheme(), "primary")));
+		
 		newButton.addActionListener(e -> {
 			log.info("new event button pressed");
 			constructProps();
@@ -165,7 +180,7 @@ public class WelcomeScreen extends JPanel {
 		// Left Panel config
 		leftPanel = new JPanel(new GridLayout(2, 0));
 		leftPanel.setPreferredSize(new Dimension(150, 0));
-		
+		leftPanel.setBackground(Color.white);
 		
 		leftPanel.add(newButton);
 		leftPanel.add(openButton);
@@ -174,7 +189,7 @@ public class WelcomeScreen extends JPanel {
 
 		// config right panel (recents / submit)
 		rightPanelConfig();
-
+		rightPanel.setBackground(Color.white);
 		this.add(rightPanel);
 	}
 	
@@ -234,29 +249,37 @@ public class WelcomeScreen extends JPanel {
 		
 		private void refresh(RecentEventListItem e, boolean isSelected) {
 			removeAll();
-			JLabel label = new JLabel(e.name);
+			JLabel label = new JLabel("    "+e.name+"                 ");
 			label.setForeground(getForeground());
-			label.setFont(FontManager.finalFont(24).deriveFont(Font.BOLD));
+			label.setFont(FontManager.finalFont(15f));
+			label.setBorder(BorderFactory.createEmptyBorder(8, 4, 4, 4));
 			add(label, BorderLayout.WEST);
 			
 			JPanel east = new JPanel(new BorderLayout());
-			label = new JLabel("Last Modified: ");
-			label.setForeground(getForeground());
-			label.setFont(FontManager.finalFont(12));
-			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-			east.add(label, BorderLayout.WEST);
+//			label = new JLabel("               ");
+////			label.setBorder(BorderFactory.createMatteBorder(0, 4, 0, 0, Color.black));
+//			label.setForeground(getForeground());
+//			label.setFont(FontManager.finalFont(12));
+//			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+//			east.add(label, BorderLayout.WEST);
 			label = new JLabel(e.lastModified);
-			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+//			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 			label.setForeground(getForeground());
-			label.setFont(FontManager.finalFont(18));
+			label.setFont(FontManager.finalFont(15f));
+			label.setBorder(BorderFactory.createEmptyBorder(8, 4, 4, 4));
+			label.setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
+			label.setOpaque(false);
+			setBorder(BorderFactory.createMatteBorder(5, 0, 0, 0, ColorManager.get(Themes.getCurrentTheme(), "background")));
+			setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ColorManager.get(Themes.getCurrentTheme(), "primary")));
+			east.setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
 			east.add(label, BorderLayout.EAST);
 			east.setOpaque(false);
 			add(east, BorderLayout.EAST);
 			
 			if (isSelected)
-				setBackground(Color.GRAY);
+				setBackground(Color.lightGray);
 			else
-				setBackground(Color.WHITE);
+			    setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
 		}
 
 		@Override
@@ -281,9 +304,11 @@ public class WelcomeScreen extends JPanel {
 		JPanel t = new JPanel();
 		t.setPreferredSize(new Dimension(0, 50));
 		t.setLayout(new BorderLayout());
-
-		title.setForeground(ColorManager.get("background"));
-		title.setBackground(ColorManager.get("primary"));
+		//System.out.println(ColorThemes.whiteBlue);
+		Color test = (ColorManager.get(Themes.getCurrentTheme(),"text"));
+		assert (test!=null);
+		title.setForeground(Color.white);
+		title.setBackground(ColorManager.get(Themes.getCurrentTheme(), "primary"));
 		title.setOpaque(true);
 		title.setFont(getFont());
 
@@ -294,10 +319,20 @@ public class WelcomeScreen extends JPanel {
 	private void rightPanelConfig() {
 		// right panel config (recents)
 		rightPanel = new JPanel(new BorderLayout());
-		rightPanel.setBorder(BorderFactory.createTitledBorder(
-				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, getFont(), Color.BLACK));
+//		rightPanel.setBorder(BorderFactory.createTitledBorder(
+//				null, "Recent Events", TitledBorder.LEADING, TitledBorder.TOP, getFont(), Color.BLACK));
+		rightPanel.setBorder(BorderFactory.createMatteBorder(10, 0, 0, 0, ColorManager.get(Themes.getCurrentTheme(), "background")));
+		JLabel recentLabel = new JLabel("   "+"Recent Events");
+		recentLabel.setFont(FontManager.finalFont(20f));
+		recentLabel.setForeground(ColorManager.get(Themes.getCurrentTheme(), "text"));
+		recentLabel.setOpaque(true);
+		recentLabel.setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
+		recentLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ColorManager.get(Themes.getCurrentTheme(), "text")));
+//		recentLabel.setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 0));
+		rightPanel.add(recentLabel, BorderLayout.NORTH);
+		rightPanel.setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
 		DefaultListModel<RecentEventListItem> model = new DefaultListModel<RecentEventListItem>();
-		
+	
 		// create jlist model for recent events
 		ArrayList<RecentEventListItem> recentEvents = getRecentEvents();
 		for (RecentEventListItem s : recentEvents) 
@@ -305,11 +340,12 @@ public class WelcomeScreen extends JPanel {
 		// add list model to list
 		JList<RecentEventListItem> recents = new JList<RecentEventListItem>(model);
 		recents.setCellRenderer(new RecentEventListItemRenderer());
-
+		recents.setBackground(ColorManager.get(Themes.getCurrentTheme(), "background"));
 		rightPanel.add(recents);
 		JPanel lowerRight = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		// open button, only enabled when an event is selected
 		JButton openConfirmation = new JButton("Open");
+//		openConfirmation.setBorder(BorderFactory.createMatteBorder(6, 0, 0, 0,ColorManager.get(Themes.whiteBlue, "primary")));
 		openConfirmation.setEnabled(false);
 		openConfirmation.addActionListener(e -> {
 			log.info("recent event "+recents.getSelectedValue() + " opened");
@@ -328,6 +364,7 @@ public class WelcomeScreen extends JPanel {
 			}
 		});
 		lowerRight.add(openConfirmation);
+		lowerRight.setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 		rightPanel.add(lowerRight, BorderLayout.SOUTH);
 	}
 	

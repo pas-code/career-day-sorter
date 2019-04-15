@@ -20,6 +20,7 @@ import com.atcs.career.email.EmailSender;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVWriter;
 import com.atcs.career.program.ErrorManager;
+import com.atcs.career.program.MainClass;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.welcome.PropertiesPane;
 import com.atcs.career.ui.welcome.WelcomeScreen;
@@ -32,7 +33,7 @@ public class MasterUI {
 	}
 	
 	public void openWelcome() {
-		JFrame welcomeFrame = new JFrame("Welcome");
+		JFrame welcomeFrame = new JFrame(MainClass.APP_NAME);
 		welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // change later
 		new WelcomeScreen(welcomeFrame, this);
 	}

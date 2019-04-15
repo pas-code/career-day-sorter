@@ -30,6 +30,8 @@ import com.atcs.career.data.Event;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.importexport.CSVReader;
 import com.atcs.career.program.MainClass;
+import com.atcs.career.ui.ColorManager;
+import com.atcs.career.ui.Themes;
 
 //Jarrett Bierman
 //11/18/18
@@ -71,10 +73,11 @@ public class PropertiesPane extends JPanel {
 		setFilesInAccordanceToEvent();
 
 		this.setLayout(new BorderLayout());
-		this.setBorder(
-				BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));
+//		this.setBorder(
+//				BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));
+		this.setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 		gridPanel = new JPanel(new GridLayout(5, 2));
-
+		gridPanel.setBackground(ColorManager.get(Themes.getCurrentTheme(), "secondary"));
 		createLabels();
 		createButtons();
 		createFieldAndSpinner();
@@ -135,9 +138,9 @@ public class PropertiesPane extends JPanel {
 
 	private void createButtons() {
 		final int homeDirLength = System.getProperty("user.home").length();
-		sessionButton = new JButton(event.getSessionFile() == null
+		sessionButton = welc.configureButton(new JButton(event.getSessionFile() == null
 				? BUTTON_DEFAULT_TEXT
-				: event.getSessionFile().substring(homeDirLength));
+				: event.getSessionFile().substring(homeDirLength)));
 		sessionButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -356,7 +359,7 @@ public class PropertiesPane extends JPanel {
 	}
 	
 	public boolean readyToSubmit() { //edit this
-		return !(title.getText().isBlank() || title.getText().equals(textPrompt));
+		return !(title.getText().isEmpty() || title.getText().equals(textPrompt));
 //	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
 //	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
