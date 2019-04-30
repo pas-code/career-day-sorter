@@ -17,7 +17,6 @@ public class Event implements Serializable {
 	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE TODO
 	public static int startDay = 0;
 	public static int startYear = 0;
-	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
@@ -34,6 +33,21 @@ public class Event implements Serializable {
 		masterStudents = new ArrayList<Student>();
 	}
 	
+	public Event(String name, Event copy) {
+		this.rooms = copy.rooms;
+		this.sessions = copy.sessions;
+		this.rooms = copy.rooms;
+		this.masterStudents = copy.masterStudents;
+		this.eventName = name;
+		this.dateLastModified = LocalDate.now();
+		this.numberOfPeriods = copy.numberOfPeriods;
+		this.sorted = copy.sorted;
+		this.studentFile = copy.studentFile; 
+		this.sessionFile = copy.sessionFile;
+		this.roomFile = copy.roomFile;
+		this.requestFile = copy.requestFile;
+		
+	}
 	
 	public static Event readTestEvent() { 
 		Event ret = new Event();
@@ -53,7 +67,6 @@ public class Event implements Serializable {
 		IOUtilities.combineStudentArrays(
 				IOUtilities.loadRequestsArray(CSVReader.getFileLocation(".csv"), this),
 				getMasterStudents());
-		amountOfSessions = sessions.size();
 	}
 
 	public void selectRoomFile() {
@@ -63,16 +76,11 @@ public class Event implements Serializable {
 
 	public void selectSessionFile() {
 		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"), this);
-		amountOfSessions = sessions.size();
 	}
 	
 	public void save() {
 		dateLastModified = LocalDate.now();
 		FileHandler.save(this);
-	}
-
-	public int getAmountOfSessions() {
-		return amountOfSessions;
 	}
 
 	public ArrayList<Session> getSessions() {
@@ -143,11 +151,7 @@ public class Event implements Serializable {
    public static int getMinsessionsize() {
       return minSessionSize;
    }
-
-   public void setAmountOfSessions(int amountOfSessions) {
-      this.amountOfSessions = amountOfSessions;
-   }
-
+   
    public void setSessions(ArrayList<Session> sessions) {
       this.sessions = sessions;
    }

@@ -139,7 +139,7 @@ public class IOUtilities
     * binary search of the requests for a student. assumes the array is sorted
     */
    private static int indexOf(Student target, ArrayList<Student> requests) {
-   	return binarySearch(requests, target, 0, requests.size());
+   	return binarySearch(requests, target, 0, requests.size() - 1);
    }
    
    public static int binarySearch(ArrayList<Student> nums, Student target, int low, int high) {

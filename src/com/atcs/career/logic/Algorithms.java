@@ -1,6 +1,5 @@
-//Michael Ruberto, Joshua Kent, Bennett Bierman
-//Program Description:
-//Nov 21, 2018
+// Michael Ruberto, Joshua Kent, Bennett Bierman
+// Nov 21, 2018
 
 package com.atcs.career.logic;
 
@@ -90,7 +89,7 @@ public class Algorithms{
       log.fine("Sessions under Cap:");
       for(int i = 0; i < e.getSessions().size(); i++) {
       	for(int j = 0; j < e.getSessions().get(i).getStudents().size(); j++) {
-      		if(e.getSessions().get(i).getStudents().get(j).size() < 10) {
+      		if(e.getSessions().get(i).getStudents().get(j).size() < 15) {
       			log.fine(e.getSessions().get(i).getSpeaker() + " PERIOD " + j 
       					+ " HAS " + e.getSessions().get(i).getStudents().get(j).size());
       			for(int k = 0; k < e.getSessions().get(i).getStudents().get(j).size(); k++)
@@ -122,7 +121,9 @@ public class Algorithms{
       return totalCont/students.size();
    }
    
-	//ALGORITHM 1. Assigns rooms to sessions by sorting popularity of the sessions/speaker.
+	/**
+	 * ALGORITHM 1. Assigns rooms to sessions by sorting popularity of the sessions/speaker. 
+	 */
    private static void assignRoomsToSessions(ArrayList<Student> students, ArrayList<Room> rooms, ArrayList<Session> sessions){
       
       Collections.sort(rooms);
@@ -134,6 +135,8 @@ public class Algorithms{
       }
       for(Student stud: students){
          ArrayList<Session> requests = stud.getRequests();
+         // check for sessions that no longer exist.
+         cleanRequests(students, sessions);
          int requestsSize = requests.size();
          for(int i = 0; i < requestsSize; i++) {
             sessionHash.get(requests.get(i).getSpeaker()).addPopularity(requestsSize-i);
@@ -148,9 +151,18 @@ public class Algorithms{
       for(int i = sessions.size() - 1; i >= 0; i--){
          if(rooms.size() > i) { //COME BACK WITH ERROR MANAGER STUFF
             sessions.get(i).setRoom(rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)));
-            rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)).setResidentSessions(new Session[] {sessions.get(i)});
+            rooms.get((rooms.size()-1) - ((sessions.size()-1) - i)).setResidentSession(sessions.get(i));
          }
       }   
+   }
+   
+   private static void cleanRequests(ArrayList<Student> students, ArrayList<Session> sessions) {
+   	for (Student s : students) {
+   		for (int i = 0; i < s.getRequests().size(); i++) {
+   			if (!sessions.contains(s.getRequests().get(i)))
+   				s.getRequests().remove(i);
+   		}
+   	}
    }
    
 	/**
@@ -195,7 +207,7 @@ public class Algorithms{
       // Backfill: remove students from populated sessions and add them to unpopular sessions
       //COMMENT BELOW HERE TO STOP BACKFILL
       
-      int minCap = 5; //TODO notify if this isn't able to be fulfilled
+      int minCap = 15; //TODO notify if this isn't able to be fulfilled
       
       for(int i = 0; i < sessions.size(); i++) { //For each session...
          for(int j = 0; j < sessions.get(i).getStudents().size(); j++) { //Check each period of it...
@@ -333,7 +345,7 @@ public class Algorithms{
    	for (Student s : studentRequestList)
    		s.setAssignments(new Session[numPeriods]);
    	for (Room r : rooms) 
-   		r.setResidentSessions(new Session[0]);
+   		r.setResidentSession(null);
    	for (Session s : sessions) {
    		s.setStudents(new ArrayList<ArrayList<Student>>());
    		s.setRoom(null);

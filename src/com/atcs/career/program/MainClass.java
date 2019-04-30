@@ -26,7 +26,6 @@ public class MainClass {
 
 
 	public static void main(String[] args) {
-		BasicLogger.getLogger("help").severe("HELP");;
 		new Thread(new Runnable() {
 			public void run() {
 //				initialize(concatArgs(args));

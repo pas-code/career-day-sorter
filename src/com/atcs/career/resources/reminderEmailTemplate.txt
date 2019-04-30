@@ -12,7 +12,7 @@ Content-Type: text/plain; charset="UTF-8"
 Hi, !#firstname#
 You have not submitted your Career Day requests yet.
 
-Please submit them here <http://google.com>.
+Please submit them here <https://forms.gle/eEEJ65CLJ9fk4Sc99>.
 
 - The ATCS Team
 
@@ -22,7 +22,7 @@ Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr">Hi, !#firstname#<div>You have not submitted your Career Da=
 y requests yet.=C2=A0</div><div><br></div><div>Please submit them=C2=A0<a h=
-ref=3D"http://google.com">here</a>.</div><div><br></div><div>- The ATCS Tea=
+ref=3D"https://forms.gle/eEEJ65CLJ9fk4Sc99">here</a>.</div><div><br></div><div>- The ATCS Tea=
 m</div></div>
 
 --0000000000003c47290585a244c1--

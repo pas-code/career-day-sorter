@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -39,6 +41,8 @@ import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
+import com.atcs.career.program.MainClass;
+import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.home.Searchable;
@@ -64,6 +68,7 @@ public abstract class MoreInfo {
 		public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
 		protected CareerDayGUI master;
+		protected static final BasicLogger log = BasicLogger.getLogger(SideInfoPanel.class.getSimpleName());
 
 		public SideInfoPanel(CareerDayGUI master) {
 			this.master = master;
@@ -77,7 +82,6 @@ public abstract class MoreInfo {
 		}
 		
 		protected byte getPeriod() {
-//			return 0;
 			return master.getCurrentPeriod();
 		}
 		
@@ -95,6 +99,10 @@ public abstract class MoreInfo {
 			return new Dimension(PREF_W, PREF_H);
 		}
 
+		protected byte amtPeriods() {
+			return master.getEvent().getNumberOfPeriods();
+		}
+		
 	}
 
 	/*
@@ -163,21 +171,23 @@ public abstract class MoreInfo {
 			this.add(north, BorderLayout.NORTH);
 		}
 
+		
 		public void refresh() {
-			System.out.println("refresh");
-			sessionName.setText(room.getResidentSessions()[getPeriod()] == null ? 
+			log.info("refresh");
+			sessionName.setText(room.getResidentSession() == null
+					? 
 					"No Resident Session" :
 						// only one resident session per room, so no need for an array.
-								room.getResidentSessions()[getPeriod()].getIdentifier());
-			studentList.setListData(room.getResidentSessions()[getPeriod()]== null ?
+								room.getResidentSession().getIdentifier());
+			studentList.setListData(room.getResidentSession() == null ?
 					new Student[0] : 
 					
 					//get the current session
-					room.getResidentSessions()[getPeriod()]
+					room.getResidentSession()
 							// get that session's students for this period
 							.getStudents().get(getPeriod())
 							// turn to standard array
-									.toArray(new Student[room.getResidentSessions()[0].getStudents()
+									.toArray(new Student[room.getResidentSession().getStudents()
 													.get(getPeriod()).size()]));		
 		}
 	}
@@ -189,6 +199,7 @@ public abstract class MoreInfo {
 		private JPanel requestPanel;
 		public StudentPanel(Student s, CareerDayGUI master) {
 			super(master);
+			log.setFilter(Level.FINEST);
 			setLayout(new BorderLayout());
 			setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			this.student = s;
@@ -249,34 +260,25 @@ public abstract class MoreInfo {
 			memberSessions = new JList<Session>();
 			memberSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			refresh();
-			int[] periodsAvailable = periodsEmpty();
 			JButton addAssignment = new JButton("Add Session");
 			JButton removeAssignment = new JButton("Remove");
-			addAssignment.setEnabled(
-					periodsAvailable.length > 0);
+			addAssignment.setEnabled(periodsEmpty().length > 0);
 			removeAssignment.setEnabled(false);
 			memberSessions.addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					removeAssignment.setEnabled(true);
-					addAssignment.setEnabled(
-							memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
 				}
 			});
 			addAssignment.addActionListener(e -> {
-				// create new bar
+				// add new assignment
+				int[] periodsAvailable = periodsEmpty();
+				log.finer("NEW ASSIGNMENT");
 				byte periodToInsertTo;
 				Session sessionToInsert;
-				JTextField sessionBox = sessionSearchField(e1 -> {});
-				
-				// highest possible period to insert is either the 
-				//max period available in the event or the highest number event that the student already has
-				// int highestPossiblePeriod = Math.min(
-				// master.getEvent().getNumberOfPeriods(),
-				// memberSessions.getModel().getSize());
-				// SpinnerNumberModel model = new
-				// SpinnerNumberModel(highestPossiblePeriod + 1, 1,
-				// highestPossiblePeriod + 1, 1);
+				JTextField sessionBox = sessionSearchField(e1 -> {
+				});
+				System.out.println("periods available: "+Arrays.toString(periodsAvailable));
 
 				@SuppressWarnings("serial")
 				/**
@@ -314,7 +316,9 @@ public abstract class MoreInfo {
 				JPanel row = new JPanel(new BorderLayout());
 				row.add(new JLabel("Insert Session: "), BorderLayout.WEST);
 				row.add(sessionBox, BorderLayout.CENTER);
+				sessionBox.setEnabled(true);
 				msg.add(row);
+				
 				row = new JPanel(new BorderLayout());
 				row.add(new JLabel("Into Period: "), BorderLayout.WEST);
 				row.add(periodInsertSelect);
@@ -323,15 +327,18 @@ public abstract class MoreInfo {
 				int confirmation = JOptionPane.showOptionDialog(
 						null, msg, "Add Session Assignment", JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE, null, null, JOptionPane.OK_OPTION);
-				
+				log.finer("confirm?: " + confirmation);
 				if (confirmation != JOptionPane.OK_OPTION) return;
 				periodToInsertTo = (byte) (((Integer)periodInsertSelect.getValue()).intValue() - 1);
 				
+				log.finer("HELP PLS into period " + periodToInsertTo);
 				if ((sessionToInsert = master.getEvent().getSessionFromName(sessionBox.getText())) == null)
 					return;
 				else {
-						student.getAssignments()[periodToInsertTo - 1] = sessionToInsert;
+					log.finer("INSERT SESSION: " + sessionToInsert);
+					student.getAssignments()[periodToInsertTo] = sessionToInsert;
 					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
+					log.finer("new sessions: " + Arrays.toString(student.getAssignments()));
 				}
 				addAssignment.setEnabled(
 						periodsEmpty().length > 0);
@@ -345,14 +352,25 @@ public abstract class MoreInfo {
 				val.getStudents().get(memberSessions.getSelectedIndex()).remove(student);
 
 				refresh();
-				addAssignment.setEnabled(
-						memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
+				addAssignment.setEnabled(periodsEmpty().length > 0);
 				removeAssignment.setEnabled(false);
+			});
+			
+			JButton removeStudent = new JButton("Delete Student");
+			removeStudent.addActionListener(e -> {
+				for (int i = 0; i < student.getAssignments().length; i++) 
+					if (student.getAssignment(i) != null)
+						student.getAssignment(i).getStudents().get(i).remove(student);
+				
+				master.getEvent().getMasterStudents().remove(student);
+				master.refresh("Students");
+				refresh();
 			});
 			
 			south.add(memberSessions);
 			south.add(addAssignment);
 			south.add(removeAssignment);
+			south.add(removeStudent);
 			add(south, BorderLayout.SOUTH);
 			refresh();
 		}
@@ -479,8 +497,24 @@ public abstract class MoreInfo {
 									: session.getRoom().getRoomNumber());
 					return;
 				}
+				
+				// if there is already a session in the room, ask if you want to reassign
+				if (set.getResidentSession() != null 
+						&& !set.getResidentSession().equals(session)) 
+					if (JOptionPane.showConfirmDialog(null,
+							"This deletes the room assignment for:\n"
+									+ set.getResidentSession() + ".\n"
+									+ "Do you want to continue?",
+							MainClass.APP_NAME, JOptionPane.YES_NO_OPTION,
+							JOptionPane.INFORMATION_MESSAGE, null)
+							!= JOptionPane.YES_OPTION)
+						return;
+				if (session.getRoom() != null) 
+					session.getRoom().setResidentSession(null);
+				if (set.getResidentSession() != null)
+					set.getResidentSession().setRoom(null);
 				session.setRoom(set);
-				set.getResidentSessions()[getPeriod()] = session;
+				set.setResidentSession(session);
 				refresh();
 			});
 			editField.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
@@ -563,6 +597,14 @@ public abstract class MoreInfo {
 			for (int i = 0; i < master.getEvent().getNumberOfPeriods(); i++)
 				south.add(availableInPeriod(i));
 //			south.add(availability);
+			
+			
+			JButton delete = new JButton("Delete Session");
+			south.add(delete);
+			delete.addActionListener(e -> {
+				master.getEvent().getSessions().remove(this.session);
+				master.refresh("Sessions");
+			});
 		}
 		
 		private JCheckBox availableInPeriod(int period) {
@@ -647,14 +689,5 @@ public abstract class MoreInfo {
 		editField.addFocusListener(action);
 		panel.add(editField, BorderLayout.CENTER);
 		return panel;
-	}
-
-	private static void show(SideInfoPanel p) {
-		JFrame f = new JFrame("test info panel");
-		f.getContentPane().add(p);
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
 	}
 }

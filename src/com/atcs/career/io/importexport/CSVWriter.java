@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.atcs.career.data.Event;
+import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.program.MainClass;
@@ -42,9 +43,12 @@ public class CSVWriter {
 	 * @param e
 	 */
 	public static void exportEvent(Event e) {
-		File destination = new File(getFileLocation(".csv"));
+		String baseLocation = getFileLocation(".csv");
+		File destination = new File(baseLocation);
 		try {
 			writeCSV(assignmentCSVData(e), destination);
+			writeCSV(sessionCSVData(e), 
+					new File(baseLocation.substring(0, baseLocation.lastIndexOf('.')) + " Session Rooms.csv"));
 			JOptionPane.showMessageDialog(
 					null, "Event Exported.", MainClass.APP_NAME, JOptionPane.INFORMATION_MESSAGE, null);
 		} catch (FileNotFoundException e1) {
@@ -62,12 +66,12 @@ public class CSVWriter {
 		
 		// header, row 1
 		ArrayList<String> row = new ArrayList<String>();
-		row.add("Student Email, ");
-		row.add("Student First Name, ");
-		row.add("Student Last Name, ");
+		row.add("Student Email");
+		row.add("Student First Name");
+		row.add("Student Last Name");
 		for (byte i = 0; i < e.getNumberOfPeriods(); i++) {
-			row.add("Period " + (i + 1) + " Session, ");
-			row.add("Period " + (i + 1) + " Room, ");
+			row.add("Period " + (i + 1) + " Session");
+			row.add("Period " + (i + 1) + " Room");
 		}
 		values.add(row);
 		
@@ -75,13 +79,13 @@ public class CSVWriter {
 		for (int i = 0; i < e.getMasterStudents().size(); i++) {
 			row = new ArrayList<String>();
 			Student current = e.getMasterStudents().get(i);
-			row.add(current.getEmail() + ", ");
-			row.add(current.getfName() + ", ");
-			row.add(current.getlName() + ", ");
+			row.add(current.getEmail());
+			row.add(current.getfName());
+			row.add(current.getlName());
 			for (byte p = 0; p < e.getNumberOfPeriods(); p++) {
 				if (current.getAssignment(p) != null) {
-					row.add(current.getAssignment(p).getTitle() + ", ");
-					row.add(current.getAssignment(p).getRoom().getRoomNumber() + ", ");
+					row.add(current.getAssignment(p).getTitle());
+					row.add(current.getAssignment(p).getRoom().getRoomNumber());
 				}
 			}
 			values.add(row);
@@ -89,15 +93,38 @@ public class CSVWriter {
 		return values;
 	}
 	
+	private static ArrayList<ArrayList<String>> sessionCSVData(Event e) {
+		ArrayList<ArrayList<String>> values = new ArrayList<ArrayList<String>>();
+		
+		// header, row 1
+		ArrayList<String> row = new ArrayList<String>();
+		row.add("Speaker");
+		row.add("Room");
+		for (int i = 1; i <= e.getNumberOfPeriods(); i++)
+			row.add("Period " + i + " Students");
+		values.add(row);
+		for (Session s : e.getSessions()) {
+			row = new ArrayList<String>();
+			row.add(s.getSpeaker());
+			row.add(s.getRoom().getRoomNumber() + "");
+			for (int i = 0; i < e.getNumberOfPeriods(); i++)
+				row.add(s.getStudents().get(i).size() + "");
+			values.add(row);
+		}
+		
+		return values;
+	}
+	
 	private static void writeCSV(ArrayList<ArrayList<String>> data, File destination) throws FileNotFoundException {
 		PrintStream out = new PrintStream(new FileOutputStream(destination));
 		System.out.println("WRITEE");
 		for (ArrayList<String> printRow: data) {
-			for (String s : printRow) {
-				out.print(s);
-				System.out.print(s);
+			for (int i = 0; i < printRow.size(); i++) {
+				String end = i == printRow.size() - 1 ? "" : ",";
+				out.print("\"" + printRow.get(i) + "\"" + end);
+//				System.out.print(s);
 			}
-			System.out.println();
+//			System.out.println();
 			out.println();
 		}
 		out.close();
@@ -110,10 +137,11 @@ public class CSVWriter {
 		// header, row 1
 		ArrayList<String> row = new ArrayList<String>();
 		row.add("email");
-		row.add("firstname, lastname");
+		row.add("firstname");
+		row.add("lastname");
 		for (byte i = 0; i < e.getNumberOfPeriods(); i++) {
-			row.add("session" + (i + 1) + ", ");
-			row.add("room" + (i + 1) + ", ");
+			row.add("session" + (i + 1));
+			row.add("room" + (i + 1));
 		}
 		values.add(row);
 		
@@ -121,12 +149,12 @@ public class CSVWriter {
 		for (int i = 0; i < e.getMasterStudents().size(); i++) {
 			row = new ArrayList<String>();
 			Student current = e.getMasterStudents().get(i);
-			row.add(current.getEmail() + ", ");
-			row.add(current.getfName() + ", ");
-			row.add(current.getlName() + ", ");
+			row.add(current.getEmail());
+			row.add(current.getfName());
+			row.add(current.getlName());
 			for (byte p = 0; p < e.getNumberOfPeriods(); p++) {
-				row.add(current.getAssignment(p).getTitle() + ", ");
-				row.add(current.getAssignment(p).getRoom().getRoomNumber() + ", ");
+				row.add(current.getAssignment(p).getTitle());
+				row.add(current.getAssignment(p).getRoom().getRoomNumber());
 			}
 			values.add(row);
 		}
@@ -143,12 +171,14 @@ public class CSVWriter {
 	public static void exportEventToEmailReminder(Event e) {
 		ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 		ArrayList<String> row = new ArrayList<String>();
-		row.add("email, firstname, lastname");
+		row.add("email");
+		row.add("firstname");
+		row.add("lastname");
 		data.add(row);
 		for (Student s : e.studentsWithoutRequests()) {
 			row = new ArrayList<String>();
-			row.add(s.getEmail() + ", ");
-			row.add(s.getfName() + ", ");
+			row.add(s.getEmail());
+			row.add(s.getfName());
 			row.add(s.getlName());
 			data.add(row);
 		}

@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -78,8 +76,8 @@ public class CareerDayGUI extends JPanel {
 		layoutConfig();
 	}
 
-	protected static final String REFRESH_ALL = "all";
-	protected void refresh(String title) {
+	public static final String REFRESH_ALL = "all";
+	public void refresh(String title) {
 		int previouslySelectedIndex = tabs.getSelectedIndex();
 		if (title.equals(REFRESH_ALL)) {
 			tabs.removeAll();
@@ -98,10 +96,15 @@ public class CareerDayGUI extends JPanel {
 				listInfoChanged = event.getMasterStudents();
 			else
 				listInfoChanged = event.getRooms();
-			tabs.setComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
+			JScrollPane newTab = createTab(listInfoChanged, false);
+//			lists.set(tabs.getSelectedIndex(), (JList<GuiListable>) newTab.getViewport().getView());
+			tabs.setComponentAt(tabIndexToRefresh, newTab);
 		}
 		tabs.setSelectedIndex(previouslySelectedIndex);
+		String previousSearchQuery = centerSearch.getText();
 		centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+		centerSearch.setText(previousSearchQuery);
+		System.out.println("list?" + lists.get(tabs.getSelectedIndex()).hashCode());
 		revalidate();
 	}
 
@@ -231,10 +234,10 @@ public class CareerDayGUI extends JPanel {
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
 	private void addTab(ArrayList<? extends GuiListable> eventData, String title) {
-		tabs.addTab(title, createTab(eventData));
+		tabs.addTab(title, createTab(eventData, true));
 	}
 	
-	private JScrollPane createTab(ArrayList<? extends GuiListable> eventData) {
+	private JScrollPane createTab(ArrayList<? extends GuiListable> eventData, boolean addToList) {
 		JPanel scrollBackPanel = new JPanel();
 		scrollBackPanel.setLayout(new BorderLayout());
 		scrollBackPanel.setBackground(Color.white);
@@ -244,7 +247,8 @@ public class CareerDayGUI extends JPanel {
 		
 		JList<GuiListable> infoList = new JList<GuiListable>(listData);
 		infoList.setCellRenderer(new ListableRenderer(this));
-		lists.add(infoList);
+		if (addToList)
+			lists.add(infoList);
 
 		scrollBackPanel.add(infoList, BorderLayout.NORTH);
 

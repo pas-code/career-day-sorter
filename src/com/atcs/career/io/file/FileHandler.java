@@ -69,7 +69,7 @@ public class FileHandler {
       new File(SAVE_DIR).mkdir();
       new File(LOG_DIR).mkdir();
       new File(EMAIL_DIR).mkdir();
-      log.config("created files.");
+      log.config("created directories.");
       
       new File(EMAIL_CSV).createNewFile();
       new File(EMAIL_JAR).createNewFile();
@@ -78,6 +78,7 @@ public class FileHandler {
       ResourceAccess.transfer("emailer.jar", new File(EMAIL_JAR), 0);
       
       new File(GEN_LOG).createNewFile();
+      log.config("created files.");
       
 //      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/").mkdir();
       if (MainClass.isApp) 
