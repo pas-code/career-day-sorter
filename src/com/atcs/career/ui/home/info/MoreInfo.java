@@ -337,7 +337,7 @@ public abstract class MoreInfo {
 				else {
 					log.finer("INSERT SESSION: " + sessionToInsert);
 					student.getAssignments()[periodToInsertTo] = sessionToInsert;
-					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
+					sessionToInsert.getStudents().get(periodToInsertTo).add(student);
 					log.finer("new sessions: " + Arrays.toString(student.getAssignments()));
 				}
 				addAssignment.setEnabled(

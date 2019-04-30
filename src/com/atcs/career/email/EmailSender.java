@@ -36,7 +36,7 @@ public class EmailSender {
 
 	public static void sendAssignmentEmail(Event e) {
 		if (checkIntentions()) {
-			CSVWriter.exportEventToEmailReminder(e);
+			CSVWriter.exportEventToEmailAssignments(e);
 			runEmailJar(new String[] {FileHandler.EMAIL_CSV, FileHandler.ASSIGNMENT_TEMPLATE});
 		}
 	}

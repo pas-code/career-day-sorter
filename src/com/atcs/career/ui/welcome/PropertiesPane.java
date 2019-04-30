@@ -258,7 +258,6 @@ public class PropertiesPane extends JPanel {
 	private void updateEventData() {
 		if (!sessionFile.equals(event.getSessionFile())) {
 			event.setSessionFile(sessionFile);
-			
 		}
 		
 		event.changeName(title.getText());

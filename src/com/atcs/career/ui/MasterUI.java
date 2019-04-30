@@ -21,7 +21,6 @@ import com.atcs.career.email.EmailSender;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVWriter;
 import com.atcs.career.program.ErrorManager;
-import com.atcs.career.program.MainClass;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.welcome.PropertiesPane;
 import com.atcs.career.ui.welcome.WelcomeScreen;
