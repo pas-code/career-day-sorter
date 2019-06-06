@@ -28,8 +28,11 @@ import com.atcs.career.ui.welcome.WelcomeScreen;
 public class MasterUI {
 	private Event masterEvent;
 	private CareerDayGUI mainGui;
+	private String placeHolder;
 	
 	public MasterUI() {
+		//just initializing something to construct the masterUI
+		placeHolder = "abc";
 	}
 	
 	public void openWelcome() {
@@ -75,8 +78,10 @@ public class MasterUI {
 		item.setShortcut(new MenuShortcut(KeyEvent.VK_S, true));
 		item.addActionListener(e -> {
 			String name = JOptionPane.showInputDialog("Enter a name for your new Event");
-			if (name != null && name != "")
-				new Event(name, masterEvent).save();
+			if (name != null && name != "") {
+				String oldName = masterEvent.getEventName();
+				masterEvent.changeName(name);
+			}
 		});
 		
 		menu.addSeparator();

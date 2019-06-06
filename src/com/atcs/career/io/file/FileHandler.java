@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.program.ErrorManager;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.ResourceAccess;
 
@@ -23,7 +23,6 @@ public class FileHandler {
 	private static final BasicLogger log = BasicLogger.getLogger(FileHandler.class.getName());
 	
 	
-	// TODO change to a hashmap?
    public static String HOME_DIR, SAVE_DIR, LOG_DIR, EMAIL_DIR;
    public static String JAVA_EXEC;
    public static String GEN_LOG, ERROR_LOG, CHANGE_LOG;
@@ -37,7 +36,7 @@ public class FileHandler {
    	createFileNames();
    	try {
 			createFiles();
-			if (MainClass.isApp)
+			if (CareerDay.isApp)
 				ResourceAccess.transfer("java", new File(JAVA_EXEC), 0);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,8 +56,10 @@ public class FileHandler {
       REMINDER_TEMPLATE = EMAIL_DIR + "emailReminderTemplate.txt";
       
       GEN_LOG = LOG_DIR + "generalLog.txt";
+      CHANGE_LOG = LOG_DIR + "changeLog.txt";
+      ERROR_LOG = LOG_DIR + "errorLog.txt";
       
-      if (MainClass.isApp)
+      if (CareerDay.isApp)
       	JAVA_EXEC = Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/java";
       else
       	JAVA_EXEC = null;
@@ -78,10 +79,12 @@ public class FileHandler {
       ResourceAccess.transfer("emailer.jar", new File(EMAIL_JAR), 0);
       
       new File(GEN_LOG).createNewFile();
+      new File(CHANGE_LOG).createNewFile();
+      new File(ERROR_LOG).createNewFile();
       log.config("created files.");
       
 //      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin/").mkdir();
-      if (MainClass.isApp) 
+      if (CareerDay.isApp) 
 	      new File(Addresses.getExecutiveDir() + "/PlugIns/Java.runtime/Contents/Home/bin").mkdir();
       
    }

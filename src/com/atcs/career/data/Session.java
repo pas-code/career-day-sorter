@@ -48,6 +48,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		System.out.println(" WARNING WARNING UH OH ROOM CREATON");
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
@@ -95,6 +96,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		this.room = room;
 	}
 
+	@Override
 	public int compareTo(Session o) {
 		return this.popularity - o.getPopularity();
 	}
@@ -115,6 +117,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 //				+ ", popularity=" + popularity + "]";
 //	}
 	
+	@Override
 	public String toString() {
 		return title;
 	}
@@ -131,6 +134,7 @@ public class Session implements Comparable<Session>, Serializable, GuiListable {
 		}
 	}
 	
+	@Override
 	public String getInfoTitle(int i) {
 		switch (i) {
 			case 0 : return "Speaker";

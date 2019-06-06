@@ -24,29 +24,13 @@ public class Event implements Serializable {
 	private LocalDate dateLastModified;
 	private byte numberOfPeriods, currentPeriod;
 	private boolean sorted;
-	
+	// filenames picked from the initializer
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
 	public Event() {
 		rooms = new ArrayList<Room>();
 		sessions = new ArrayList<Session>();
 		masterStudents = new ArrayList<Student>();
-	}
-	
-	public Event(String name, Event copy) {
-		this.rooms = copy.rooms;
-		this.sessions = copy.sessions;
-		this.rooms = copy.rooms;
-		this.masterStudents = copy.masterStudents;
-		this.eventName = name;
-		this.dateLastModified = LocalDate.now();
-		this.numberOfPeriods = copy.numberOfPeriods;
-		this.sorted = copy.sorted;
-		this.studentFile = copy.studentFile; 
-		this.sessionFile = copy.sessionFile;
-		this.roomFile = copy.roomFile;
-		this.requestFile = copy.requestFile;
-		
 	}
 	
 	public static Event readTestEvent() { 
@@ -136,6 +120,10 @@ public class Event implements Serializable {
 		this.eventName = eventName;
 	}
 
+	public void tempSetName(String temp) {
+		this.eventName = temp;
+	}
+	
    public ArrayList<Student> getMasterStudents() {
       return masterStudents;
    }
@@ -230,6 +218,7 @@ public class Event implements Serializable {
 		this.dateLastModified = date;
 	}
 	
+	@Override
 	public String toString() {
 		return getEventName();
 	}

@@ -15,7 +15,7 @@ import com.atcs.career.data.Priority;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 
 public class Algorithms{
@@ -58,7 +58,7 @@ public class Algorithms{
    		
    	if (!thingsMissing.equals("")) {
    		JOptionPane.showMessageDialog(null, "You are missing important data:\n" + thingsMissing
-   				 + "Please input this information and try again.", MainClass.APP_NAME + ": Cannot Sort Students",
+   				 + "Please input this information and try again.", CareerDay.APP_NAME + ": Cannot Sort Students",
    				 JOptionPane.WARNING_MESSAGE, null);
    		e.setSorted(false);
    		return false;
@@ -109,7 +109,7 @@ public class Algorithms{
       System.out.println();
       
       JOptionPane.showMessageDialog(null, "Sort completed with\n" + ((int)(accuracy * 10000)/100.0)+ "% accuracy",
-      		MainClass.APP_NAME, JOptionPane.INFORMATION_MESSAGE, null);
+      		CareerDay.APP_NAME, JOptionPane.INFORMATION_MESSAGE, null);
    }
    
    private static double getSortingAccuracyAverage(ArrayList<Student> students){   //tells you how good the sorting was based on final contentness

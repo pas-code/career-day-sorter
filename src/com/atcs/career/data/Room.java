@@ -47,6 +47,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 		maxCapacity = cap;
 	}
 
+	@Override
 	public String toString() {
 		return "Room: " + "[Room Number: " + roomNumber + "] [Capacity: "
 				+ maxCapacity + "]";
@@ -65,6 +66,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 		}
 	}
 	
+	@Override
 	public String getInfoTitle(int i) {
 		switch (i) {
 			case 0 : return "Capacity";
@@ -82,6 +84,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 		return roomNumber;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Room))
 			return false;

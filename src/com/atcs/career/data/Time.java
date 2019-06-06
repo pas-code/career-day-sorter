@@ -87,7 +87,8 @@ public class Time implements Comparable<Time>, Serializable
       return new Time(minsToNextDay + midnightToTime);
    }
    
-   public String toString() {
+   @Override
+	public String toString() {
       String amString = (am) ? "AM" : "PM";
       return timeString() + " " + amString;
    }

@@ -26,6 +26,7 @@ public interface GuiListable extends Searchable
     
     public static Comparator<GuiListable> listSorter() {
    	 return new Comparator<GuiListable>() {
+			@Override
 			public int compare(GuiListable o1, GuiListable o2) {
 				return o1.compareToList(o2);
 			}

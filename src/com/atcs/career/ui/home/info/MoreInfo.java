@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -41,7 +40,7 @@ import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.CareerDayGUI;
@@ -95,6 +94,7 @@ public abstract class MoreInfo {
 			refresh();
 		}
 		
+		@Override
 		public Dimension getPreferredSize() {
 			return new Dimension(PREF_W, PREF_H);
 		}
@@ -129,6 +129,7 @@ public abstract class MoreInfo {
 			roomNumberField.setBorder(BorderFactory.createTitledBorder("Room Name"));
 			
 			roomNumberField.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					room.setRoomNumber(roomNumberField.getText());
 				}
@@ -141,6 +142,7 @@ public abstract class MoreInfo {
 			sessionName.setBorder(BorderFactory.createTitledBorder("Resident Session"));
 			
 			roomCapacityField.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
 						room.setMaxCapacity(Integer.parseInt(roomCapacityField.getText()));
@@ -172,6 +174,7 @@ public abstract class MoreInfo {
 		}
 
 		
+		@Override
 		public void refresh() {
 			log.info("refresh");
 			sessionName.setText(room.getResidentSession() == null
@@ -210,6 +213,7 @@ public abstract class MoreInfo {
 			JPanel north = new JPanel(new GridLayout(0, 1));
 			north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
 			north.add(createInfoField("First Name", student.getfName(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setfName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
@@ -218,6 +222,7 @@ public abstract class MoreInfo {
 			
 			
 			north.add(createInfoField("Last Name", student.getlName(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setlName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
@@ -225,6 +230,7 @@ public abstract class MoreInfo {
 			}));
 			
 			north.add(createInfoField("Grade", student.getGrade(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					try {
 					 student.setGrade(Integer.parseInt(((JTextComponent) e.getSource()).getText()));
@@ -234,6 +240,7 @@ public abstract class MoreInfo {
 				}
 			}));
 			north.add(createInfoField("Email", student.getEmail(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setEmail(((JTextComponent) e.getSource()).getText());
 				}
@@ -463,6 +470,7 @@ public abstract class MoreInfo {
 		}
 		
 		
+		@Override
 		public void refresh() {
 			memberSessions.setListData(student.getAssignments());
 			revalidate();
@@ -505,7 +513,7 @@ public abstract class MoreInfo {
 							"This deletes the room assignment for:\n"
 									+ set.getResidentSession() + ".\n"
 									+ "Do you want to continue?",
-							MainClass.APP_NAME, JOptionPane.YES_NO_OPTION,
+							CareerDay.APP_NAME, JOptionPane.YES_NO_OPTION,
 							JOptionPane.INFORMATION_MESSAGE, null)
 							!= JOptionPane.YES_OPTION)
 						return;
@@ -634,6 +642,7 @@ public abstract class MoreInfo {
 			listStudents.revalidate();
 		}
 
+		@Override
 		public void refresh() {
 			populateList(getPeriod());
 			//TODO uh oh
@@ -652,9 +661,12 @@ public abstract class MoreInfo {
 		searchBar.addActionListener(action);
 		//auto-complete
 		searchBar.addKeyListener(new KeyListener() {
+			@Override
 			public void keyTyped(KeyEvent e) {}
+			@Override
 			public void keyPressed(KeyEvent e) {}
 			
+			@Override
 			public void keyReleased(KeyEvent e) {
 				final int maxAmtResults = 5;
 				ArrayList<Searchable> resultData = new ArrayList<Searchable>();

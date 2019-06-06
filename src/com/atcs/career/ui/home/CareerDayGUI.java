@@ -31,7 +31,7 @@ import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.logic.Algorithms;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.info.MoreInfo;
@@ -128,6 +128,7 @@ public class CareerDayGUI extends JPanel {
 		north.add(title, BorderLayout.CENTER);
 		JButton sort = new JButton("Run Algorithm");
 		sort.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				sort();
 				SwingUtilities.getWindowAncestor(eastPanel).requestFocus();
@@ -138,17 +139,19 @@ public class CareerDayGUI extends JPanel {
 
 		JButton addElem = new JButton("+");
 		addElem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainLog.info("add elem");
 				JPopupMenu popupMenu = new JPopupMenu();
 
 				JMenuItem item = new JMenuItem("Add Session");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Session s;
 						if ((s = ElementCreator.createSession(event)) == null) return;
 						event.getSessions().add(s);
-						MainClass.changeLog.info("Session added: " + s);
+						CareerDay.changeLog.info("Session added: " + s);
 						refresh("Sessions");
 					}
 				});
@@ -156,12 +159,13 @@ public class CareerDayGUI extends JPanel {
 
 				item = new JMenuItem("Add Student");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Student add = ElementCreator
 								.createStudent(event.getNumberOfPeriods());
 						if (add == null) return;
 						event.getMasterStudents().add(add);
-						MainClass.changeLog.info("Student added: " + add);
+						CareerDay.changeLog.info("Student added: " + add);
 						refresh("Students");
 					}
 				});
@@ -169,11 +173,12 @@ public class CareerDayGUI extends JPanel {
 
 				item = new JMenuItem("Add Room");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Room r;
 						if ((r = ElementCreator.createRoom(event.getNumberOfPeriods())) == null) return;
 						event.getRooms().add(r);
-						MainClass.changeLog.info("Room added: " + r);
+						CareerDay.changeLog.info("Room added: " + r);
 						refresh("Rooms");
 					}
 				});
@@ -195,6 +200,7 @@ public class CareerDayGUI extends JPanel {
 		centerSearch.setList(lists.get(0), true);
 
 		tabs.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				mainLog.config("tab changed to " + tabs.getSelectedIndex());
 				if (tabs.getSelectedIndex() != -1)
@@ -212,6 +218,7 @@ public class CareerDayGUI extends JPanel {
 			// it didn't work without this. leave it
 			int perInd = i;
 			period.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					changePeriod((byte) perInd);
 				}
@@ -259,7 +266,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public JFrame makeWindow() {
-		JFrame frame = new JFrame(MainClass.APP_NAME);
+		JFrame frame = new JFrame(CareerDay.APP_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		frame.pack();
@@ -272,6 +279,7 @@ public class CareerDayGUI extends JPanel {
 	 * This overrides the JPanel's getPreferredSize() method It tells the JPanel
 	 * to be a certain width and height
 	 */
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
@@ -291,7 +299,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public void changePeriod(byte periodIndex) {
-		MainClass.changeLog.info("change period to " + periodIndex);
+		CareerDay.changeLog.info("change period to " + periodIndex);
 		this.selectedPeriod = periodIndex;
 		event.setCurrentPeriod(selectedPeriod);
 		if (infoPanel != null) infoPanel.refresh();

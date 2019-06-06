@@ -235,6 +235,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		return getEmail().compareTo(o.getEmail());
 	}
 	
+	@Override
 	public int compareToList(GuiListable o) {
 		if (!(o instanceof Student)) return -1;
 		Student s = (Student) o;
@@ -259,6 +260,7 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		}
 	}
 	
+	@Override
 	public String getInfoTitle(int i) {
 		switch (i) {
 			case 0 : return "Grade";

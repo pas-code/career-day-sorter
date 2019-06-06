@@ -17,7 +17,7 @@ import com.atcs.career.data.Event;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.io.file.FileHandler;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 
 public class CSVWriter {
 	
@@ -50,7 +50,7 @@ public class CSVWriter {
 			writeCSV(sessionCSVData(e), 
 					new File(baseLocation.substring(0, baseLocation.lastIndexOf('.')) + " Session Rooms.csv"));
 			JOptionPane.showMessageDialog(
-					null, "Event Exported.", MainClass.APP_NAME, JOptionPane.INFORMATION_MESSAGE, null);
+					null, "Event Exported.", CareerDay.APP_NAME, JOptionPane.INFORMATION_MESSAGE, null);
 		} catch (FileNotFoundException e1) {
 			com.atcs.career.program.ErrorManager.processException(
 					e1, "Cannot find file for event export.", false, true);
@@ -139,9 +139,10 @@ public class CSVWriter {
 		row.add("email");
 		row.add("firstname");
 		row.add("lastname");
+		char keyTranslation = 'a';
 		for (byte i = 0; i < e.getNumberOfPeriods(); i++) {
-			row.add("session" + (i + 1));
-			row.add("room" + (i + 1));
+			row.add("session" + (char)(keyTranslation + i));
+			row.add("room" + (char)(keyTranslation + i));
 		}
 		values.add(row);
 		

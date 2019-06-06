@@ -18,13 +18,16 @@ import java.awt.event.FocusListener;
 public interface EditingAction extends ActionListener, FocusListener {
 	void edit(AWTEvent e);
 	
+	@Override
 	default void actionPerformed(ActionEvent e) {
 		edit(e);
 	}
 	
+	@Override
 	default void focusGained(FocusEvent e) {}
 
-   default void focusLost(FocusEvent e) {
+   @Override
+	default void focusLost(FocusEvent e) {
    	edit(e);
    }
 }

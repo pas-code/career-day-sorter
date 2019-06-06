@@ -32,7 +32,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.ColorManager;
@@ -68,6 +68,7 @@ public class WelcomeScreen extends JPanel {
 	
 	
 	// ----------------------------------- INITIAL CONFIGURATION OF GUI ---------------------------------------
+	@Override
 	public java.awt.Dimension getPreferredSize() {
 		return new java.awt.Dimension(PREF_W, PREF_H);
 	}
@@ -136,7 +137,7 @@ public class WelcomeScreen extends JPanel {
 	private void configGui() {
 		// initialize gui
 		setForeground(ColorManager.get("text"));
-		title = new JLabel(MainClass.APP_NAME);
+		title = new JLabel(CareerDay.APP_NAME);
 		setFont(FontManager.finalFont(25f));
 		topPanel = topPanelConfig();
 
@@ -196,6 +197,7 @@ public class WelcomeScreen extends JPanel {
 		File[] children = saveDir.listFiles();
 		// sort so the latest event comes first
 		Arrays.sort(children, new Comparator<File>() {
+			@Override
 			public int compare(File o1, File o2) {
 				return (int)(o2.lastModified() - o1.lastModified());
 			}

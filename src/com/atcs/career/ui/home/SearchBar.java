@@ -48,6 +48,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		clear = new JButton("clear");
 		add(clear, BorderLayout.EAST);
 		clear.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				field.setText("");
 				search("");
@@ -74,7 +75,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		allData.removeAll(allData);
 		ListModel<T> model = list.getModel();
 		for (int i = 0; i < model.getSize(); i++)
-			allData.add((Searchable)model.getElementAt(i));
+			allData.add(model.getElementAt(i));
 	}
 	
 	private void search(String target) {
@@ -123,6 +124,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		setAllData();
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		search(field.getText());
 	}

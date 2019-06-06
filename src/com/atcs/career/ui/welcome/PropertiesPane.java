@@ -25,11 +25,12 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 
 //Jarrett Bierman
 //11/18/18
@@ -117,8 +118,9 @@ public class PropertiesPane extends JPanel {
 		container.getContentPane().add(this);
 		container.pack();
 		container.setLocationRelativeTo(null);
-		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		container.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO notify that data has been lost
 			}
@@ -251,7 +253,7 @@ public class PropertiesPane extends JPanel {
 		
 		
 		ret.setLastModified(LocalDate.now());
-		MainClass.changeLog.info("Event Created:\n" + ret.infoString());
+		CareerDay.changeLog.info("Event Created:\n" + ret.infoString());
 		return ret;
 	}
 	
@@ -261,37 +263,36 @@ public class PropertiesPane extends JPanel {
 		}
 		
 		event.changeName(title.getText());
-		if (!sessionFile.equals(event.getSessionFile())) {
+		if (sessionFile != null && !sessionFile.equals(event.getSessionFile())) {
 			event.setSessions(IOUtilities.loadSessionArray(sessionFile, event));
 			event.setSessionFile(sessionFile);
-			MainClass.changeLog.info("sessions file changed to " + sessionFile);
+			CareerDay.changeLog.info("sessions file changed to " + sessionFile);
 		}
-		if (!allStudentFile.equals(event.getStudentFile())) {
+		if (allStudentFile != null && !allStudentFile.equals(event.getStudentFile())) {
 			event.setMasterStudents(IOUtilities.loadMasterStudentArray(
 					allStudentFile, event.getNumberOfPeriods()));
 			event.setStudentFile(allStudentFile);
-			MainClass.changeLog.info("students file changed to " + allStudentFile);
+			CareerDay.changeLog.info("students file changed to " + allStudentFile);
 			// add in the requests.
 			if (event.getRequestFile() != null) {
-				IOUtilities
-						.combineStudentArrays(
+				IOUtilities.combineStudentArrays(
 								IOUtilities.loadRequestsArray(requestFile,
 										event), event.getMasterStudents());
 			}
 		}
-		if (!requestFile.equals(event.getRequestFile())) {
+		if (requestFile != null && !requestFile.equals(event.getRequestFile())) {
 			// TODO clear requests
 			// TODO should I clear the requests or just overwrite them? some might stay depending on data.
 			IOUtilities.combineStudentArrays(IOUtilities.loadRequestsArray(
 					requestFile, event), event.getMasterStudents());
 			event.setRequestFile(requestFile);
-			MainClass.changeLog.info("requests file changed to " + requestFile);
+			CareerDay.changeLog.info("requests file changed to " + requestFile);
 		}
 		if (!classroomFile.equals(event.getRoomFile())) {
 			event.setRooms(IOUtilities.loadRoomArray(classroomFile,
 					event.getNumberOfPeriods()));
 			event.setRoomFile(classroomFile);
-			MainClass.changeLog.info("room file changed to " + classroomFile);
+			CareerDay.changeLog.info("room file changed to " + classroomFile);
 		}
 			
 	}
@@ -357,6 +358,7 @@ public class PropertiesPane extends JPanel {
 		return location;
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
@@ -367,13 +369,11 @@ public class PropertiesPane extends JPanel {
 		if (welc != null) 
 			welc.cancelProps();
 		else
-			((JFrame) SwingUtilities.getWindowAncestor(this)).dispose();
+			SwingUtilities.getWindowAncestor(this).dispose();
 	}
 	
-	public boolean readyToSubmit() { //edit this
+	public boolean readyToSubmit() { 
 		return !(title.getText().isEmpty() || title.getText().equals(textPrompt));
-//	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-//	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
 	}
 
 }
