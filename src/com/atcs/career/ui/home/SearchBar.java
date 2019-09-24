@@ -48,6 +48,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		clear = new JButton("clear");
 		add(clear, BorderLayout.EAST);
 		clear.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				field.setText("");
 				search("");
@@ -74,7 +75,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		allData.removeAll(allData);
 		ListModel<T> model = list.getModel();
 		for (int i = 0; i < model.getSize(); i++)
-			allData.add((Searchable)model.getElementAt(i));
+			allData.add(model.getElementAt(i));
 	}
 	
 	private void search(String target) {
@@ -93,9 +94,10 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	 * @param values the values to be shown on the list
 	 */
 	private void setListData(ArrayList<Searchable> values) {
+		System.out.println("setting list data to: " + list.hashCode());
 		if (values.isEmpty())
 			list.setListData((T[]) new Searchable[0]);
-		list.setListData((T[]) values.toArray(new Searchable[values.size()]));
+		list.setListData((T[]) (values.toArray(new Searchable[values.size()])));
 	}
 	
 	private void close() {
@@ -122,6 +124,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		setAllData();
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		search(field.getText());
 	}
@@ -149,7 +152,7 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 	}
 	
 	private void enterGhostText() {
-		if (field.getText().equals("")) {
+		if (field.getText().isEmpty()) {
 			field.setForeground(Color.GRAY);
 			field.setText("Search...");
 			hasGhostText = true;
@@ -160,5 +163,14 @@ public class SearchBar<T extends Searchable> extends JPanel implements ActionLis
 		hasGhostText = false;
 		field.setText("");
 		field.setForeground(Color.BLACK);
+	}
+	
+	public String getText() {
+		return field.getText();
+	}
+	
+	public void setText(String text) {
+		field.setText(text);
+		search(field.getText());
 	}
 }

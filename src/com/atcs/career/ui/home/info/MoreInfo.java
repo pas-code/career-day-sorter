@@ -14,10 +14,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -38,6 +40,8 @@ import com.atcs.career.data.GuiListable;
 import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
+import com.atcs.career.program.CareerDay;
+import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.CareerDayGUI;
 import com.atcs.career.ui.home.Searchable;
@@ -63,6 +67,7 @@ public abstract class MoreInfo {
 		public static final int PREF_H = 600;
 		private static final long serialVersionUID = 1L;
 		protected CareerDayGUI master;
+		protected static final BasicLogger log = BasicLogger.getLogger(SideInfoPanel.class.getSimpleName());
 
 		public SideInfoPanel(CareerDayGUI master) {
 			this.master = master;
@@ -76,8 +81,7 @@ public abstract class MoreInfo {
 		}
 		
 		protected byte getPeriod() {
-//			return 0;
-			return master.getSelectedPeriod();
+			return master.getCurrentPeriod();
 		}
 		
 		protected CareerDayGUI getMaster() {
@@ -90,10 +94,15 @@ public abstract class MoreInfo {
 			refresh();
 		}
 		
+		@Override
 		public Dimension getPreferredSize() {
 			return new Dimension(PREF_W, PREF_H);
 		}
 
+		protected byte amtPeriods() {
+			return master.getEvent().getNumberOfPeriods();
+		}
+		
 	}
 
 	/*
@@ -120,6 +129,7 @@ public abstract class MoreInfo {
 			roomNumberField.setBorder(BorderFactory.createTitledBorder("Room Name"));
 			
 			roomNumberField.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					room.setRoomNumber(roomNumberField.getText());
 				}
@@ -132,6 +142,7 @@ public abstract class MoreInfo {
 			sessionName.setBorder(BorderFactory.createTitledBorder("Resident Session"));
 			
 			roomCapacityField.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
 						room.setMaxCapacity(Integer.parseInt(roomCapacityField.getText()));
@@ -162,21 +173,24 @@ public abstract class MoreInfo {
 			this.add(north, BorderLayout.NORTH);
 		}
 
+		
+		@Override
 		public void refresh() {
-			System.out.println("refresh");
-			sessionName.setText(room.getResidentSessions()[getPeriod()] == null ? 
+			log.info("refresh");
+			sessionName.setText(room.getResidentSession() == null
+					? 
 					"No Resident Session" :
 						// only one resident session per room, so no need for an array.
-								room.getResidentSessions()[getPeriod()].getIdentifier());
-			studentList.setListData(room.getResidentSessions()[getPeriod()]== null ?
+								room.getResidentSession().getIdentifier());
+			studentList.setListData(room.getResidentSession() == null ?
 					new Student[0] : 
 					
 					//get the current session
-					room.getResidentSessions()[getPeriod()]
+					room.getResidentSession()
 							// get that session's students for this period
 							.getStudents().get(getPeriod())
 							// turn to standard array
-									.toArray(new Student[room.getResidentSessions()[0].getStudents()
+									.toArray(new Student[room.getResidentSession().getStudents()
 													.get(getPeriod()).size()]));		
 		}
 	}
@@ -188,6 +202,7 @@ public abstract class MoreInfo {
 		private JPanel requestPanel;
 		public StudentPanel(Student s, CareerDayGUI master) {
 			super(master);
+			log.setFilter(Level.FINEST);
 			setLayout(new BorderLayout());
 			setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			this.student = s;
@@ -198,6 +213,7 @@ public abstract class MoreInfo {
 			JPanel north = new JPanel(new GridLayout(0, 1));
 			north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
 			north.add(createInfoField("First Name", student.getfName(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setfName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
@@ -206,6 +222,7 @@ public abstract class MoreInfo {
 			
 			
 			north.add(createInfoField("Last Name", student.getlName(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setlName(((JTextComponent) e.getSource()).getText());
 					north.setBorder(BorderFactory.createTitledBorder(student.getFullName() + " Student Info"));
@@ -213,6 +230,7 @@ public abstract class MoreInfo {
 			}));
 			
 			north.add(createInfoField("Grade", student.getGrade(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					try {
 					 student.setGrade(Integer.parseInt(((JTextComponent) e.getSource()).getText()));
@@ -222,6 +240,7 @@ public abstract class MoreInfo {
 				}
 			}));
 			north.add(createInfoField("Email", student.getEmail(), new EditingAction() {
+				@Override
 				public void edit(AWTEvent e) {
 					student.setEmail(((JTextComponent) e.getSource()).getText());
 				}
@@ -248,34 +267,25 @@ public abstract class MoreInfo {
 			memberSessions = new JList<Session>();
 			memberSessions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			refresh();
-			int[] periodsAvailable = periodsEmpty();
 			JButton addAssignment = new JButton("Add Session");
 			JButton removeAssignment = new JButton("Remove");
-			addAssignment.setEnabled(
-					periodsAvailable.length > 0);
+			addAssignment.setEnabled(periodsEmpty().length > 0);
 			removeAssignment.setEnabled(false);
 			memberSessions.addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					removeAssignment.setEnabled(true);
-					addAssignment.setEnabled(
-							memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
 				}
 			});
 			addAssignment.addActionListener(e -> {
-				// create new bar
+				// add new assignment
+				int[] periodsAvailable = periodsEmpty();
+				log.finer("NEW ASSIGNMENT");
 				byte periodToInsertTo;
 				Session sessionToInsert;
-				JTextField sessionBox = sessionSearchField(e1 -> {});
-				
-				// highest possible period to insert is either the 
-				//max period available in the event or the highest number event that the student already has
-				// int highestPossiblePeriod = Math.min(
-				// master.getEvent().getNumberOfPeriods(),
-				// memberSessions.getModel().getSize());
-				// SpinnerNumberModel model = new
-				// SpinnerNumberModel(highestPossiblePeriod + 1, 1,
-				// highestPossiblePeriod + 1, 1);
+				JTextField sessionBox = sessionSearchField(e1 -> {
+				});
+				System.out.println("periods available: "+Arrays.toString(periodsAvailable));
 
 				@SuppressWarnings("serial")
 				/**
@@ -313,7 +323,9 @@ public abstract class MoreInfo {
 				JPanel row = new JPanel(new BorderLayout());
 				row.add(new JLabel("Insert Session: "), BorderLayout.WEST);
 				row.add(sessionBox, BorderLayout.CENTER);
+				sessionBox.setEnabled(true);
 				msg.add(row);
+				
 				row = new JPanel(new BorderLayout());
 				row.add(new JLabel("Into Period: "), BorderLayout.WEST);
 				row.add(periodInsertSelect);
@@ -322,15 +334,18 @@ public abstract class MoreInfo {
 				int confirmation = JOptionPane.showOptionDialog(
 						null, msg, "Add Session Assignment", JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE, null, null, JOptionPane.OK_OPTION);
-				
+				log.finer("confirm?: " + confirmation);
 				if (confirmation != JOptionPane.OK_OPTION) return;
 				periodToInsertTo = (byte) (((Integer)periodInsertSelect.getValue()).intValue() - 1);
 				
+				log.finer("HELP PLS into period " + periodToInsertTo);
 				if ((sessionToInsert = master.getEvent().getSessionFromName(sessionBox.getText())) == null)
 					return;
 				else {
-						student.getAssignments()[periodToInsertTo - 1] = sessionToInsert;
-					sessionToInsert.getStudents().get(periodToInsertTo - 1).add(student);
+					log.finer("INSERT SESSION: " + sessionToInsert);
+					student.getAssignments()[periodToInsertTo] = sessionToInsert;
+					sessionToInsert.getStudents().get(periodToInsertTo).add(student);
+					log.finer("new sessions: " + Arrays.toString(student.getAssignments()));
 				}
 				addAssignment.setEnabled(
 						periodsEmpty().length > 0);
@@ -344,14 +359,25 @@ public abstract class MoreInfo {
 				val.getStudents().get(memberSessions.getSelectedIndex()).remove(student);
 
 				refresh();
-				addAssignment.setEnabled(
-						memberSessions.getModel().getSize() < master.getEvent().getNumberOfPeriods());
+				addAssignment.setEnabled(periodsEmpty().length > 0);
 				removeAssignment.setEnabled(false);
+			});
+			
+			JButton removeStudent = new JButton("Delete Student");
+			removeStudent.addActionListener(e -> {
+				for (int i = 0; i < student.getAssignments().length; i++) 
+					if (student.getAssignment(i) != null)
+						student.getAssignment(i).getStudents().get(i).remove(student);
+				
+				master.getEvent().getMasterStudents().remove(student);
+				master.refresh("Students");
+				refresh();
 			});
 			
 			south.add(memberSessions);
 			south.add(addAssignment);
 			south.add(removeAssignment);
+			south.add(removeStudent);
 			add(south, BorderLayout.SOUTH);
 			refresh();
 		}
@@ -444,6 +470,7 @@ public abstract class MoreInfo {
 		}
 		
 		
+		@Override
 		public void refresh() {
 			memberSessions.setListData(student.getAssignments());
 			revalidate();
@@ -461,7 +488,7 @@ public abstract class MoreInfo {
 			super(master);
 			this.session = session;
 
-			speakerName = createInfoField("Speaker:", session.getSpeaker(), new EditingAction() {
+			speakerName = createInfoField("Speaker", session.getSpeaker(), new EditingAction() {
 				@Override
 				public void edit(AWTEvent e) {
 					session.setSpeaker(((JTextField)e.getSource()).getText());
@@ -478,32 +505,28 @@ public abstract class MoreInfo {
 									: session.getRoom().getRoomNumber());
 					return;
 				}
+				
+				// if there is already a session in the room, ask if you want to reassign
+				if (set.getResidentSession() != null 
+						&& !set.getResidentSession().equals(session)) 
+					if (JOptionPane.showConfirmDialog(null,
+							"This deletes the room assignment for:\n"
+									+ set.getResidentSession() + ".\n"
+									+ "Do you want to continue?",
+							CareerDay.APP_NAME, JOptionPane.YES_NO_OPTION,
+							JOptionPane.INFORMATION_MESSAGE, null)
+							!= JOptionPane.YES_OPTION)
+						return;
+				if (session.getRoom() != null) 
+					session.getRoom().setResidentSession(null);
+				if (set.getResidentSession() != null)
+					set.getResidentSession().setRoom(null);
 				session.setRoom(set);
-				set.getResidentSessions()[getPeriod()] = session;
+				set.setResidentSession(session);
 				refresh();
 			});
 			editField.setText(session.getRoom() == null ? "" : session.getRoom().getRoomNumber());
 			classroomNumber.add(editField, BorderLayout.CENTER);
-			
-//			classroomNumber = createInfoField("Room No",
-//					session.getRoom() == null
-//							? "" : session.getRoom().getRoomNumber(),
-//					new EditingAction() {
-//						@Override
-//						public void edit(AWTEvent e) {
-//							try {
-//								// TODO search rooms and parse namess
-//								// session.setRoom(((JTextField)e.getSource()).getText());
-//								((JTextField) e.getSource()).addActionListener(e1 -> {
-//									session.setRoom(((JTextField) e1.getSource()).getText());
-//								});
-//							} catch (NumberFormatException err) {
-//								System.out.println("oops");
-//								((JTextField) e.getSource()).setText(session.getRoom().getRoomNumber());
-//							}
-//						}
-//					});
-
 			
 
 			setLayout(new BorderLayout());
@@ -518,6 +541,7 @@ public abstract class MoreInfo {
 			listStudents = new JList<Student>();
 			listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(listStudents);
+			scrollPane.setBorder(BorderFactory.createTitledBorder("Resident Students"));
 			populateList(getPeriod());
 			String title = session.getTitle();
 			setBorder(BorderFactory.createTitledBorder(null, title,
@@ -527,13 +551,13 @@ public abstract class MoreInfo {
 			center.add(scrollPane);
 
 			add(north, BorderLayout.NORTH);
-			north.setLayout(new GridLayout(3, 0));
+			north.setLayout(new GridLayout(2, 0));
 			north.add(speakerName);
 			north.add(classroomNumber);
 
 			add(south, BorderLayout.SOUTH);
 			south.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
-			south.setLayout(new GridLayout(5, 1));
+			south.setLayout(new GridLayout(0, 1));
 			
 			JButton button = new JButton("Add Student");
 			button.addActionListener(e -> {
@@ -552,19 +576,52 @@ public abstract class MoreInfo {
 			
 			south.add(button);
 			
-			button = new JButton("Show Student Info");
-			button.addActionListener(e -> {
-				
+			JButton studentInfo = new JButton("Show Student Info");
+			studentInfo.addActionListener(e -> {
+				master.getTabs().setSelectedIndex(1);
+				master.getLists().get(1).setSelectedValue(listStudents.getSelectedValue(), true);
 			});
+			south.add(studentInfo);
+			studentInfo.setEnabled(false);
 			
-			button = new JButton("Remove from Session");
-			button.addActionListener(e -> {
+			JButton remove = new JButton("Remove from Session");
+			remove.addActionListener(e -> {
 				Student selected = listStudents.getSelectedValue();
+				if (selected == null) return;
 				session.getStudents().get(getPeriod()).remove(selected);
 				selected.getAssignments()[getPeriod()] = null;
 				refresh();
 			});
-
+			remove.setEnabled(false);
+			
+			listStudents.addListSelectionListener(e -> {
+				remove.setEnabled(true);
+				studentInfo.setEnabled(true);
+			});
+			south.add(remove);
+			
+			south.add(new JLabel("Available in: "));
+			
+			for (int i = 0; i < master.getEvent().getNumberOfPeriods(); i++)
+				south.add(availableInPeriod(i));
+//			south.add(availability);
+			
+			
+			JButton delete = new JButton("Delete Session");
+			south.add(delete);
+			delete.addActionListener(e -> {
+				master.getEvent().getSessions().remove(this.session);
+				master.refresh("Sessions");
+			});
+		}
+		
+		private JCheckBox availableInPeriod(int period) {
+			JCheckBox ret = new JCheckBox("Period " + (period + 1));
+			ret.addActionListener(e -> {
+				session.getPeriodAvailability()[period] = ret.isSelected();
+			});
+			ret.setSelected(session.getPeriodAvailability()[period]);
+			return ret;
 		}
 		
 		private JTextField roomSearchField(ActionListener action) {
@@ -585,6 +642,7 @@ public abstract class MoreInfo {
 			listStudents.revalidate();
 		}
 
+		@Override
 		public void refresh() {
 			populateList(getPeriod());
 			//TODO uh oh
@@ -603,9 +661,12 @@ public abstract class MoreInfo {
 		searchBar.addActionListener(action);
 		//auto-complete
 		searchBar.addKeyListener(new KeyListener() {
+			@Override
 			public void keyTyped(KeyEvent e) {}
+			@Override
 			public void keyPressed(KeyEvent e) {}
 			
+			@Override
 			public void keyReleased(KeyEvent e) {
 				final int maxAmtResults = 5;
 				ArrayList<Searchable> resultData = new ArrayList<Searchable>();
@@ -640,14 +701,5 @@ public abstract class MoreInfo {
 		editField.addFocusListener(action);
 		panel.add(editField, BorderLayout.CENTER);
 		return panel;
-	}
-
-	private static void show(SideInfoPanel p) {
-		JFrame f = new JFrame("test info panel");
-		f.getContentPane().add(p);
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
 	}
 }

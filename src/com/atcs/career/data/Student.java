@@ -35,8 +35,8 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		this.email = email;
 		this.requests = requests;
 		grade = getGradeFromEmail();
-		priority = getStudentPriority();
 		this.timeEntered = timeEntered;
+		createAndSetStudentPriority();
 		this.assignments = new Session[numPeriods];
 		isSwitchable = true;
 		this.submitted = submitted;
@@ -179,6 +179,25 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	public Priority getStudentPriority() {
 		return priority;
 	}
+	
+	public void createAndSetStudentPriority() {
+		if (getTimeEntered() != 0) {
+			int yearEntered = (getTimeEntered()/1000) - Event.startYear;
+			int dayEntered = ((yearEntered * 365) + (getTimeEntered()%1000)) - Event.startDay;
+			if (getGrade() >= Priority.classCutOff) 
+	         setStudentPriority(new Priority(dayEntered, Priority.upperClassMagnitudeValue));
+	      
+	      else if (getGrade() < Priority.classCutOff) 
+	         setStudentPriority(new Priority(dayEntered, Priority.lowerClassMagnitudeValue));
+		} 
+//		else {
+//			setStudentPriority(new Priority(0,
+//					getGrade() >= Priority.classCutOff
+//					? Priority.upperClassMagnitudeValue
+//							: Priority.lowerClassMagnitudeValue));
+//		}
+		
+	}
 
 	public void setStudentPriority(Priority newPriority) {
 		this.priority = newPriority;
@@ -205,12 +224,26 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 
 	@Override
 	public int compareTo(Student o) {
+		if (this.getStudentPriority() == null && o.getStudentPriority() == null) return 0;
+		if (this.getStudentPriority() == null) return -1;
+		if (o.getStudentPriority() == null) return 1;
 		return (int) (this.getStudentPriority().getPriority()
 				- o.getStudentPriority().getPriority());
 	}
 
 	public int compareToEmail(Student o) {
 		return getEmail().compareTo(o.getEmail());
+	}
+	
+	@Override
+	public int compareToList(GuiListable o) {
+		if (!(o instanceof Student)) return -1;
+		Student s = (Student) o;
+		if (s.grade != grade)
+			return grade - s.grade;
+		if (s.lName != lName)
+			return lName.compareTo(s.lName);
+		return fName.compareTo(fName);
 	}
 	
 	@Override
@@ -221,16 +254,19 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 	@Override
 	public String getInfo(int i) {
 		switch (i) {
-			case 0 :
-				return getGrade() + "";
-			case 1 :
-				return "";
-			case 2 :
-				return getEmail();
-			default :
-				return lName;
+			case 0 : return getGrade() + "";
+			case 1 : return getEmail();
+			default : return "";
 		}
-
+	}
+	
+	@Override
+	public String getInfoTitle(int i) {
+		switch (i) {
+			case 0 : return "Grade";
+			case 1 : return "Email";
+			default : return "";
+		}
 	}
 
 	public Session getAssignment(int period) {
@@ -273,5 +309,4 @@ public class Student implements Comparable<Student>, Serializable, GuiListable {
 		
 		return -1;
 	}
-
 }

@@ -25,11 +25,12 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.IOUtilities;
 import com.atcs.career.io.importexport.CSVReader;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 
 //Jarrett Bierman
 //11/18/18
@@ -48,6 +49,7 @@ public class PropertiesPane extends JPanel {
 	private JButton sessionButton, requestButton, classroomButton,
 			allStudentButton;
 	private String sessionFile, requestFile, classroomFile, allStudentFile;
+	private String lastDirAccessed;
 	private JButton submit, cancel;
 	private JTextField title;
 	private static final String textPrompt = "Enter Project Name Here";
@@ -116,8 +118,9 @@ public class PropertiesPane extends JPanel {
 		container.getContentPane().add(this);
 		container.pack();
 		container.setLocationRelativeTo(null);
-		container.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		container.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		container.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO notify that data has been lost
 			}
@@ -142,9 +145,12 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sessionFile = selectFile(sessionButton);
+				String selected = selectFile(sessionButton);
+				sessionFile = selected == null ? sessionFile : selected;
 				sessionButton.setText(sessionFile == null ?
 						BUTTON_DEFAULT_TEXT : sessionFile.substring(homeDirLength));
+				if (sessionFile != null) 
+					lastDirAccessed = sessionFile.substring(0, sessionFile.lastIndexOf('/'));
 			}
 		});
 
@@ -154,9 +160,12 @@ public class PropertiesPane extends JPanel {
 		allStudentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				allStudentFile = selectFile(allStudentButton);
+				String selected = selectFile(allStudentButton);
+				allStudentFile = selected == null ? allStudentFile : selected;
 				allStudentButton.setText(allStudentFile == null ?
 						BUTTON_DEFAULT_TEXT : allStudentFile.substring(homeDirLength));
+				if (allStudentFile != null) 
+					lastDirAccessed = allStudentFile.substring(0, allStudentFile.lastIndexOf('/'));
 			}
 		});
 
@@ -167,9 +176,12 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				requestFile = selectFile(requestButton);
+				String selected = selectFile(requestButton);
+				requestFile = selected == null ? requestFile : selected;
 				requestButton.setText(requestFile == null ?
 						BUTTON_DEFAULT_TEXT : requestFile.substring(homeDirLength));
+				if (requestFile != null) 
+					lastDirAccessed = requestFile.substring(0, requestFile.lastIndexOf('/'));
 			}
 		});
 
@@ -181,9 +193,12 @@ public class PropertiesPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				classroomFile = selectFile(classroomButton);
+				String selected = selectFile(classroomButton);
+				classroomFile = selected == null ? classroomFile : selected;
 				classroomButton.setText(classroomFile == null ?
 						BUTTON_DEFAULT_TEXT : classroomFile.substring(homeDirLength));
+				if (classroomFile != null) 
+					lastDirAccessed = classroomFile.substring(0, classroomFile.lastIndexOf('/'));
 			}
 		});
 
@@ -195,8 +210,11 @@ public class PropertiesPane extends JPanel {
 				if (readyToSubmit()) {
 					if (welc != null)
 						welc.sendEventAndClose(createEvent());
-					else 
+					else {
 						updateEventData();
+						close();
+						
+					}
 				} else
 					JOptionPane.showMessageDialog(null,
 							"You did not select all of the needed files. Please select all options.");
@@ -204,7 +222,7 @@ public class PropertiesPane extends JPanel {
 		});
 		cancel = new JButton("Cancel");
 		cancel.addActionListener(e -> {
-			cancel();
+			close();
 		});
 	}
 	
@@ -214,7 +232,7 @@ public class PropertiesPane extends JPanel {
 
 		ret.changeName(title.getText());
 		if (checkNullPassed(sessionFile)) {
-			ret.setSessions(IOUtilities.loadSessionArray(sessionFile));
+			ret.setSessions(IOUtilities.loadSessionArray(sessionFile, ret));
 			ret.setSessionFile(sessionFile);
 		}
 		if (checkNullPassed(allStudentFile)) {
@@ -223,8 +241,8 @@ public class PropertiesPane extends JPanel {
 			ret.setStudentFile(allStudentFile);
 		}
 		if (checkNullPassed(requestFile)) {
-			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
-					requestFile, ret.getNumberOfPeriods()), ret.getMasterStudents());
+			IOUtilities.combineStudentArrays(IOUtilities.loadRequestsArray(
+					requestFile, ret), ret.getMasterStudents());
 			ret.setRequestFile(requestFile);
 		}
 		if (checkNullPassed(classroomFile)) {
@@ -235,48 +253,46 @@ public class PropertiesPane extends JPanel {
 		
 		
 		ret.setLastModified(LocalDate.now());
-		MainClass.changeLog.info("Event Created:\n" + ret.infoString());
+		CareerDay.changeLog.info("Event Created:\n" + ret.infoString());
 		return ret;
 	}
 	
 	private void updateEventData() {
 		if (!sessionFile.equals(event.getSessionFile())) {
 			event.setSessionFile(sessionFile);
-			
 		}
 		
 		event.changeName(title.getText());
-		if (!sessionFile.equals(event.getSessionFile())) {
-			event.setSessions(IOUtilities.loadSessionArray(sessionFile));
+		if (sessionFile != null && !sessionFile.equals(event.getSessionFile())) {
+			event.setSessions(IOUtilities.loadSessionArray(sessionFile, event));
 			event.setSessionFile(sessionFile);
-			MainClass.changeLog.info("sessions file changed to " + sessionFile);
+			CareerDay.changeLog.info("sessions file changed to " + sessionFile);
 		}
-		if (!allStudentFile.equals(event.getStudentFile())) {
+		if (allStudentFile != null && !allStudentFile.equals(event.getStudentFile())) {
 			event.setMasterStudents(IOUtilities.loadMasterStudentArray(
 					allStudentFile, event.getNumberOfPeriods()));
 			event.setStudentFile(allStudentFile);
-			MainClass.changeLog.info("students file changed to " + allStudentFile);
+			CareerDay.changeLog.info("students file changed to " + allStudentFile);
 			// add in the requests.
 			if (event.getRequestFile() != null) {
-				IOUtilities
-						.combineStudentArrays(
-								IOUtilities.loadStudentArray(requestFile,
-										event.getNumberOfPeriods()), event.getMasterStudents());
+				IOUtilities.combineStudentArrays(
+								IOUtilities.loadRequestsArray(requestFile,
+										event), event.getMasterStudents());
 			}
 		}
-		if (!requestFile.equals(event.getRequestFile())) {
+		if (requestFile != null && !requestFile.equals(event.getRequestFile())) {
 			// TODO clear requests
 			// TODO should I clear the requests or just overwrite them? some might stay depending on data.
-			IOUtilities.combineStudentArrays(IOUtilities.loadStudentArray(
-					requestFile, event.getNumberOfPeriods()), event.getMasterStudents());
+			IOUtilities.combineStudentArrays(IOUtilities.loadRequestsArray(
+					requestFile, event), event.getMasterStudents());
 			event.setRequestFile(requestFile);
-			MainClass.changeLog.info("requests file changed to " + requestFile);
+			CareerDay.changeLog.info("requests file changed to " + requestFile);
 		}
 		if (!classroomFile.equals(event.getRoomFile())) {
 			event.setRooms(IOUtilities.loadRoomArray(classroomFile,
 					event.getNumberOfPeriods()));
 			event.setRoomFile(classroomFile);
-			MainClass.changeLog.info("room file changed to " + classroomFile);
+			CareerDay.changeLog.info("room file changed to " + classroomFile);
 		}
 			
 	}
@@ -329,7 +345,7 @@ public class PropertiesPane extends JPanel {
 	}
 
 	public String selectFile(JButton b) {
-		String location = CSVReader.getFileLocation(".csv");
+		String location = CSVReader.getFileLocation(".csv", lastDirAccessed);
 		if (location == null) 
 			return null;
 		int index = 0;
@@ -342,23 +358,22 @@ public class PropertiesPane extends JPanel {
 		return location;
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
 
 	// ------------------------------------------END GUI CONFIGURATION----------------------------------------
 
-	private void cancel() {
+	private void close() {
 		if (welc != null) 
 			welc.cancelProps();
 		else
-			((JFrame) SwingUtilities.getWindowAncestor(this)).dispose();
+			SwingUtilities.getWindowAncestor(this).dispose();
 	}
 	
-	public boolean readyToSubmit() { //edit this
-		return !(title.getText().isBlank() || title.getText().equals(textPrompt));
-//	   return !(title.getText().isEmpty() || periodCount.getValue() == null 
-//	            || title.getText().equals(textPrompt) || sessionFile == null || allStudentFile == null);
+	public boolean readyToSubmit() { 
+		return !(title.getText().isEmpty() || title.getText().equals(textPrompt));
 	}
 
 }

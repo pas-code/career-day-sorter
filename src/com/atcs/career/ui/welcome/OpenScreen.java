@@ -3,7 +3,6 @@
 
 package com.atcs.career.ui.welcome;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CancellationException;
@@ -26,8 +25,6 @@ public class OpenScreen {
 		jfc.setDialogTitle("Open an Event File");
 		for (int i = 0; i < 3; i++)
 			jfc.remove(0);
-		for (Component c : jfc.getComponents())
-			System.out.println(c);
 		jfc.addChoosableFileFilter(new FileFilter() {
 			@Override
 			public boolean accept(File f) {

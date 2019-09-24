@@ -17,15 +17,14 @@ public class Event implements Serializable {
 	private static final int minSessionSize = 10; //COME BACK AND CHANGE TO PROPER VALUE TODO
 	public static int startDay = 0;
 	public static int startYear = 0;
-	private int amountOfSessions;
 	private ArrayList<Session> sessions = new ArrayList<Session>();
 	private ArrayList<Student> masterStudents = new ArrayList<Student>();
 	private ArrayList<Room> rooms = new ArrayList<Room>();
 	private String eventName, oldName;
 	private LocalDate dateLastModified;
-	private byte numberOfPeriods;
+	private byte numberOfPeriods, currentPeriod;
 	private boolean sorted;
-	
+	// filenames picked from the initializer
 	private String studentFile, sessionFile, requestFile, roomFile;
 	
 	public Event() {
@@ -33,7 +32,6 @@ public class Event implements Serializable {
 		sessions = new ArrayList<Session>();
 		masterStudents = new ArrayList<Student>();
 	}
-	
 	
 	public static Event readTestEvent() { 
 		Event ret = new Event();
@@ -51,9 +49,8 @@ public class Event implements Serializable {
 
 	public void selectStudentFile() {
 		IOUtilities.combineStudentArrays(
-				IOUtilities.loadStudentArray(CSVReader.getFileLocation(".csv"), getNumberOfPeriods()),
+				IOUtilities.loadRequestsArray(CSVReader.getFileLocation(".csv"), this),
 				getMasterStudents());
-		amountOfSessions = sessions.size();
 	}
 
 	public void selectRoomFile() {
@@ -62,17 +59,12 @@ public class Event implements Serializable {
 	
 
 	public void selectSessionFile() {
-		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"));
-		amountOfSessions = sessions.size();
+		sessions = IOUtilities.loadSessionArray(CSVReader.getFileLocation(".csv"), this);
 	}
 	
 	public void save() {
 		dateLastModified = LocalDate.now();
 		FileHandler.save(this);
-	}
-
-	public int getAmountOfSessions() {
-		return amountOfSessions;
 	}
 
 	public ArrayList<Session> getSessions() {
@@ -128,6 +120,10 @@ public class Event implements Serializable {
 		this.eventName = eventName;
 	}
 
+	public void tempSetName(String temp) {
+		this.eventName = temp;
+	}
+	
    public ArrayList<Student> getMasterStudents() {
       return masterStudents;
    }
@@ -143,11 +139,7 @@ public class Event implements Serializable {
    public static int getMinsessionsize() {
       return minSessionSize;
    }
-
-   public void setAmountOfSessions(int amountOfSessions) {
-      this.amountOfSessions = amountOfSessions;
-   }
-
+   
    public void setSessions(ArrayList<Session> sessions) {
       this.sessions = sessions;
    }
@@ -196,6 +188,16 @@ public class Event implements Serializable {
 		this.numberOfPeriods = numberOfPeriods;
 	}
 
+	public byte getCurrentPeriod() {
+		return currentPeriod;
+	}
+
+
+	public void setCurrentPeriod(byte currentPeriod) {
+		this.currentPeriod = currentPeriod;
+	}
+
+
 	public boolean isSorted() {
 		return sorted;
 	}
@@ -216,6 +218,7 @@ public class Event implements Serializable {
 		this.dateLastModified = date;
 	}
 	
+	@Override
 	public String toString() {
 		return getEventName();
 	}

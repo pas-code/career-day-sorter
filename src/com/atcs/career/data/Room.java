@@ -10,26 +10,25 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 	private static final long serialVersionUID = -406223752974907136L;
 	private String roomNumber;
 	private int maxCapacity;
-	private Session[] residentSessions;
+	private Session residentSession;
 
 	public Room(String roomNumber, int maxCapacity, int numPeriods) {
 		super();
 		this.roomNumber = roomNumber;
 		this.maxCapacity = maxCapacity;
-		residentSessions = new Session[numPeriods];
 	}
 
 	@Override
 	public int compareTo(Room o) {
 		return this.maxCapacity - o.getMaxCapacity();
 	}
-
-	public Session[] getResidentSessions() {
-		return residentSessions;
+	
+	public Session getResidentSession() {
+		return residentSession;
 	}
-
-	public void setResidentSessions(Session[] residentSessions) {
-		this.residentSessions = residentSessions;
+	
+	public void setResidentSession(Session s) {
+		residentSession = s;
 	}
 
 	public String getRoomNumber() {
@@ -48,6 +47,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 		maxCapacity = cap;
 	}
 
+	@Override
 	public String toString() {
 		return "Room: " + "[Room Number: " + roomNumber + "] [Capacity: "
 				+ maxCapacity + "]";
@@ -61,10 +61,16 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 	@Override
 	public String getInfo(int i) {
 		switch (i) {
-			case 0 :
-				return maxCapacity + "";
-			default :
-				return roomNumber + "";
+			case 0 : return maxCapacity + "";
+			default : return roomNumber + "";
+		}
+	}
+	
+	@Override
+	public String getInfoTitle(int i) {
+		switch (i) {
+			case 0 : return "Capacity";
+			default : return "Room Name";
 		}
 	}
 
@@ -78,6 +84,7 @@ public class Room implements Comparable<Room>, Serializable, GuiListable {
 		return roomNumber;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Room))
 			return false;

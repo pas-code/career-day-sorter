@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,13 +31,13 @@ import com.atcs.career.data.Room;
 import com.atcs.career.data.Session;
 import com.atcs.career.data.Student;
 import com.atcs.career.logic.Algorithms;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
 import com.atcs.career.ui.home.info.MoreInfo;
 import com.atcs.career.ui.home.info.MoreInfo.SideInfoPanel;
 
-//Jarrett Bierman & Edward Fominykh
+//Jarrett Bierman & Edward Fominykh & Thomas Varano
 //9/4/18
 
 public class CareerDayGUI extends JPanel {
@@ -50,10 +52,7 @@ public class CareerDayGUI extends JPanel {
 	private SearchBar<GuiListable> centerSearch;
 	private JTabbedPane tabs;
 	private JPanel eastPanel;
-
-	/**
-	 * 
-	 */
+ 
 	private static final BasicLogger	mainLog = BasicLogger.getLogger(CareerDayGUI.class.getName());
 
 	private Font bigFont;
@@ -77,8 +76,8 @@ public class CareerDayGUI extends JPanel {
 		layoutConfig();
 	}
 
-	protected static final String REFRESH_ALL = "all";
-	protected void refresh(String title) {
+	public static final String REFRESH_ALL = "all";
+	public void refresh(String title) {
 		int previouslySelectedIndex = tabs.getSelectedIndex();
 		if (title.equals(REFRESH_ALL)) {
 			tabs.removeAll();
@@ -97,10 +96,15 @@ public class CareerDayGUI extends JPanel {
 				listInfoChanged = event.getMasterStudents();
 			else
 				listInfoChanged = event.getRooms();
-			tabs.setComponentAt(tabIndexToRefresh, createTab(listInfoChanged));
+			JScrollPane newTab = createTab(listInfoChanged, false);
+//			lists.set(tabs.getSelectedIndex(), (JList<GuiListable>) newTab.getViewport().getView());
+			tabs.setComponentAt(tabIndexToRefresh, newTab);
 		}
 		tabs.setSelectedIndex(previouslySelectedIndex);
+		String previousSearchQuery = centerSearch.getText();
 		centerSearch.setList(lists.get(tabs.getSelectedIndex()));
+		centerSearch.setText(previousSearchQuery);
+		System.out.println("list?" + lists.get(tabs.getSelectedIndex()).hashCode());
 		revalidate();
 	}
 
@@ -124,25 +128,30 @@ public class CareerDayGUI extends JPanel {
 		north.add(title, BorderLayout.CENTER);
 		JButton sort = new JButton("Run Algorithm");
 		sort.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				sort();
+				SwingUtilities.getWindowAncestor(eastPanel).requestFocus();
+				System.out.println("done");
 			}
 		});
 		north.add(sort, BorderLayout.EAST);
 
 		JButton addElem = new JButton("+");
 		addElem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainLog.info("add elem");
 				JPopupMenu popupMenu = new JPopupMenu();
 
 				JMenuItem item = new JMenuItem("Add Session");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Session s;
-						if ((s = ElementCreator.createSession()) == null) return;
+						if ((s = ElementCreator.createSession(event)) == null) return;
 						event.getSessions().add(s);
-						MainClass.changeLog.info("Session added: " + s);
+						CareerDay.changeLog.info("Session added: " + s);
 						refresh("Sessions");
 					}
 				});
@@ -150,12 +159,13 @@ public class CareerDayGUI extends JPanel {
 
 				item = new JMenuItem("Add Student");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Student add = ElementCreator
 								.createStudent(event.getNumberOfPeriods());
 						if (add == null) return;
 						event.getMasterStudents().add(add);
-						MainClass.changeLog.info("Student added: " + add);
+						CareerDay.changeLog.info("Student added: " + add);
 						refresh("Students");
 					}
 				});
@@ -163,11 +173,12 @@ public class CareerDayGUI extends JPanel {
 
 				item = new JMenuItem("Add Room");
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						Room r;
 						if ((r = ElementCreator.createRoom(event.getNumberOfPeriods())) == null) return;
 						event.getRooms().add(r);
-						MainClass.changeLog.info("Room added: " + r);
+						CareerDay.changeLog.info("Room added: " + r);
 						refresh("Rooms");
 					}
 				});
@@ -189,6 +200,7 @@ public class CareerDayGUI extends JPanel {
 		centerSearch.setList(lists.get(0), true);
 
 		tabs.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				mainLog.config("tab changed to " + tabs.getSelectedIndex());
 				if (tabs.getSelectedIndex() != -1)
@@ -206,6 +218,7 @@ public class CareerDayGUI extends JPanel {
 			// it didn't work without this. leave it
 			int perInd = i;
 			period.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					changePeriod((byte) perInd);
 				}
@@ -228,18 +241,21 @@ public class CareerDayGUI extends JPanel {
 
 	/** Precondition: ArrayList contents must of type Gui_Listable */
 	private void addTab(ArrayList<? extends GuiListable> eventData, String title) {
-		tabs.addTab(title, createTab(eventData));
+		tabs.addTab(title, createTab(eventData, true));
 	}
 	
-	private JScrollPane createTab(ArrayList<? extends GuiListable> eventData) {
+	private JScrollPane createTab(ArrayList<? extends GuiListable> eventData, boolean addToList) {
 		JPanel scrollBackPanel = new JPanel();
 		scrollBackPanel.setLayout(new BorderLayout());
 		scrollBackPanel.setBackground(Color.white);
-
-		JList<GuiListable> infoList = new JList<GuiListable>(
-				eventData.toArray(new GuiListable[eventData.size()]));
+		
+		GuiListable[] listData = eventData.toArray(new GuiListable[eventData.size()]);
+		Arrays.sort(listData, GuiListable.listSorter());
+		
+		JList<GuiListable> infoList = new JList<GuiListable>(listData);
 		infoList.setCellRenderer(new ListableRenderer(this));
-		lists.add(infoList);
+		if (addToList)
+			lists.add(infoList);
 
 		scrollBackPanel.add(infoList, BorderLayout.NORTH);
 
@@ -250,7 +266,7 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public JFrame makeWindow() {
-		JFrame frame = new JFrame(MainClass.APP_NAME);
+		JFrame frame = new JFrame(CareerDay.APP_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		frame.pack();
@@ -263,6 +279,7 @@ public class CareerDayGUI extends JPanel {
 	 * This overrides the JPanel's getPreferredSize() method It tells the JPanel
 	 * to be a certain width and height
 	 */
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(PREF_W, PREF_H);
 	}
@@ -282,15 +299,17 @@ public class CareerDayGUI extends JPanel {
 	}
 
 	public void changePeriod(byte periodIndex) {
-		MainClass.changeLog.info("change period to " + periodIndex);
+		CareerDay.changeLog.info("change period to " + periodIndex);
 		this.selectedPeriod = periodIndex;
+		event.setCurrentPeriod(selectedPeriod);
 		if (infoPanel != null) infoPanel.refresh();
+		refresh(tabs.getTitleAt(tabs.getSelectedIndex()));
 	}
 
 	/**
 	 * @return the selectedPeriod
 	 */
-	public byte getSelectedPeriod() {
+	public byte getCurrentPeriod() {
 		return selectedPeriod;
 	}
 
@@ -300,6 +319,14 @@ public class CareerDayGUI extends JPanel {
 	 */
 	public void setSelectedPeriod(byte selectedPeriod) {
 		this.selectedPeriod = selectedPeriod;
+	}
+	
+	public JTabbedPane getTabs() {
+		return tabs;
+	}
+	
+	public ArrayList<JList<GuiListable>> getLists() {
+		return lists;
 	}
 
 }

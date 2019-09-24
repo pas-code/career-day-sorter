@@ -9,12 +9,12 @@ Content-Type: multipart/alternative; boundary="000000000000fdafcd0585a22f7b"
 --000000000000fdafcd0585a22f7b
 Content-Type: text/plain; charset="UTF-8"
 
-Hi, #!firstName#
+Hi, !#firstname#
 Here are your assignments for Career Day.
 
-   - Period 1: #!session1# in #!room1#
-   - Period 2: #!session2# in #!room2#
-   - Period 3: #!session3# in #!room3#
+   - Period 1: !#sessiona# in #!rooma#
+   - Period 2: !#sessionb# in #!roomb#
+   - Period 3: !#sessionc# in #!roomc#
 
 - The ATCS Team
 
@@ -22,9 +22,9 @@ Here are your assignments for Career Day.
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi, #!firstName#<div>Here are your assignments for Career =
-Day.</div><div><ul><li>Period 1: #!session1# in #!room1#=C2=A0</li><li>Peri=
-od 2: #!session2# in #!room2#=C2=A0</li><li>Period 3: #!session3# in #!room=
-3#=C2=A0</li></ul><div>- The ATCS Team</div></div></div>
+<div dir=3D"ltr">Hi, !#firstname#<div>Here are your assignments for Career =
+Day.</div><div><ul><li>Period 1: !#sessiona# in !#rooma#=C2=A0</li><li>Peri=
+od 2: !#sessionb# in !#roomb#=C2=A0</li><li>Period 3: !#sessionc# in !#roomc#=
+=C2=A0</li></ul><div>- The ATCS Team</div></div></div>
 
 --000000000000fdafcd0585a22f7b--

@@ -5,6 +5,8 @@ package com.atcs.career.email;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
 import com.atcs.career.io.importexport.CSVWriter;
@@ -26,12 +28,22 @@ public class EmailSender {
 	}
 	
 	public static void sendReminderEmail(Event e) {
-		CSVWriter.exportEventToEmailReminder(e);
-		runEmailJar(new String[] {FileHandler.EMAIL_CSV, FileHandler.REMINDER_TEMPLATE});
+		if (checkIntentions()) {
+			CSVWriter.exportEventToEmailReminder(e);
+			runEmailJar(new String[] {FileHandler.EMAIL_CSV, FileHandler.REMINDER_TEMPLATE});
+		}
 	}
 
 	public static void sendAssignmentEmail(Event e) {
-		CSVWriter.exportEventToEmailReminder(e);
-		runEmailJar(new String[] {FileHandler.EMAIL_CSV, FileHandler.ASSIGNMENT_TEMPLATE});
+		if (checkIntentions()) {
+			CSVWriter.exportEventToEmailAssignments(e);
+			runEmailJar(new String[] {FileHandler.EMAIL_CSV, FileHandler.ASSIGNMENT_TEMPLATE});
+		}
+	}
+	
+	private static boolean checkIntentions() {
+		return JOptionPane.showOptionDialog(null, "Are you sure you want to send this email?", "Confirmation",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.NO_OPTION) 
+				== JOptionPane.YES_OPTION;
 	}
 }

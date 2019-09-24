@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.email.EmailSender;
@@ -27,8 +28,11 @@ import com.atcs.career.ui.welcome.WelcomeScreen;
 public class MasterUI {
 	private Event masterEvent;
 	private CareerDayGUI mainGui;
+	private String placeHolder;
 	
 	public MasterUI() {
+		//just initializing something to construct the masterUI
+		placeHolder = "abc";
 	}
 	
 	public void openWelcome() {
@@ -73,7 +77,11 @@ public class MasterUI {
 		item = menu.add(new MenuItem("Save as..."));
 		item.setShortcut(new MenuShortcut(KeyEvent.VK_S, true));
 		item.addActionListener(e -> {
-			//TODO figure out what to do here.
+			String name = JOptionPane.showInputDialog("Enter a name for your new Event");
+			if (name != null && name != "") {
+				String oldName = masterEvent.getEventName();
+				masterEvent.changeName(name);
+			}
 		});
 		
 		menu.addSeparator();

@@ -32,9 +32,10 @@ import javax.swing.event.ListSelectionListener;
 
 import com.atcs.career.data.Event;
 import com.atcs.career.io.file.FileHandler;
-import com.atcs.career.program.MainClass;
+import com.atcs.career.program.CareerDay;
 import com.atcs.career.program.logging.BasicLogger;
 import com.atcs.career.resources.FontManager;
+import com.atcs.career.ui.ColorManager;
 import com.atcs.career.ui.MasterUI;
 
 public class WelcomeScreen extends JPanel {
@@ -67,17 +68,18 @@ public class WelcomeScreen extends JPanel {
 	
 	
 	// ----------------------------------- INITIAL CONFIGURATION OF GUI ---------------------------------------
+	@Override
 	public java.awt.Dimension getPreferredSize() {
 		return new java.awt.Dimension(PREF_W, PREF_H);
 	}
 
-	private void configureButton(JButton b) {
+	private JButton configureButton(JButton b) {
 		b.setFont(getFont());
 		b.setBorderPainted(false);
 //		b.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		b.setBackground(Color.GRAY);
 		b.setFocusable(false);
 		b.addMouseListener(buttonListener());
+		return configButtonLaf(b);
 	}
 	
 	private MouseListener buttonListener() {
@@ -134,14 +136,13 @@ public class WelcomeScreen extends JPanel {
 	
 	private void configGui() {
 		// initialize gui
-		title = new JLabel(MainClass.APP_NAME);
+		setForeground(ColorManager.get("text"));
+		title = new JLabel(CareerDay.APP_NAME);
 		setFont(FontManager.finalFont(25f));
 		topPanel = topPanelConfig();
 
-		newButton = new JButton("New");
-		openButton = new JButton("Open");
-		configureButton(newButton);
-		configureButton(openButton);
+		newButton = configureButton(new JButton("New"));
+		openButton = configureButton(new JButton("Open"));
 
 		newButton.addActionListener(e -> {
 			log.info("new event button pressed");
@@ -160,14 +161,13 @@ public class WelcomeScreen extends JPanel {
 		// Class Panel config
 		this.setLayout(new BorderLayout());
 		this.add(topPanel, BorderLayout.NORTH);
-		this.setBackground(Color.gray);
-
+		this.setOpaque(true);
+		
 		// Left Panel config
 		leftPanel = new JPanel(new GridLayout(2, 0));
 		leftPanel.setPreferredSize(new Dimension(150, 0));
 		
 		
-		leftPanel.setBackground(Color.GRAY);
 		leftPanel.add(newButton);
 		leftPanel.add(openButton);
 
@@ -177,6 +177,12 @@ public class WelcomeScreen extends JPanel {
 		rightPanelConfig();
 
 		this.add(rightPanel);
+	}
+	
+	private static JButton configButtonLaf(JButton b) {
+		b.setForeground(ColorManager.get("text"));
+		b.setOpaque(true);
+		return b;
 	}
 	
 	/**
@@ -191,6 +197,7 @@ public class WelcomeScreen extends JPanel {
 		File[] children = saveDir.listFiles();
 		// sort so the latest event comes first
 		Arrays.sort(children, new Comparator<File>() {
+			@Override
 			public int compare(File o1, File o2) {
 				return (int)(o2.lastModified() - o1.lastModified());
 			}
@@ -230,16 +237,19 @@ public class WelcomeScreen extends JPanel {
 		private void refresh(RecentEventListItem e, boolean isSelected) {
 			removeAll();
 			JLabel label = new JLabel(e.name);
+			label.setForeground(getForeground());
 			label.setFont(FontManager.finalFont(24).deriveFont(Font.BOLD));
 			add(label, BorderLayout.WEST);
 			
 			JPanel east = new JPanel(new BorderLayout());
 			label = new JLabel("Last Modified: ");
+			label.setForeground(getForeground());
 			label.setFont(FontManager.finalFont(12));
 			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 			east.add(label, BorderLayout.WEST);
 			label = new JLabel(e.lastModified);
 			label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+			label.setForeground(getForeground());
 			label.setFont(FontManager.finalFont(18));
 			east.add(label, BorderLayout.EAST);
 			east.setOpaque(false);
@@ -274,7 +284,9 @@ public class WelcomeScreen extends JPanel {
 		t.setPreferredSize(new Dimension(0, 50));
 		t.setLayout(new BorderLayout());
 
-		title.setForeground(Color.BLACK);
+		title.setForeground(ColorManager.get("background"));
+		title.setBackground(ColorManager.get("primary"));
+		title.setOpaque(true);
 		title.setFont(getFont());
 
 		t.add(title, BorderLayout.WEST);

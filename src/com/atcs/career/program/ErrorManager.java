@@ -39,13 +39,14 @@ public class ErrorManager {
 	}
 	
 	public static void showErrorMessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg, MainClass.APP_NAME + " | Error", JOptionPane.ERROR_MESSAGE, null);
+		JOptionPane.showMessageDialog(null, msg, CareerDay.APP_NAME + " | Error", JOptionPane.ERROR_MESSAGE, null);
 	}
 	
 	public static void processException(Throwable e, String usrMsg, String logMsg, boolean fatal, boolean notify) {
 		if (fatal) {
 			// report the error in a separate thread
 			new Thread(new Runnable() {
+				@Override
 				public void run() {
 					reportException(e, logMsg);
 				}
